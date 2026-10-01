@@ -11840,51 +11840,82 @@ function gmAutoPlay(ending){
   gmClosePanel();
   
   const statusEl = document.getElementById('autoplay-status');
-  if(statusEl) statusEl.textContent = '啟動DLC收容失效...';
+  if(statusEl) statusEl.textContent = '準備啟動DLC收容失效...';
   
-  // 改進啟動流程：確保介紹對話框完全處理後才開始序列
-  const launchAndPlay = () => {
+  // 徹底清理轉場狀態，確保不會在加載動畫中執行動作
+  const cleanupTransition = () => {
+    document.body.classList.remove('scene-loading');
+    document.getElementById('chapterIntroOverlay').classList.remove('show');
+    document.getElementById('split-overlay').classList.remove('active');
+    if(typeof SplitAnim !== 'undefined'){
+      try{ SplitAnim.clearTimers(); SplitAnim.cancelAnims(); }catch(e){}
+    }
+    // 關閉可能殘留的對話框
     try{
-      G.currentPage = 'ch2';
-      G.currentChapter = 'ch2';
-      document.body.classList.add('chapter-scp');
-      document.body.classList.remove('scene-loading');
-      document.getElementById('chapterIntroOverlay').classList.remove('show');
-      document.getElementById('split-overlay').classList.remove('active');
-      if(!G.settings.layout || G.settings.layout === 'fixed') G.settings.layout = 'radial';
-      if(typeof Ch2 !== 'undefined' && Ch2.start) Ch2.start();
-    }catch(e){ console.log('launch error:', e); }
+      const ov = document.getElementById('dialogOverlay');
+      if(ov) ov.classList.remove('show');
+    }catch(e){}
+    // 清除舊節點（章節選擇界面的殘留）
+    try{ Renderer.clear(); }catch(e){}
+  };
+  
+  const launchAndPlay = () => {
+    cleanupTransition();
     
-    // 步驟1：等待介紹對話框出現（最多5秒）
-    if(statusEl) statusEl.textContent = '等待介紹對話框...';
-    gmWaitForCondition(() => {
-      const overlay = document.getElementById('dialogOverlay');
-      return overlay && overlay.classList.contains('show');
-    }, 5000, () => {
-      // 步驟2：點擊"開始"按鈕
-      if(statusEl) statusEl.textContent = '點擊開始...';
-      gmClickPrimaryDialog();
-      // 步驟3：等待對話框關閉且場景節點就緒（最多5秒）
+    // 等待清理生效後再啟動
+    setTimeout(() => {
+      try{
+        G.currentPage = 'ch2';
+        G.currentChapter = 'ch2';
+        document.body.classList.add('chapter-scp');
+        if(!G.settings.layout || G.settings.layout === 'fixed') G.settings.layout = 'radial';
+        // 自動遊玩時跳過 fadeScene 加載動畫，讓場景立即構建
+        G._restoring = true;
+        if(typeof Ch2 !== 'undefined' && Ch2.start) Ch2.start();
+      }catch(e){ console.log('launch error:', e); }
+      
+      if(statusEl) statusEl.textContent = '等待介紹對話框...';
+      // 步驟1：等待介紹對話框真正出現（最多8秒）
       gmWaitForCondition(() => {
         const overlay = document.getElementById('dialogOverlay');
-        const dialogGone = !overlay || !overlay.classList.contains('show');
-        const sceneReady = G.nodes && G.nodes.length > 0;
-        return dialogGone && sceneReady;
-      }, 5000, () => {
-        // 步驟4：排空可能殘留的對話框，然後開始序列
-        gmDrainDialogs(() => {
-          if(statusEl) statusEl.textContent = '開始自動遊玩...';
-          gmAutoPlayStartSequence(ending);
-        }, 2000);
+        return overlay && overlay.classList.contains('show');
+      }, 8000, () => {
+        if(statusEl) statusEl.textContent = '點擊開始...';
+        // 步驟2：點擊"開始"按鈕，並手動確保對話框關閉
+        gmClickPrimaryDialog();
+        try{
+          const ov = document.getElementById('dialogOverlay');
+          if(ov) ov.classList.remove('show');
+        }catch(e){}
+        // 步驟3：直接調用 buildLounge 構建休息室（避免對話框Promise時序問題）
+        if(statusEl) statusEl.textContent = '構建休息室場景...';
+        try{
+          if(typeof Ch2 !== 'undefined' && Ch2.buildLounge) Ch2.buildLounge();
+        }catch(e){ console.log('buildLounge error:', e); }
+        // 步驟4：等待休息室根節點真正渲染到DOM（最多5秒）
+        gmWaitForCondition(() => {
+          const loungeNode = document.querySelector('[data-node-id="lounge"]');
+          return loungeNode !== null;
+        }, 5000, () => {
+          // 步驟4：排空可能殘留的對話框
+          gmDrainDialogs(() => {
+            // 步驟5：額外等待800ms讓視圖與動畫穩定
+            if(statusEl) statusEl.textContent = '場景就緒，開始自動遊玩...';
+            setTimeout(() => {
+              gmAutoPlayStartSequence(ending);
+            }, 800);
+          }, 3000);
+        });
       });
-    });
+    }, 300);
   };
   
   // 如果已经在第二章游戏中，直接开始序列
   if(G.currentPage === 'ch2' && G.currentChapter === 'ch2' && G.ch2 && G.ch2.area){
     if(statusEl) statusEl.textContent = '已在DLC中，開始自動遊玩...';
+    cleanupTransition();
     gmDrainDialogs(() => {
-      setTimeout(() => gmAutoPlayStartSequence(ending), 300);
+      setTimeout(() => gmAutoPlayStartSequence(ending), 500);
     }, 2000);
   } else {
     launchAndPlay();
@@ -11895,9 +11926,6 @@ function gmAutoPlayStartSequence(ending){
   // 定义每个结局的操作序列
   const sequences = {
     1: [
-      {type:'status', text:'初始化：開始遊戲...'},
-      {type:'action', fn:()=>{ if(typeof Ch2!=='undefined' && !G.ch2) Ch2.startChapter(); }},
-      {type:'wait', ms:600},
       {type:'status', text:'進入休息室...'},
       {type:'click', nodeId:'l_door'},
       {type:'wait', ms:300},
@@ -12194,6 +12222,7 @@ function gmAutoPlayNext(){
   if(window._autoPlayIndex >= window._autoPlaySteps.length){
     document.getElementById('autoplay-status').textContent = '✅ 自動遊玩完成';
     window._autoPlaying = false;
+    G._restoring = false;
     if(window._autoPlayTimer){ clearTimeout(window._autoPlayTimer); window._autoPlayTimer = null; }
     // 3秒後自動隱藏 overlay
     setTimeout(() => {
@@ -12428,6 +12457,7 @@ function gmAutoSimulateLongPress(nodeId){
 
 function gmAutoPlayStop(){
   window._autoPlaying = false;
+  G._restoring = false;
   if(window._autoPlayTimer){ clearTimeout(window._autoPlayTimer); window._autoPlayTimer = null; }
   document.getElementById('autoplay-overlay').style.display = 'none';
   Core.toast('已結束自動遊玩，畫面保持當前狀態');
@@ -12502,6 +12532,7 @@ function gmDrainDialogs(callback, maxWait){
 // 通用自動遊玩執行器：複用 gmAutoPlayNext 步驟引擎
 function gmRunAutoplay(steps, setupFn){
   window._autoPlaying = true;
+  G._restoring = true;
   window._autoPlaySteps = steps;
   window._autoPlayIndex = 0;
   if(window._autoPlayTimer){ clearTimeout(window._autoPlayTimer); window._autoPlayTimer=null; }
@@ -12556,6 +12587,7 @@ function gmAutoPlayCh1(){
 function gmAutoPlayTutorial(){
   if(window._autoPlaying) return;
   window._autoPlaying = true;
+  G._restoring = true;
   if(window._autoPlayTimer){ clearTimeout(window._autoPlayTimer); window._autoPlayTimer=null; }
   document.getElementById('autoplay-overlay').style.display = 'flex';
   gmClosePanel();
@@ -12602,6 +12634,7 @@ function gmAutoPlayTutorial(){
         }
         setStatus('✅ 教學關完成');
         window._autoPlaying = false;
+        G._restoring = false;
       }
     }, 700);
   }, 900);
