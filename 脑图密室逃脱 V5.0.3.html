@@ -3885,6 +3885,7 @@ const Core = {
       { id: 'menu_start', label: '開始遊戲', type: 'start' },
       { id: 'menu_save', label: I18n.t('menu.save'), type: 'save' },
       { id: 'menu_ach', label: '成就', type: 'ach' },
+      { id: 'v5_home', label: '我的家', type: 'home' },
     ].filter(it => !it.hidden);
     items.forEach((it, i) => {
       const opts = { lit: true, w: 140, h: 44 };
@@ -3907,6 +3908,9 @@ const Core = {
         opts.onClick = () => this.toggleSettings();
       } else if (it.type === 'save') {
         opts.onDblClick = () => this.doSave();
+      } else if (it.type === 'home') {
+        opts.w = 130;
+        opts.onClick = () => { if (typeof HomeRoom !== 'undefined') HomeRoom.enter(); };
       }
       if (isRadial) {
         // 放射性：根在中心，子360度环绕，用fixed坐标固定
@@ -3923,18 +3927,6 @@ const Core = {
       Renderer.addNode(it.id, it.label, it._x, it._y, opts);
       Renderer.addConnection('menu_root', it.id, { alwaysVisible: true });
     });
-    // V5.0.3：主菜單「我的家」分支（西南外環 225°，r=220，避開上/右/下/左四主節點）
-    {
-      const homeAng = Math.PI * 1.25;
-      const homeR = 220;
-      const hx = Math.cos(homeAng) * homeR, hy = Math.sin(homeAng) * homeR;
-      Renderer.addNode('v5_home', '我的家', hx, hy, {
-        lit: true, w: 130, h: 44,
-        data: isRadial ? { fixedX: hx, fixedY: hy } : {},
-        onClick: () => { if (typeof HomeRoom !== 'undefined') HomeRoom.enter(); }
-      });
-      Renderer.addConnection('menu_root', 'v5_home', { alwaysVisible: true });
-    }
     Renderer.render();
     Renderer.centerView();
     // V2.9.1 UI優化3：啟動主菜單粒子背景
@@ -14221,9 +14213,9 @@ if(typeof Ch2 !== 'undefined'){
         { id: 'v5_home_music',  label: '音樂鑑賞',   act: function(){ HomeRoom.openMusic(); } },
         { id: 'v5_home_credit', label: '關於致謝',   act: function(){ document.getElementById('aboutOverlay').style.display = 'flex'; } },
       ];
-      var R = 200;
+      var R = 210;
       kids.forEach(function(k, i){
-        var ang = -Math.PI/2 + (i / (kids.length - 1)) * Math.PI; // -90°→90° 上半圆
+        var ang = (i / kids.length) * Math.PI * 2 - Math.PI / 2; // 360° 圆形展开，从顶部开始
         var kx = Math.cos(ang) * R, ky = Math.sin(ang) * R;
         var data = isRadial ? { fixedX: kx, fixedY: ky } : {};
         Renderer.addNode(k.id, k.label, kx, ky, { lit: true, w: 120, h: 40, data: data, onClick: k.act });
@@ -14262,8 +14254,8 @@ if(typeof Ch2 !== 'undefined'){
       var tx1 = w/2 - hx * bigScale;
       var ty1 = h/2 - hy * bigScale;
       this._animateViewport(tx1, ty1, bigScale, 500, function(){
-        // 第二阶段：缩小到「我的家」居中（适中大小）
-        var midScale = 1.5;
+        // 第二阶段：缩小到「我的家」居中（大小和进入前一样，scale=1）
+        var midScale = 1.0;
         var tx2 = w/2 - hx * midScale;
         var ty2 = h/2 - hy * midScale;
         self._animateViewport(tx2, ty2, midScale, 450, function(){
