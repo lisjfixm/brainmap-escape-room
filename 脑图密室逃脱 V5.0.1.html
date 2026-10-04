@@ -1466,6 +1466,27 @@ body.reduce-anim .cut-path{ transition-duration:.01ms !important; }
 /* --- P2-6：节点按压视觉节流占位（JS 侧 120ms 节流） --- */
 .node-group.node-press{ transition:transform .08s ease-out; }
 
+/* ===== V5.0.2：「我的家」专用面板 ===== */
+.home-overlay{position:fixed;inset:0;z-index:200;background:rgba(8,6,12,0.88);backdrop-filter:blur(8px);-webkit-backdrop-filter:blur(8px);display:flex;align-items:center;justify-content:center;opacity:0;pointer-events:none;transition:opacity 0.35s ease;}
+.home-overlay.show{opacity:1;pointer-events:auto;}
+.home-panel{width:min(680px,92vw);max-height:88vh;background:linear-gradient(160deg,#1e1828,#14101c);border:1px solid rgba(255,170,80,0.25);border-radius:18px;box-shadow:0 24px 80px rgba(0,0,0,0.7),0 0 60px rgba(255,170,80,0.06);transform:scale(0.92) translateY(12px);transition:transform 0.4s cubic-bezier(0.34,1.56,0.64,1);overflow:hidden;display:flex;flex-direction:column;}
+.home-overlay.show .home-panel{transform:scale(1) translateY(0);}
+.home-header{display:flex;align-items:center;gap:12px;padding:18px 22px;border-bottom:1px solid rgba(255,170,80,0.12);}
+.home-back-btn{width:38px;height:38px;border-radius:10px;background:rgba(255,170,80,0.08);border:1px solid rgba(255,170,80,0.2);color:#ffd89a;cursor:pointer;display:flex;align-items:center;justify-content:center;font-size:1.1rem;transition:all 0.2s;flex-shrink:0;}
+.home-back-btn:hover{background:rgba(255,170,80,0.18);transform:translateX(-3px);}
+.home-title{font-size:1.15rem;color:#ffb86c;letter-spacing:0.15em;font-weight:600;}
+.home-subtitle{font-size:0.72rem;color:rgba(255,200,140,0.45);margin-left:auto;letter-spacing:0.05em;}
+.home-grid{display:grid;grid-template-columns:repeat(2,1fr);gap:12px;padding:22px;overflow-y:auto;flex:1;}
+.home-item{display:flex;align-items:center;gap:14px;padding:16px 18px;border-radius:12px;background:rgba(255,170,80,0.04);border:1px solid rgba(255,170,80,0.12);cursor:pointer;transition:all 0.2s;text-align:left;}
+.home-item:hover{background:rgba(255,170,80,0.1);border-color:rgba(255,170,80,0.35);transform:translateY(-2px);box-shadow:0 6px 20px rgba(255,170,80,0.1);}
+.home-item-icon{width:40px;height:40px;border-radius:10px;background:rgba(255,170,80,0.1);display:flex;align-items:center;justify-content:center;font-size:1.2rem;flex-shrink:0;}
+.home-item-text{flex:1;}
+.home-item-name{font-size:0.92rem;color:#ffe4b5;font-weight:500;margin-bottom:2px;}
+.home-item-desc{font-size:0.7rem;color:rgba(255,200,140,0.4);}
+.home-item-arrow{color:rgba(255,170,80,0.3);font-size:0.9rem;flex-shrink:0;}
+.home-item:hover .home-item-arrow{color:rgba(255,170,80,0.7);transform:translateX(3px);transition:transform 0.2s;}
+@media(max-width:520px){.home-grid{grid-template-columns:1fr;}.home-header{padding:14px 16px;}.home-grid{padding:16px;gap:10px;}}
+
 </style>
 </head>
 <body>
@@ -3894,7 +3915,7 @@ const Core = {
       Renderer.addNode('v5_home', '我的家', hx, hy, {
         lit: true, w: 130, h: 44,
         data: isRadial ? { fixedX: hx, fixedY: hy } : {},
-        onClick: () => this.toggleHome()
+        onClick: () => { if (typeof HomeRoom !== 'undefined') HomeRoom.enter(); }
       });
       Renderer.addConnection('menu_root', 'v5_home', { alwaysVisible: true });
     }
@@ -14133,6 +14154,89 @@ if(typeof Ch2 !== 'undefined'){
       ['v5_endingsGalleryOverlay','v5_guideOverlay','v5_eggOverlay','v5_musicOverlay'].forEach(function(ovId){
         var ov=document.getElementById(ovId); if(ov) ov.addEventListener('click', function(e){ if(e.target===ov) ov.classList.remove('show'); });
       });
+      // V5.0.2：「我的家」专用面板事件绑定
+      var backBtn = document.getElementById('homeBackBtn');
+      if (backBtn) backBtn.addEventListener('click', function(){ HomeRoom.exit(); });
+      var homeOv = document.getElementById('homeOverlay');
+      if (homeOv) homeOv.addEventListener('click', function(e){ if(e.target===homeOv) HomeRoom.exit(); });
+      document.querySelectorAll('.home-item').forEach(function(item){
+        item.addEventListener('click', function(){
+          var action = item.getAttribute('data-action');
+          HomeRoom._handleItem(action);
+        });
+      });
+    },
+    // V5.0.2：镜头动画辅助
+    _savedViewport: null,
+    _animating: false,
+    _animateViewport(tx, ty, ts, duration, cb) {
+      if (this._animating) return;
+      this._animating = true;
+      var startX = G.viewport.x, startY = G.viewport.y, startS = G.viewport.scale;
+      var t0 = performance.now();
+      var self = this;
+      function ease(t) { return t < 0.5 ? 4*t*t*t : 1 - Math.pow(-2*t+2, 3)/2; }
+      function tick(now) {
+        var p = Math.min(1, (now - t0) / duration);
+        var e = ease(p);
+        G.viewport.x = startX + (tx - startX) * e;
+        G.viewport.y = startY + (ty - startY) * e;
+        G.viewport.scale = startS + (ts - startS) * e;
+        Renderer.applyViewport();
+        if (p < 1) { requestAnimationFrame(tick); }
+        else { self._animating = false; if (cb) cb(); }
+      }
+      requestAnimationFrame(tick);
+    },
+    // V5.0.2：进入「我的家」——镜头放大→面板展开
+    enter() {
+      if (this._animating) return;
+      this._enter();
+      // 保存当前视图
+      this._savedViewport = { x: G.viewport.x, y: G.viewport.y, scale: G.viewport.scale };
+      // 计算「我的家」节点目标视图（居中+放大到占满短边）
+      var homeNode = G.nodes.find(function(n){ return n.id === 'v5_home'; });
+      var hx = homeNode ? (homeNode.data && homeNode.data.fixedX !== undefined ? homeNode.data.fixedX : homeNode.x) : -155.56;
+      var hy = homeNode ? (homeNode.data && homeNode.data.fixedY !== undefined ? homeNode.data.fixedY : homeNode.y) : -155.56;
+      var w = Renderer.svg.clientWidth, h = Renderer.svg.clientHeight;
+      var shortSide = Math.min(w, h);
+      var targetScale = Math.min(3.2, Math.max(2.0, shortSide / 160)); // 节点宽约130，留边距，限制最大3.2
+      var tx = w/2 - hx * targetScale;
+      var ty = h/2 - hy * targetScale;
+      var self = this;
+      // 第一阶段：镜头放大移动到「我的家」
+      this._animateViewport(tx, ty, targetScale, 750, function(){
+        // 第二阶段：显示面板
+        document.getElementById('homeOverlay').classList.add('show');
+        // 面板显示后，镜头微调居中（可选）
+      });
+    },
+    // V5.0.2：退出「我的家」——面板收起→镜头缩小返回
+    exit() {
+      if (this._animating) return;
+      var self = this;
+      // 第一阶段：隐藏面板
+      document.getElementById('homeOverlay').classList.remove('show');
+      // 等待面板淡出后恢复镜头
+      setTimeout(function(){
+        if (self._savedViewport) {
+          self._animateViewport(self._savedViewport.x, self._savedViewport.y, self._savedViewport.scale, 700);
+        } else {
+          Renderer.centerView();
+        }
+      }, 350);
+    },
+    // V5.0.2：处理「我的家」子项点击
+    _handleItem(action) {
+      switch(action) {
+        case 'gallery': this.openGallery(); break;
+        case 'stats': StatsPanel.open(); break;
+        case 'codex': Codex.open(); break;
+        case 'guide': this.openGuide(); break;
+        case 'egg': this.openEgg(); break;
+        case 'music': this.openMusic(); break;
+        case 'credit': document.getElementById('aboutOverlay').style.display = 'flex'; break;
+      }
     },
     unlock(id) {
       if (this.unlocked[id]) return;
@@ -14474,6 +14578,91 @@ const MenuParticles = {
 window.addEventListener('DOMContentLoaded', () => MenuParticles.init());
 
 </script>
+
+  <!-- ===== V5.0.2：「我的家」专用面板 ===== -->
+  <div class="home-overlay" id="homeOverlay">
+    <div class="home-panel">
+      <div class="home-header">
+        <button class="home-back-btn" id="homeBackBtn" aria-label="返回">
+          <svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M19 12H5M12 19l-7-7 7-7"/></svg>
+        </button>
+        <div class="home-title">我的家</div>
+        <div class="home-subtitle" id="homeSubtitle">HOME</div>
+      </div>
+      <div class="home-grid" id="homeGrid">
+        <div class="home-item" data-action="gallery">
+          <div class="home-item-icon">
+            <svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="#ffb86c" stroke-width="1.8"><rect x="3" y="3" width="18" height="18" rx="2"/><path d="M3 9h18M9 21V9"/></svg>
+          </div>
+          <div class="home-item-text">
+            <div class="home-item-name">结局收藏室</div>
+            <div class="home-item-desc">查看所有达成的结局</div>
+          </div>
+          <div class="home-item-arrow">›</div>
+        </div>
+        <div class="home-item" data-action="stats">
+          <div class="home-item-icon">
+            <svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="#ffb86c" stroke-width="1.8"><path d="M3 3v18h18"/><path d="M7 14l4-4 4 4 5-5"/></svg>
+          </div>
+          <div class="home-item-text">
+            <div class="home-item-name">统计与纪录</div>
+            <div class="home-item-desc">游戏数据与最佳成绩</div>
+          </div>
+          <div class="home-item-arrow">›</div>
+        </div>
+        <div class="home-item" data-action="codex">
+          <div class="home-item-icon">
+            <svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="#ffb86c" stroke-width="1.8"><path d="M4 19.5A2.5 2.5 0 0 1 6.5 17H20"/><path d="M6.5 2H20v20H6.5A2.5 2.5 0 0 1 4 19.5v-15A2.5 2.5 0 0 1 6.5 2z"/></svg>
+          </div>
+          <div class="home-item-text">
+            <div class="home-item-name">笔记回忆录</div>
+            <div class="home-item-desc">收集的线索与笔记</div>
+          </div>
+          <div class="home-item-arrow">›</div>
+        </div>
+        <div class="home-item" data-action="guide">
+          <div class="home-item-icon">
+            <svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="#ffb86c" stroke-width="1.8"><circle cx="12" cy="12" r="10"/><path d="M9.09 9a3 3 0 0 1 5.83 1c0 2-3 3-3 3M12 17h.01"/></svg>
+          </div>
+          <div class="home-item-text">
+            <div class="home-item-name">玩法手册</div>
+            <div class="home-item-desc">操作说明与章节提示</div>
+          </div>
+          <div class="home-item-arrow">›</div>
+        </div>
+        <div class="home-item" data-action="egg">
+          <div class="home-item-icon">
+            <svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="#ffb86c" stroke-width="1.8"><path d="M12 22c5 0 8-4 8-10 0-6-4-10-8-10S4 6 4 12c0 6 3 10 8 10z"/><path d="M12 6c-2 2-3 5-3 8s1 5 3 6c2-1 3-3 3-6s-1-6-3-8z"/></svg>
+          </div>
+          <div class="home-item-text">
+            <div class="home-item-name">彩蛋收集</div>
+            <div class="home-item-desc">隐藏的秘密与彩蛋</div>
+          </div>
+          <div class="home-item-arrow">›</div>
+        </div>
+        <div class="home-item" data-action="music">
+          <div class="home-item-icon">
+            <svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="#ffb86c" stroke-width="1.8"><path d="M9 18V5l12-2v13"/><circle cx="6" cy="18" r="3"/><circle cx="18" cy="16" r="3"/></svg>
+          </div>
+          <div class="home-item-text">
+            <div class="home-item-name">音乐鉴赏</div>
+            <div class="home-item-desc">试听游戏音效与音乐</div>
+          </div>
+          <div class="home-item-arrow">›</div>
+        </div>
+        <div class="home-item" data-action="credit">
+          <div class="home-item-icon">
+            <svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="#ffb86c" stroke-width="1.8"><path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/></svg>
+          </div>
+          <div class="home-item-text">
+            <div class="home-item-name">关于致谢</div>
+            <div class="home-item-desc">版本信息与制作团队</div>
+          </div>
+          <div class="home-item-arrow">›</div>
+        </div>
+      </div>
+    </div>
+  </div>
 
 <!-- GM Console -->
   <!-- 剪贴板面板 -->
