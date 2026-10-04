@@ -14235,7 +14235,8 @@ if(typeof Ch2 !== 'undefined'){
     },
   };
   window.HomeRoom = HomeRoom;
-  try { HomeRoom.init(); } catch(e) {}
+  // V5.0.1 修复：HomeRoom.init 依賴面板 HTML 元素，必須在 DOM 解析完成後調用
+  document.addEventListener('DOMContentLoaded', function() { try { HomeRoom.init(); } catch(e) {} });
 
   // T-3: 初始化 stats 扩展字段
   G.stats = G.stats || {};
