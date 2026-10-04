@@ -1489,7 +1489,7 @@ body.reduce-anim .cut-path{ transition-duration:.01ms !important; }
 
 /* ===== V5.0.5：「我的家」脑图模式 ===== */
 body.home-mode .node-group:not([data-node-id^="v5_home"]){opacity:0 !important;pointer-events:none !important;transition:opacity 0.4s ease;}
-body.home-mode .connection:not([data-from^="v5_home"]):not([data-to^="v5_home"]){opacity:0 !important;transition:opacity 0.4s ease;}
+body.home-mode .connection:not([data-from-id^="v5_home"]):not([data-to-id^="v5_home"]){opacity:0 !important;transition:opacity 0.4s ease;}
 body.home-mode .node-group[data-node-id^="v5_home"]{transition:opacity 0.4s ease;}
 .home-back-fab{position:fixed;top:16px;left:16px;z-index:150;width:46px;height:46px;border-radius:14px;background:rgba(20,16,28,0.9);border:1px solid rgba(255,170,80,0.3);color:#ffd89a;cursor:pointer;display:none;align-items:center;justify-content:center;box-shadow:0 4px 20px rgba(0,0,0,0.5);transition:all 0.25s;backdrop-filter:blur(6px);}
 .home-back-fab.show{display:flex;animation:homeFabIn 0.4s cubic-bezier(0.34,1.56,0.64,1);}
@@ -14236,68 +14236,113 @@ if(typeof Ch2 !== 'undefined'){
       G.connections = G.connections.filter(function(c){ return !toRemove.has(c.fromId) && !toRemove.has(c.toId); });
       Renderer.render();
     },
-    // V5.0.5：进入「我的家」模式——镜头放大→缩小居中→其他消失→展开子节点
+    // V5.0.6：进入「我的家」模式——平滑动画：镜头放大→节点移到中心→缩小居中
     enter() {
       if (this._animating || this._homeMode) return;
       this._enter();
       this._homeMode = true;
-      // 保存当前视图
+      this._animating = true;
       this._savedViewport = { x: G.viewport.x, y: G.viewport.y, scale: G.viewport.scale };
-      // 计算「我的家」节点位置
       var homeNode = G.nodes.find(function(n){ return n.id === 'v5_home'; });
       var hx = homeNode ? (homeNode.data && homeNode.data.fixedX !== undefined ? homeNode.data.fixedX : homeNode.x) : -220;
       var hy = homeNode ? (homeNode.data && homeNode.data.fixedY !== undefined ? homeNode.data.fixedY : homeNode.y) : 0;
-      // 保存「我的家」原来的坐标，进入后它成为新中心(0,0)
       this._savedHomePos = { x: hx, y: hy };
       var w = Renderer.svg.clientWidth, h = Renderer.svg.clientHeight;
       var self = this;
-      // 第一阶段：镜头放大到最大（「我的家」占满屏幕）
-      var bigScale = Math.min(5.0, Math.max(3.5, Math.min(w, h) / 100));
-      var tx1 = w/2 - hx * bigScale;
-      var ty1 = h/2 - hy * bigScale;
-      this._animateViewport(tx1, ty1, bigScale, 500, function(){
-        // 把「我的家」节点移到 (0,0) 成为新的坐标中心
-        if (homeNode && homeNode.data) {
-          homeNode.data.fixedX = 0;
-          homeNode.data.fixedY = 0;
+      function ease(t) { return t < 0.5 ? 4*t*t*t : 1 - Math.pow(-2*t+2, 3)/2; }
+      // 第一阶段：镜头平滑放大到「我的家」原位置
+      var bigScale = Math.min(4.5, Math.max(3.0, Math.min(w, h) / 110));
+      var tx1 = w/2 - hx * bigScale, ty1 = h/2 - hy * bigScale;
+      var s0x = G.viewport.x, s0y = G.viewport.y, s0s = G.viewport.scale;
+      var t0 = performance.now();
+      function phase1(now) {
+        var p = Math.min(1, (now - t0) / 550);
+        var e = ease(p);
+        G.viewport.x = s0x + (tx1 - s0x) * e;
+        G.viewport.y = s0y + (ty1 - s0y) * e;
+        G.viewport.scale = s0s + (bigScale - s0s) * e;
+        Renderer.applyViewport();
+        if (p < 1) { requestAnimationFrame(phase1); }
+        else {
+          // 第二阶段：镜头缩小居中 + 节点平滑移到(0,0)，同步进行
+          var s1x = G.viewport.x, s1y = G.viewport.y, s1s = G.viewport.scale;
+          var t1 = performance.now();
+          function phase2(now2) {
+            var p2 = Math.min(1, (now2 - t1) / 550);
+            var e2 = ease(p2);
+            G.viewport.x = s1x + (w/2 - s1x) * e2;
+            G.viewport.y = s1y + (h/2 - s1y) * e2;
+            G.viewport.scale = s1s + (1.0 - s1s) * e2;
+            if (homeNode && homeNode.data) {
+              homeNode.data.fixedX = hx + (0 - hx) * e2;
+              homeNode.data.fixedY = hy + (0 - hy) * e2;
+            }
+            Renderer.render();
+            if (p2 < 1) { requestAnimationFrame(phase2); }
+            else {
+              self._animating = false;
+              document.body.classList.add('home-mode');
+              self._expandHomeNodes();
+              document.getElementById('homeBackFab').classList.add('show');
+            }
+          }
+          requestAnimationFrame(phase2);
         }
-        Renderer.render();
-        // 第二阶段：缩小到「我的家」居中（大小和进入前一样，scale=1，此时中心就是(0,0)）
-        var midScale = 1.0;
-        var tx2 = w/2;
-        var ty2 = h/2;
-        self._animateViewport(tx2, ty2, midScale, 450, function(){
-          // 其他节点消失，展开「我的家」子节点
-          document.body.classList.add('home-mode');
-          self._expandHomeNodes();
-          // 显示返回按钮
-          document.getElementById('homeBackFab').classList.add('show');
-        });
-      });
+      }
+      requestAnimationFrame(phase1);
     },
-    // V5.0.5：退出「我的家」模式——子节点消失→恢复原中心→镜头返回
+    // V5.0.6：退出「我的家」模式——平滑返回：节点移回原位→镜头缩小
     exit() {
       if (this._animating || !this._homeMode) return;
       this._homeMode = false;
+      this._animating = true;
       var self = this;
-      // 隐藏返回按钮
+      var homeNode = G.nodes.find(function(n){ return n.id === 'v5_home'; });
+      var origX = this._savedHomePos ? this._savedHomePos.x : -220;
+      var origY = this._savedHomePos ? this._savedHomePos.y : 0;
+      var w = Renderer.svg.clientWidth, h = Renderer.svg.clientHeight;
+      function ease(t) { return t < 0.5 ? 4*t*t*t : 1 - Math.pow(-2*t+2, 3)/2; }
       document.getElementById('homeBackFab').classList.remove('show');
-      // 移除子节点，恢复其他节点
       this._collapseHomeNodes();
       document.body.classList.remove('home-mode');
-      // 恢复「我的家」原来的坐标，menu_root 重新成为中心
-      var homeNode = G.nodes.find(function(n){ return n.id === 'v5_home'; });
-      if (homeNode && homeNode.data && this._savedHomePos) {
-        homeNode.data.fixedX = this._savedHomePos.x;
-        homeNode.data.fixedY = this._savedHomePos.y;
+      // 第一阶段：镜头放大 + 节点从(0,0)平滑移回原位
+      var bigScale = Math.min(4.5, Math.max(3.0, Math.min(w, h) / 110));
+      var tx1 = w/2 - origX * bigScale, ty1 = h/2 - origY * bigScale;
+      var s0x = G.viewport.x, s0y = G.viewport.y, s0s = G.viewport.scale;
+      var t0 = performance.now();
+      function phase1(now) {
+        var p = Math.min(1, (now - t0) / 500);
+        var e = ease(p);
+        G.viewport.x = s0x + (tx1 - s0x) * e;
+        G.viewport.y = s0y + (ty1 - s0y) * e;
+        G.viewport.scale = s0s + (bigScale - s0s) * e;
+        if (homeNode && homeNode.data) {
+          homeNode.data.fixedX = 0 + (origX - 0) * e;
+          homeNode.data.fixedY = 0 + (origY - 0) * e;
+        }
+        Renderer.render();
+        if (p < 1) { requestAnimationFrame(phase1); }
+        else {
+          // 第二阶段：镜头缩小回到原位
+          var endX = self._savedViewport ? self._savedViewport.x : w/2;
+          var endY = self._savedViewport ? self._savedViewport.y : h/2;
+          var endS = self._savedViewport ? self._savedViewport.scale : 1;
+          var s1x = G.viewport.x, s1y = G.viewport.y, s1s = G.viewport.scale;
+          var t1 = performance.now();
+          function phase2(now2) {
+            var p2 = Math.min(1, (now2 - t1) / 500);
+            var e2 = ease(p2);
+            G.viewport.x = s1x + (endX - s1x) * e2;
+            G.viewport.y = s1y + (endY - s1y) * e2;
+            G.viewport.scale = s1s + (endS - s1s) * e2;
+            Renderer.applyViewport();
+            if (p2 < 1) { requestAnimationFrame(phase2); }
+            else { self._animating = false; }
+          }
+          requestAnimationFrame(phase2);
+        }
       }
-      Renderer.render();
-      // 镜头恢复
-      if (this._savedViewport) {
-        this._animateViewport(this._savedViewport.x, this._savedViewport.y, this._savedViewport.scale, 600);
-      } else {
-        Renderer.centerView();
-      }
+      requestAnimationFrame(phase1);
     },
     // V5.0.5：处理「我的家」子项点击
     _handleItem(action) {
