@@ -14245,8 +14245,10 @@ if(typeof Ch2 !== 'undefined'){
       this._savedViewport = { x: G.viewport.x, y: G.viewport.y, scale: G.viewport.scale };
       // 计算「我的家」节点位置
       var homeNode = G.nodes.find(function(n){ return n.id === 'v5_home'; });
-      var hx = homeNode ? (homeNode.data && homeNode.data.fixedX !== undefined ? homeNode.data.fixedX : homeNode.x) : -155.56;
-      var hy = homeNode ? (homeNode.data && homeNode.data.fixedY !== undefined ? homeNode.data.fixedY : homeNode.y) : -155.56;
+      var hx = homeNode ? (homeNode.data && homeNode.data.fixedX !== undefined ? homeNode.data.fixedX : homeNode.x) : -220;
+      var hy = homeNode ? (homeNode.data && homeNode.data.fixedY !== undefined ? homeNode.data.fixedY : homeNode.y) : 0;
+      // 保存「我的家」原来的坐标，进入后它成为新中心(0,0)
+      this._savedHomePos = { x: hx, y: hy };
       var w = Renderer.svg.clientWidth, h = Renderer.svg.clientHeight;
       var self = this;
       // 第一阶段：镜头放大到最大（「我的家」占满屏幕）
@@ -14254,10 +14256,16 @@ if(typeof Ch2 !== 'undefined'){
       var tx1 = w/2 - hx * bigScale;
       var ty1 = h/2 - hy * bigScale;
       this._animateViewport(tx1, ty1, bigScale, 500, function(){
-        // 第二阶段：缩小到「我的家」居中（大小和进入前一样，scale=1）
+        // 把「我的家」节点移到 (0,0) 成为新的坐标中心
+        if (homeNode && homeNode.data) {
+          homeNode.data.fixedX = 0;
+          homeNode.data.fixedY = 0;
+        }
+        Renderer.render();
+        // 第二阶段：缩小到「我的家」居中（大小和进入前一样，scale=1，此时中心就是(0,0)）
         var midScale = 1.0;
-        var tx2 = w/2 - hx * midScale;
-        var ty2 = h/2 - hy * midScale;
+        var tx2 = w/2;
+        var ty2 = h/2;
         self._animateViewport(tx2, ty2, midScale, 450, function(){
           // 其他节点消失，展开「我的家」子节点
           document.body.classList.add('home-mode');
@@ -14267,7 +14275,7 @@ if(typeof Ch2 !== 'undefined'){
         });
       });
     },
-    // V5.0.4：退出「我的家」模式——子节点消失→其他恢复→镜头返回
+    // V5.0.4：退出「我的家」模式——子节点消失→恢复原中心→镜头返回
     exit() {
       if (this._animating || !this._homeMode) return;
       this._homeMode = false;
@@ -14277,6 +14285,13 @@ if(typeof Ch2 !== 'undefined'){
       // 移除子节点，恢复其他节点
       this._collapseHomeNodes();
       document.body.classList.remove('home-mode');
+      // 恢复「我的家」原来的坐标，menu_root 重新成为中心
+      var homeNode = G.nodes.find(function(n){ return n.id === 'v5_home'; });
+      if (homeNode && homeNode.data && this._savedHomePos) {
+        homeNode.data.fixedX = this._savedHomePos.x;
+        homeNode.data.fixedY = this._savedHomePos.y;
+      }
+      Renderer.render();
       // 镜头恢复
       if (this._savedViewport) {
         this._animateViewport(this._savedViewport.x, this._savedViewport.y, this._savedViewport.scale, 600);
