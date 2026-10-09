@@ -4,7 +4,7 @@
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no" />
 <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='%23ffc27a' stroke-width='1.8' stroke-linecap='round' stroke-linejoin='round'%3E%3Ccircle cx='7.5' cy='15.5' r='3.5'/%3E%3Cpath d='M10 13l10-10M16 6l3 3M13 9l2 2'/%3E%3C/svg%3E" />
-  <title>幽冥密室 · 脑图密室逃脱 V6.0.2</title>
+  <title>幽冥密室 · 脑图密室逃脱 V6.0.4</title>
   <style>
 *,*::before,*::after{box-sizing:border-box;}
 img,video{max-width:100%;height:auto;display:block;}
@@ -2405,8 +2405,10 @@ body.home-mode .node-group[data-node-id^="v6_"] .node-rect{ pointer-events:auto 
           <button onclick="document.getElementById('aboutOverlay').style.display='none'" style="background:rgba(255,170,80,0.1);border:1px solid rgba(255,170,80,0.3);color:#ffd89a;width:30px;height:30px;border-radius:8px;cursor:pointer;font-size:0.9rem;">✕</button>
         </div>
         <div style="font-size:0.85rem;color:rgba(255,220,180,0.8);line-height:1.9;letter-spacing:0.03em;">
-          <div style="color:#ffb86c;font-size:1rem;margin-bottom:10px;font-weight:bold;">脑图密室逃脱 <span id="aboutVersionSpan" style="color:#fff;cursor:pointer;user-select:none;">V6.0.2</span></div>
+          <div style="color:#ffb86c;font-size:1rem;margin-bottom:10px;font-weight:bold;">脑图密室逃脱 <span id="aboutVersionSpan" style="color:#fff;cursor:pointer;user-select:none;">V6.0.4</span></div>
           <div style="background:rgba(180,220,255,0.1);border:1px solid rgba(180,220,255,0.4);border-radius:8px;padding:12px;margin-bottom:12px;font-size:0.78rem;line-height:1.8;">
+            <b style="color:#a8d8ff;">【V6.0.4 更新日誌】手機版面頂部安全留白</b><br>· 頂部預留 28px 空間，控制列、狀態列與小地圖同步下移，避免與手機狀態列／瀏海重疊<br><br>
+            <b style="color:#a8d8ff;">【V6.0.3 更新日誌】腦圖拖曳效能修復</b><br>· 拖曳期間合併 SVG 更新、暫停高成本濾鏡與粒子動畫，修復移動視角時畫面閃爍<br><br>
             <b style="color:#a8d8ff;">【V6.0.2 更新日誌】「我的家」顯示問題修復</b><br>· 修正成就殿堂、物品圖鑑章節標籤舊命名：原「第二章·收容失效」改為「DLC1·收容失效」、原「第三章·黎明」改為「第二章·黎明」<br>· 修正密室解謎、記憶翻牌、反應考驗、數字華容道通關後，最佳紀錄／通關次數沒有即時更新的問題<br>· 優化桌面端記憶翻牌、每日紀要佈局：卡片與日曆自動適應視窗高度，不再需要勉強滾動才能點到<br><br>
             <b style="color:#a8d8ff;">【V6.0.1 更新日誌】閣樓「數字華容道」體驗優化</b><br>· 方塊移動改為平滑滑動動畫（絕對定位 + transform，0.2s 緩動），不再瞬間跳變<br>· 支援同行／同列多個方塊聯動：點擊遠處方塊時，2 個、3 個方塊一起滑動過去<br>· 修復方塊移動後再次點擊失效的問題（點擊時動態定位）<br><br>            <b style="color:#a8d8ff;">【V6.0.0 更新日誌】超級自主+ 大版本迭代：我的家全新擴建 + 設計體系統一 + 全面除錯</b><br><b style="color:#a8d8ff;">新增內容（非常豐富）：</b><br>· 「我的家」由 7 間擴建為更多房間，新增成就殿堂、物品圖鑑、音樂盒、主題展廳、小遊戲、設定中心等多個全新系統<br>· 全新成就系統、收集圖鑑、每日／里程碑、互動小遊戲，大量新彩蛋與隱藏內容<br>· 統一設計規範：配色／字階／圓角／觸控目標／動效全面打磨，資訊層級更清晰，畫面保持整齊<br><b style="color:#a8d8ff;">修復與優化：</b><br>· 徹底排查計時器洩漏、事件綁定、跨章節狀態、存讀檔、觸控鍵盤、暫停與快捷鍵互斥等問題並瀏覽器實測<br><br><b style="color:#a8d8ff;">【V5.0.6 更新日誌】超級自主+ 全面迭代：豐富內容 + UI/UX 打磨 + 徹底除錯</b><br>
             <b style="color:#a8d8ff;">新增內容（非常豐富）：</b><br>
@@ -2679,7 +2681,7 @@ body.home-mode .node-group[data-node-id^="v6_"] .node-rect{ pointer-events:auto 
       </div>
       <div class="loading-tip" id="loadingTip"></div>
       <div class="loading-bar-wrap"><div class="loading-bar" id="loadingBar"></div></div>
-      <div class="loading-version" id="loadingVersion">V6.0.2</div>
+      <div class="loading-version" id="loadingVersion">V6.0.4</div>
     </div>
     <!-- 自動遊玩狀態遮罩 -->
     <div id="autoplay-overlay">
@@ -2860,7 +2862,7 @@ body.home-mode .node-group[data-node-id^="v6_"] .node-rect{ pointer-events:auto 
 <script>
 // ============================================================
 // 脑图密室逃脱 (Mind Map Escape Room)
-// Version: V6.0.2  (2026-10-08)
+// Version: V6.0.4  (2026-10-09)
 // Single-file HTML escape room game.
 // Changelog: see About overlay (關於本作) or aboutOverlay.
 // ============================================================
@@ -17401,8 +17403,8 @@ V6.Home.registerRoom('annex', {
     <svg class="cut-line-svg cut-line-top" viewBox="0 0 1000 20" preserveAspectRatio="none"><path class="cut-path cyan" d=""/></svg>
     <svg class="cut-line-svg cut-line-bottom" viewBox="0 0 1000 20" preserveAspectRatio="none"><path class="cut-path cyan" d=""/></svg>
   </div>
-  <div class="version-display">脑图密室逃脱 V6.0.2</div>
-  <div id="versionWatermark">幽冥密室 V6.0.2</div>
+  <div class="version-display">脑图密室逃脱 V6.0.4</div>
+  <div id="versionWatermark">幽冥密室 V6.0.4</div>
   <div id="questBar"><div class="quest-title" onclick="QuestTracker.toggle()">任务清单</div><ul id="questList"></ul></div>
   <div class="codex-overlay" id="codexOverlay"><div class="codex-panel">
     <div class="codex-header"><div class="codex-title">笔记 · 线索收集册</div>
