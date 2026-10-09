@@ -106,6 +106,17 @@ body.reduce-anim #minimap{transition:none !important;}
 #canvas-container{position:absolute;inset:0;z-index:1;cursor:grab;touch-action:none;}
 #canvas-container.dragging{cursor:grabbing;}
 #mindmap{width:100%;height:100%;display:block;}
+/* V6.0.3：拖曳期間只移動 SVG viewport，暫停昂貴的 SVG 濾鏡/動畫，避免 WebView 逐事件重繪閃爍 */
+body.map-dragging .node-group,
+body.map-dragging .node-group .node-rect,
+body.map-dragging .node-group .node-text,
+body.map-dragging .connection{transition:none !important;animation:none !important;filter:none !important;}
+body.map-dragging .node-group:hover,
+body.map-dragging .node-group:active,
+body.map-dragging .node-group:hover .node-rect,
+body.map-dragging .node-group:active .node-rect{filter:none !important;stroke-width:1.5 !important;}
+body.map-dragging #menuParticles,
+body.map-dragging .particle-canvas{visibility:hidden !important;}
 .connection{fill:none;stroke:var(--line-dark);stroke-width:var(--line-width,2);transition:stroke 0.8s ease,opacity 0.5s ease;pointer-events:none;opacity:1;}
 .connection.always-visible{opacity:1;}
 .connection.level-line{stroke-width:2.5;opacity:0;}
@@ -3380,7 +3391,7 @@ const I18n = {
 };
 
 const Renderer = {
-  svg: null, nodesG: null, connG: null, _newNodeIds: [], container: null, _pauseAnim: false,
+  svg: null, nodesG: null, connG: null, _newNodeIds: [], container: null, _pauseAnim: false, _viewportRaf: 0,
   init() {
     this.svg = $('#mindmap');
     this.nodesG = $('#nodes');
@@ -3403,6 +3414,7 @@ const Renderer = {
       G.dragging = true; G.dragStart = { x: pt.clientX, y: pt.clientY };
       G.viewportStart = { ...G.viewport };
       c.classList.add('dragging');
+      document.body.classList.add('map-dragging');
     };
     const move = (e) => {
       const pt = e.touches ? e.touches[0] : e;
@@ -3417,15 +3429,26 @@ const Renderer = {
       const dy = pt.clientY - G.dragStart.y;
       G.viewport.x = G.viewportStart.x + dx;
       G.viewport.y = G.viewportStart.y + dy;
+      // 觸控事件可能遠高於螢幕刷新率，合併到下一個畫面幀再更新 SVG。
+      this.queueViewportApply();
+    };
+    const end = () => {
+      if (!G.dragging) return;
+      G.dragging = false;
+      c.classList.remove('dragging');
+      document.body.classList.remove('map-dragging');
+      if (this._viewportRaf) { cancelAnimationFrame(this._viewportRaf); this._viewportRaf = 0; }
+      // 補上最後位置，並只在拖曳結束時更新一次小地圖。
       this.applyViewport();
     };
-    const end = () => { G.dragging = false; c.classList.remove('dragging'); };
     c.addEventListener('mousedown', start);
     window.addEventListener('mousemove', move);
     window.addEventListener('mouseup', end);
     c.addEventListener('touchstart', start, { passive: true });
     window.addEventListener('touchmove', move, { passive: true });
     window.addEventListener('touchend', end);
+    window.addEventListener('touchcancel', end);
+    window.addEventListener('blur', end);
   },
   setupWheel() {
     this.container.addEventListener('wheel', (e) => {
@@ -3435,11 +3458,18 @@ const Renderer = {
       this.applyViewport();
     }, { passive: false });
   },
+  queueViewportApply() {
+    if (this._viewportRaf) return;
+    this._viewportRaf = requestAnimationFrame(() => {
+      this._viewportRaf = 0;
+      if (G.dragging) this.applyViewport();
+    });
+  },
   applyViewport() {
     const v = G.viewport;
     $('#viewport').setAttribute('transform', `translate(${v.x},${v.y}) scale(${v.scale})`);
-    // V4.5.3：平移/縮放時即時更新小地圖視口框
-    if (typeof Minimap !== 'undefined') Minimap.updateViewport();
+    // V4.5.3：平移/縮放時即時更新小地圖視口框；拖曳期間延後至結束，避免第二個 canvas 反覆重繪。
+    if (typeof Minimap !== 'undefined' && !G.dragging) Minimap.updateViewport();
   },
   // V3.0.0：鎖定節點懸停提示
   _showTooltip(node, e) {
