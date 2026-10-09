@@ -16,12 +16,14 @@ body{overflow-wrap:break-word;touch-action:none;overflow:hidden;}
   --node-border-lit:rgba(255,180,80,0.7);--node-text-lit:#ffd89a;
   --node-glow:rgba(255,170,60,0.4);--accent:#ff9a3c;--accent-strong:#ffb86c;
   --line-dark:rgba(100,100,110,0.25);--line-lit:rgba(255,170,80,0.4);
-  --inventory-bg:rgba(18,18,26,0.92);
+  --inventory-bg:rgba(18,18,26,0.92);--reserved-top-space:28px;
 }
 html,body{margin:0;padding:0;width:100%;height:100%;overflow:hidden;background:var(--bg-deep);color:#e8e4dc;font-family:"Songti SC","STSong","SimSun","Noto Serif SC",serif;user-select:none;-webkit-user-select:none;}
 /* V4.6.2：iPhone 劉海/安全區域適配 */
 .top-bar{padding-top:env(safe-area-inset-top);padding-top:constant(safe-area-inset-top);}
-#minimap{top:calc(56px + env(safe-area-inset-top)) !important;top:calc(56px + constant(safe-area-inset-top)) !important;}
+#minimap{top:calc(56px + var(--reserved-top-space) + env(safe-area-inset-top)) !important;top:calc(56px + var(--reserved-top-space) + constant(safe-area-inset-top)) !important;}
+/* V6.0.4：頂部預留 28px，避免手機狀態列/瀏海與遊戲控制元件重疊 */
+.top-bar{top:var(--reserved-top-space);}
 #app{position:relative;width:100vw;height:100vh;overflow:hidden;}
 .bg-atmosphere{position:absolute;inset:0;background:radial-gradient(ellipse at 50% 50%,rgba(30,25,20,0.6) 0%,var(--bg-deep) 70%),repeating-linear-gradient(0deg,transparent 0,transparent 2px,rgba(255,255,255,0.01) 2px,rgba(255,255,255,0.01) 4px);pointer-events:none;z-index:0;transition:background 1.2s ease;}
 .bg-atmosphere.lit{background:radial-gradient(ellipse at 50% 45%,rgba(80,50,20,0.5) 0%,rgba(20,15,10,0.85) 55%,var(--bg-deep) 80%),repeating-linear-gradient(0deg,transparent 0,transparent 2px,rgba(255,200,120,0.02) 2px,rgba(255,200,120,0.02) 4px);}
@@ -97,7 +99,7 @@ body.reduce-anim *, body.reduce-anim *::before, body.reduce-anim *::after{
 body.reduce-anim #menuParticles, body.reduce-anim .particle-canvas{display:none !important;}
 body.reduce-anim .node-group .ripple, body.reduce-anim .ripple-anim{display:none !important;}
 body.reduce-anim #minimap{transition:none !important;}
-.status-bar{position:absolute;top:56px;left:0;right:0;display:flex;justify-content:center;gap:24px;padding:6px 20px;z-index:9;pointer-events:none;}
+.status-bar{position:absolute;top:calc(56px + var(--reserved-top-space));left:0;right:0;display:flex;justify-content:center;gap:24px;padding:6px 20px;z-index:9;pointer-events:none;}
 .status-item{display:flex;align-items:center;gap:6px;background:rgba(10,10,15,0.7);border:1px solid rgba(255,170,80,0.2);border-radius:20px;padding:4px 14px;font-size:0.78rem;}
 .status-item .status-icon{font-size:0.9rem;}
 .status-item .status-value{color:#ffd89a;letter-spacing:0.05em;min-width:42px;text-align:center;}
