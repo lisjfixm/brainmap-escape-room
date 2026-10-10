@@ -110,7 +110,37 @@ SCP 基金会 Site-19 发生大规模收容失效事件。作为 D 级人员，�
 
 ## 版本历史
 
-### V6.0.6（最新，修复平移时节点变暗、松手闪一下）
+### V7.0.0（超级自主+ 大版本迭代：全面体验升级）
+**新增功能：**
+- 存档导出/导入：设置面板新增「导出存档」「导入存档」按钮，Base64 编码跨设备迁移进度
+- 错误边界处理：window.onerror 全局拦截，出错时自动保存并提示玩家
+- prefers-reduced-motion 支持：系统偏好减弱动画时自动关闭游戏动效
+- 成就 toast 队列：最多同时显示 2 个，其余排队依次弹出
+
+**Bug 修复（严重）：**
+- 修复 meta 成就「V5 收藏家」永远无法解锁的 bug（错误调用 this.unlocked）
+- 修复手棒 rAF 无限循环空转问题，改为 gamepadconnected 事件驱动
+- 修复长按教学 interval 清理不完整导致的记忆体泄漏
+- 修复 showDialog 连续呼叫时前一个 Promise 永不 resolve 的问题
+- 修复 Renderer.render() 动画清理 setTimeout 污染新章节节点
+
+**Bug 修复（一般）：**
+- goToMenu() 全量 DOM 访问加 null 检查，避免元素缺失时卡死
+- 快捷键 's' 仅在游戏中存档，菜单不再误触
+- 新增 visibilitychange 处理，背景分页计时提示
+- continueGame() 加 schema 验证，坏存档不再导致崩溃
+- hasSave() 检查存档版本，避免 UI 误导
+
+**性能优化：**
+- Renderer 快取 viewport DOM 元素
+- Inventory 自动保存 debounce 300ms，连续拾取合并写入
+- 对话框打字机改用 textNode.appendData()，减少 innerHTML 重建
+
+### V6.0.7（修复节点展开动画）
+- 修复 DLC1 等场景中点击节点后新子节点直接出现、没有从父节点滑出淡入的问题
+- 根因：no-transition class 移除与 transform 改变在同一帧同步执行，浏览器不触发 CSS transition；改为先移除 class 并强制 reflow，下一帧才改 transform
+
+### V6.0.6（修复平移时节点变暗、松手闪一下）
 - 拖曳期间不再强行 `filter:none`——之前连 lit 节点的 drop-shadow 发光一起关掉，导致平移时节点变暗、松手光晕恢复又闪一下
 - 只保留关 transition／animation 与背景粒子，节点外观在拖曳中保持一致
 
