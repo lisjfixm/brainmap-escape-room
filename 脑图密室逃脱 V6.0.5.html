@@ -108,15 +108,13 @@ body.reduce-anim #minimap{transition:none !important;}
 #canvas-container{position:absolute;inset:0;z-index:1;cursor:grab;touch-action:none;}
 #canvas-container.dragging{cursor:grabbing;}
 #mindmap{width:100%;height:100%;display:block;}
-/* V6.0.3：拖曳期間只移動 SVG viewport，暫停昂貴的 SVG 濾鏡/動畫，避免 WebView 逐事件重繪閃爍 */
+/* V6.0.6：拖曳期間關閉 transition／animation 與背景粒子即可——
+   不再強行 filter:none，否則 lit 節點的 drop-shadow 發光會消失，
+   造成平移時節點「變暗」、鬆手光暈恢復又閃一下。 */
 body.map-dragging .node-group,
 body.map-dragging .node-group .node-rect,
 body.map-dragging .node-group .node-text,
-body.map-dragging .connection{transition:none !important;animation:none !important;filter:none !important;}
-body.map-dragging .node-group:hover,
-body.map-dragging .node-group:active,
-body.map-dragging .node-group:hover .node-rect,
-body.map-dragging .node-group:active .node-rect{filter:none !important;stroke-width:1.5 !important;}
+body.map-dragging .connection{transition:none !important;animation:none !important;}
 body.map-dragging #menuParticles,
 body.map-dragging .particle-canvas{visibility:hidden !important;}
 .connection{fill:none;stroke:var(--line-dark);stroke-width:var(--line-width,2);transition:stroke 0.8s ease,opacity 0.5s ease;pointer-events:none;opacity:1;}

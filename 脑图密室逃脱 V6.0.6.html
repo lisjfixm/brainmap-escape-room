@@ -4,7 +4,7 @@
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no" />
 <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='%23ffc27a' stroke-width='1.8' stroke-linecap='round' stroke-linejoin='round'%3E%3Ccircle cx='7.5' cy='15.5' r='3.5'/%3E%3Cpath d='M10 13l10-10M16 6l3 3M13 9l2 2'/%3E%3C/svg%3E" />
-  <title>幽冥密室 · 脑图密室逃脱 V6.0.6</title>
+  <title>幽冥密室 · 脑图密室逃脱 V6.0.7</title>
   <style>
 *,*::before,*::after{box-sizing:border-box;}
 img,video{max-width:100%;height:auto;display:block;}
@@ -108,7 +108,7 @@ body.reduce-anim #minimap{transition:none !important;}
 #canvas-container{position:absolute;inset:0;z-index:1;cursor:grab;touch-action:none;}
 #canvas-container.dragging{cursor:grabbing;}
 #mindmap{width:100%;height:100%;display:block;}
-/* V6.0.6：拖曳期間關閉 transition／animation 與背景粒子即可——
+/* V6.0.7：拖曳期間關閉 transition／animation 與背景粒子即可——
    不再強行 filter:none，否則 lit 節點的 drop-shadow 發光會消失，
    造成平移時節點「變暗」、鬆手光暈恢復又閃一下。 */
 body.map-dragging .node-group,
@@ -2406,8 +2406,9 @@ body.home-mode .node-group[data-node-id^="v6_"] .node-rect{ pointer-events:auto 
           <button onclick="document.getElementById('aboutOverlay').style.display='none'" style="background:rgba(255,170,80,0.1);border:1px solid rgba(255,170,80,0.3);color:#ffd89a;width:30px;height:30px;border-radius:8px;cursor:pointer;font-size:0.9rem;">✕</button>
         </div>
         <div style="font-size:0.85rem;color:rgba(255,220,180,0.8);line-height:1.9;letter-spacing:0.03em;">
-          <div style="color:#ffb86c;font-size:1rem;margin-bottom:10px;font-weight:bold;">脑图密室逃脱 <span id="aboutVersionSpan" style="color:#fff;cursor:pointer;user-select:none;">V6.0.6</span></div>
+          <div style="color:#ffb86c;font-size:1rem;margin-bottom:10px;font-weight:bold;">脑图密室逃脱 <span id="aboutVersionSpan" style="color:#fff;cursor:pointer;user-select:none;">V6.0.7</span></div>
           <div style="background:rgba(180,220,255,0.1);border:1px solid rgba(180,220,255,0.4);border-radius:8px;padding:12px;margin-bottom:12px;font-size:0.78rem;line-height:1.8;">
+            <b style="color:#a8d8ff;">【V6.0.7 更新日誌】修復點擊節點展開子節點無動畫</b><br>· 修復 DLC1 等場景中點擊節點後新子節點直接出現、沒有從父節點滑出淡入的問題<br>· 根因：no-transition class 移除與 transform 改變在同一幀同步執行，瀏覽器不觸發 CSS transition；改為先移除 class 並強制 reflow，下一幀才改 transform<br>· 同時保留 V6.0.6 平移時節點不變暗的修復<br><br>
             <b style="color:#a8d8ff;">【V6.0.6 更新日誌】修復平移時節點變暗、鬆手閃一下</b><br>· 拖曳期間不再強行 filter:none——之前連 lit 節點的 drop-shadow 發光一起關掉，導致平移時節點變暗、鬆手光暈恢復又閃一下<br>· 只保留關 transition／animation 與背景粒子，節點外觀在拖曳中保持一致<br><br>
             <b style="color:#a8d8ff;">【V6.0.5 更新日誌】根治平移畫布鬆手後閃一下</b><br>· 移除節點預設的 filter:blur(0.5px)——它讓每個節點都成為獨立合成層，拖曳鬆手恢復 filter 時整幅 SVG 被迫重新柵格化，就是那一下閃爍；lit/進度節點的 drop-shadow 保留<br>· 鬆手延遲約 90ms 才恢復 transition/filter，讓最後一次座標變換先在無動畫狀態下穩定，再切回正常外觀，避免「移動」與「恢復濾鏡」在同一幀重疊<br><br>
             <b style="color:#a8d8ff;">【V6.0.4 更新日誌】手機版面頂部安全留白</b><br>· 頂部預留 28px 空間，控制列、狀態列與小地圖同步下移，避免與手機狀態列／瀏海重疊<br><br>
@@ -2684,7 +2685,7 @@ body.home-mode .node-group[data-node-id^="v6_"] .node-rect{ pointer-events:auto 
       </div>
       <div class="loading-tip" id="loadingTip"></div>
       <div class="loading-bar-wrap"><div class="loading-bar" id="loadingBar"></div></div>
-      <div class="loading-version" id="loadingVersion">V6.0.6</div>
+      <div class="loading-version" id="loadingVersion">V6.0.7</div>
     </div>
     <!-- 自動遊玩狀態遮罩 -->
     <div id="autoplay-overlay">
@@ -2865,7 +2866,7 @@ body.home-mode .node-group[data-node-id^="v6_"] .node-rect{ pointer-events:auto 
 <script>
 // ============================================================
 // 脑图密室逃脱 (Mind Map Escape Room)
-// Version: V6.0.6  (2026-10-10)
+// Version: V6.0.7  (2026-10-10)
 // Single-file HTML escape room game.
 // Changelog: see About overlay (關於本作) or aboutOverlay.
 // ============================================================
@@ -3547,17 +3548,19 @@ const Renderer = {
     else if (layout === 'tree-up') this.layoutTreeUp();
     this.renderConnections();
     this.renderNodes();
+    // V6.0.7: 先在第一層 rAF 移除 no-transition 並強制 reflow，
+    // 再於第二層 rAF 才改 transform，確保 CSS transition 真正觸發。
     requestAnimationFrame(() => {
+      svg.classList.remove('no-transition');
+      // 強制瀏覽器在改變 transform 前重新計算 style，
+      // 讓 transition 屬性從 none 切換到 inline 值後才開始過渡。
+      void svg.offsetWidth;
       requestAnimationFrame(() => {
-        svg.classList.remove('no-transition');
         if (this._pauseAnim) {
-          // 转场中：不触发动画，等待转场完成
           this._newNodeIds = [];
           return;
         }
         if (this._newNodes.length > 0 || this._newConns.length > 0) {
-          // 用局部變數捕獲本次 render 的新節點/連線，避免後續 render() 重置 this._newNodes
-          // 導致舊 setTimeout 迭代到新陣列、舊節點 transform 永不清除（節點卡在中間）。
           const newNodes = this._newNodes.slice();
           const newConns = this._newConns.slice();
           newNodes.forEach(item => {
@@ -3570,7 +3573,6 @@ const Renderer = {
           const clearDur = (G.settings.animDuration || 0.5) * 1000 + 100;
           setTimeout(() => {
             G.nodes.forEach(n => { if (n.data) n.data.isNew = false; });
-            // 清除新节点的内联transform动画，同时设置SVG transform属性兜底
             newNodes.forEach(item => {
               if (item.g && item.g.style && item.g.isConnected !== false) {
                 item.g.setAttribute('transform', `translate(${item.targetX},${item.targetY})`);
@@ -17411,8 +17413,8 @@ V6.Home.registerRoom('annex', {
     <svg class="cut-line-svg cut-line-top" viewBox="0 0 1000 20" preserveAspectRatio="none"><path class="cut-path cyan" d=""/></svg>
     <svg class="cut-line-svg cut-line-bottom" viewBox="0 0 1000 20" preserveAspectRatio="none"><path class="cut-path cyan" d=""/></svg>
   </div>
-  <div class="version-display">脑图密室逃脱 V6.0.6</div>
-  <div id="versionWatermark">幽冥密室 V6.0.6</div>
+  <div class="version-display">脑图密室逃脱 V6.0.7</div>
+  <div id="versionWatermark">幽冥密室 V6.0.7</div>
   <div id="questBar"><div class="quest-title" onclick="QuestTracker.toggle()">任务清单</div><ul id="questList"></ul></div>
   <div class="codex-overlay" id="codexOverlay"><div class="codex-panel">
     <div class="codex-header"><div class="codex-title">笔记 · 线索收集册</div>
