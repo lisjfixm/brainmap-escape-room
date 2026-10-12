@@ -4,7 +4,7 @@
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no" />
 <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='%23ffc27a' stroke-width='1.8' stroke-linecap='round' stroke-linejoin='round'%3E%3Ccircle cx='7.5' cy='15.5' r='3.5'/%3E%3Cpath d='M10 13l10-10M16 6l3 3M13 9l2 2'/%3E%3C/svg%3E" />
-  <title>幽冥密室 · 脑图密室逃脱 V9.0.0</title>
+  <title>幽冥密室 · 脑图密室逃脱 V10.0.0</title>
   <style>
 *,*::before,*::after{box-sizing:border-box;}
 img,video{max-width:100%;height:auto;display:block;}
@@ -2105,6 +2105,746 @@ body{ padding-bottom: env(safe-area-inset-bottom, 0px); }
   #graphCanvas{ overflow:hidden; }
 }
 
+
+/* ================= V10.0.0 新增樣式開始 ================= */
+
+/* ---- D 組：摩斯/燈陣/2048/管道（已與 E 組共用規則去重） ---- */
+/* ============================================================
+   V10.0.0 閣樓小遊戲共用樣式（D 組：摩斯/燈陣/2048/管道）
+   拼接錨點：V10_work.html 最後一個 `<\/style>`（合約第 7 節，V9 L2108）之前
+   依賴：沿用既有 --v6-gold / --v6-jade / --v6-surface-flat 等變數；所有 class 一律 v10- 前綴
+   ============================================================ */
+
+/* 遊戲本體居中容器 */
+.v10-game-wrap{ max-width:420px; margin:0 auto; }
+
+/* ---------- 摩斯電碼 ---------- */
+.v10-morse-echo{
+  min-height:30px; display:flex; align-items:center; justify-content:center;
+  gap:6px; margin:6px 0 4px; font-size:1.35rem; letter-spacing:6px;
+  color:var(--v6-gold); font-weight:600; font-family:ui-monospace,monospace;
+}
+.v10-morse-ans{ text-align:center; font-size:.9rem; color:var(--v6-jade); margin-bottom:8px; min-height:20px; }
+.v10-optgrid{ display:grid; grid-template-columns:1fr 1fr; gap:10px; margin-top:8px; }
+.v10-optbtn{
+  appearance:none; cursor:pointer; font-family:inherit; min-height:56px; border-radius:var(--r-sm);
+  font-size:1.35rem; font-weight:600; letter-spacing:.04em;
+  background:var(--v6-surface-flat); color:#ffe2b0;
+  border:1px solid var(--v6-border-strong); transition:all var(--t-fast) ease;
+}
+.v10-optbtn:hover{ border-color:var(--v6-gold); background:var(--v6-gold-soft); }
+.v10-optbtn:active{ transform:scale(.96); }
+.v10-optbtn.right{ background:var(--v6-jade-soft); border-color:var(--v6-jade); color:#dff7e8; }
+.v10-optbtn.wrong{ background:var(--v6-crimson-soft); border-color:var(--v6-crimson); color:#ffd9d9; }
+.v10-optbtn:disabled{ cursor:default; opacity:.85; }
+
+/* ---------- 熄燈方陣 ---------- */
+.v10-lo-board{ display:grid; grid-template-columns:repeat(5,1fr); gap:8px; max-width:340px; margin:6px auto; }
+.v10-lo-cell{
+  aspect-ratio:1/1; border-radius:var(--r-sm); cursor:pointer;
+  background:#14101c; border:1px solid var(--v6-border);
+  transition:background var(--t-fast) ease, box-shadow var(--t-fast) ease, transform var(--t-fast) ease;
+}
+.v10-lo-cell:hover{ border-color:var(--v6-border-strong); }
+.v10-lo-cell:active{ transform:scale(.94); }
+.v10-lo-cell.on{
+  background:radial-gradient(circle at 50% 40%, #ffe08a, #ffb86c 70%);
+  box-shadow:0 0 14px rgba(255,190,100,.55), inset 0 0 6px rgba(255,255,255,.35);
+  border-color:var(--v6-gold);
+}
+
+/* ---------- 2048 ---------- */
+.v10-g-board{
+  position:relative; max-width:380px; margin:6px auto; aspect-ratio:1/1;
+  background:var(--v6-surface-flat); border:1px solid var(--v6-border-strong);
+  border-radius:var(--r-md); padding:10px; touch-action:none;
+}
+.v10-g-grid{ display:grid; grid-template-columns:repeat(4,1fr); grid-template-rows:repeat(4,1fr); gap:10px; width:100%; height:100%; }
+.v10-g-cell{ border-radius:var(--r-sm); background:rgba(255,200,120,.06); }
+.v10-g-tile{
+  border-radius:var(--r-sm); display:flex; align-items:center; justify-content:center;
+  font-weight:700; font-size:1.5rem; color:#241a0e;
+  transition:transform var(--t-fast) ease;
+}
+.v10-gt-2{ background:#efe3c2; } .v10-gt-4{ background:#e8d19a; }
+.v10-gt-8{ background:#ffd27a; } .v10-gt-16{ background:#ffc04d; }
+.v10-gt-32{ background:#ffab3d; } .v10-gt-64{ background:#ff9326; color:#fff4e0; }
+.v10-gt-128{ background:#7fe0ad; font-size:1.25rem; } .v10-gt-256{ background:#5fd69a; font-size:1.25rem; color:#08251a; }
+.v10-gt-512{ background:#3ecb86; font-size:1.25rem; color:#eafff4; }
+.v10-gt-1024{ background:#2bb877; font-size:1.05rem; color:#eafff4; }
+.v10-gt-2048{ background:linear-gradient(135deg,#ffd27a,#7fe0ad); font-size:1.05rem; color:#241a0e; box-shadow:0 0 16px rgba(255,210,122,.6); }
+.v10-gt-super{ background:linear-gradient(135deg,#ffb86c,#3ecb86); font-size:1rem; color:#fff; box-shadow:0 0 16px rgba(127,224,173,.6); }
+
+/* ---------- 管道連通 ---------- */
+.v10-pipe-board{ display:grid; gap:6px; max-width:380px; margin:6px auto; }
+.v10-pipe-cell{
+  aspect-ratio:1/1; border-radius:var(--r-sm); cursor:pointer; padding:0;
+  background:#14101c; border:1px solid var(--v6-border); overflow:hidden;
+  transition:border-color var(--t-fast) ease, transform var(--t-fast) ease;
+}
+.v10-pipe-cell:hover{ border-color:var(--v6-border-strong); }
+.v10-pipe-cell:active{ transform:scale(.95); }
+.v10-pipe-cell svg{ display:block; width:100%; height:100%; }
+.v10-pipe-cell.is-src{ border-color:var(--v6-jade); }
+.v10-pipe-cell.is-sink{ border-color:var(--v6-gold); }
+
+/* 通達/回饋閃 */
+.v10-flash{ animation:v10pulse var(--t-mid) ease; }
+@keyframes v10pulse{ 0%{ box-shadow:0 0 0 0 rgba(127,224,173,.7);} 100%{ box-shadow:0 0 0 14px rgba(127,224,173,0);} }
+
+/* ---------- 窄屏自適應 ---------- */
+@media (max-width:480px){
+  .v10-game-wrap{ max-width:100%; }
+  .v10-lo-board{ gap:6px; max-width:100%; }
+  .v10-g-board{ padding:8px; }
+  .v10-g-grid{ gap:7px; }
+  .v10-g-tile{ font-size:1.2rem; }
+  .v10-optbtn{ min-height:52px; font-size:1.2rem; }
+}
+
+/* 減少動態偏好 */
+@media (prefers-reduced-motion:reduce){
+  .v10-lo-cell, .v10-g-tile, .v10-pipe-cell, .v10-optbtn{ transition:none; }
+  .v10-flash{ animation:none; }
+}
+
+/* ---- E 組：推箱/黑白棋/天平/數獨（含共用 .v10-rule/.v10-hud/.v10-btnrow 偏好版） ---- */
+/* ============================================================
+   V10.0.0 閣樓小遊戲共用樣式（推箱 / 黑白棋 / 天平 / 圖形數獨）
+   class 全 v10- 前綴；暗色 + 金黃 #ffb86c/#ffd27a + 玉色體系
+   ============================================================ */
+
+.v10-wrap {
+  max-width: 420px;
+  margin: 0 auto;
+  padding: 4px 2px 8px;
+  font-size: 14px;
+  color: #e8e0d0;
+}
+.v10-rule {
+  font-size: 12.5px;
+  color: #a89e88;
+  line-height: 1.55;
+  margin: 4px 0 10px;
+  padding: 8px 10px;
+  background: rgba(255, 184, 108, 0.06);
+  border-left: 3px solid #ffb86c;
+  border-radius: 4px;
+}
+.v10-hud {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px 14px;
+  align-items: center;
+  justify-content: center;
+  margin: 6px 0 10px;
+  font-size: 13px;
+}
+.v10-hud b { color: #ffd27a; font-weight: 600; }
+.v10-hud .v10-hud-item { white-space: nowrap; }
+
+.v10-board {
+  display: grid;
+  gap: 0;
+  margin: 0 auto;
+  background: #2a2418;
+  border: 2px solid #4a3f28;
+  border-radius: 6px;
+  overflow: hidden;
+  user-select: none;
+}
+.v10-cell {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  position: relative;
+  box-sizing: border-box;
+}
+
+/* --- 推箱迷宮 --- */
+.v10-soko-grid { gap: 0; }
+.v10-soko-cell {
+  background: #1e1a12;
+  border: 1px solid #3a3220;
+  font-size: 0;
+}
+.v10-soko-cell.v10-wall { background: #4a3f28; border-color: #5a4a30; }
+.v10-soko-cell.v10-target { background: #1a2a1e; }
+.v10-soko-cell.v10-target::after {
+  content: '';
+  position: absolute;
+  width: 30%; height: 30%;
+  background: #6fd4a8;
+  border-radius: 50%;
+  opacity: .55;
+}
+.v10-soko-box {
+  width: 78%; height: 78%;
+  background: linear-gradient(135deg, #c89050, #a06830);
+  border: 2px solid #e8b070;
+  border-radius: 3px;
+  box-shadow: inset 0 0 0 2px rgba(0,0,0,.25);
+}
+.v10-soko-box.v10-on-target {
+  background: linear-gradient(135deg, #7fd4a8, #4aa878);
+  border-color: #a8e8c8;
+}
+.v10-soko-player {
+  width: 60%; height: 60%;
+  background: #ffd27a;
+  border-radius: 50%;
+  box-shadow: 0 0 8px rgba(255,210,122,.5);
+}
+.v10-dpad {
+  display: grid;
+  grid-template-columns: repeat(3, 48px);
+  grid-template-rows: repeat(2, 44px);
+  gap: 6px;
+  justify-content: center;
+  margin: 10px auto 6px;
+}
+.v10-dpad button {
+  background: #3a3220;
+  border: 1px solid #5a4a30;
+  color: #ffd27a;
+  border-radius: 6px;
+  font-size: 18px;
+  cursor: pointer;
+  transition: background .12s, transform .08s;
+}
+.v10-dpad button:hover { background: #4a3f28; }
+.v10-dpad button:active { transform: scale(.94); background: #5a4a30; }
+.v10-dpad .v10-dpad-up { grid-column: 2; grid-row: 1; }
+.v10-dpad .v10-dpad-left { grid-column: 1; grid-row: 2; }
+.v10-dpad .v10-dpad-down { grid-column: 2; grid-row: 2; }
+.v10-dpad .v10-dpad-right { grid-column: 3; grid-row: 2; }
+
+/* --- 黑白棋 --- */
+.v10-othello-board { gap: 1px; background: #2a4a30; border-color: #1a3020; }
+.v10-othello-cell {
+  background: #3a6a48;
+  cursor: pointer;
+  transition: background .1s;
+}
+.v10-othello-cell:hover { background: #4a8a58; }
+.v10-othello-cell.v10-valid { background: #5aaa68; }
+.v10-othello-cell.v10-valid::after {
+  content: '';
+  width: 22%; height: 22%;
+  background: rgba(255,255,255,.35);
+  border-radius: 50%;
+}
+.v10-othello-disc {
+  width: 80%; height: 80%;
+  border-radius: 50%;
+  transition: transform .18s, background .18s;
+}
+.v10-othello-disc.v10-black { background: radial-gradient(circle at 35% 35%, #333, #000); box-shadow: 0 1px 3px rgba(0,0,0,.5); }
+.v10-othello-disc.v10-white { background: radial-gradient(circle at 35% 35%, #fff, #ccc); box-shadow: 0 1px 3px rgba(0,0,0,.3); }
+
+/* --- 天平 --- */
+.v10-balance-stage {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  padding: 10px 0 4px;
+}
+.v10-balance-beam {
+  position: relative;
+  width: 320px;
+  height: 6px;
+  background: linear-gradient(90deg, #8a6a3a, #c89858, #8a6a3a);
+  border-radius: 3px;
+  margin-top: 50px;
+  transition: transform .5s cubic-bezier(.4,0,.2,1);
+  transform-origin: center center;
+}
+.v10-balance-pivot {
+  position: absolute;
+  left: 50%; top: -28px;
+  transform: translateX(-50%);
+  width: 0; height: 0;
+  border-left: 16px solid transparent;
+  border-right: 16px solid transparent;
+  border-bottom: 28px solid #c89858;
+}
+.v10-balance-tray {
+  position: absolute;
+  top: 6px;
+  width: 110px;
+  margin-left: -55px;
+}
+.v10-balance-tray.v10-left { left: 0; }
+.v10-balance-tray.v10-right { left: 100%; }
+.v10-balance-rope {
+  width: 2px;
+  height: 30px;
+  background: #8a6a3a;
+  margin: 0 auto;
+}
+.v10-balance-pan {
+  width: 100px;
+  height: 22px;
+  margin: 0 auto;
+  background: linear-gradient(180deg, #c89858, #8a6a3a);
+  border-radius: 0 0 50px 50px;
+  display: flex;
+  align-items: flex-end;
+  justify-content: center;
+  gap: 3px;
+  padding-bottom: 2px;
+  box-sizing: border-box;
+}
+.v10-balance-weight {
+  background: linear-gradient(180deg, #e8d8b0, #a89060);
+  border: 1px solid #6a5030;
+  border-radius: 3px 3px 0 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 9px;
+  font-weight: 700;
+  color: #3a2a10;
+  cursor: pointer;
+  transition: transform .1s;
+}
+.v10-balance-weight:hover { transform: translateY(-2px); }
+.v10-balance-shelf {
+  margin-top: 14px;
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6px;
+  justify-content: center;
+  max-width: 360px;
+}
+.v10-balance-shelf .v10-balance-weight {
+  cursor: pointer;
+  opacity: .9;
+}
+.v10-balance-shelf .v10-balance-weight.placed {
+  opacity: .3;
+  pointer-events: none;
+}
+
+/* --- 圖形數獨 --- */
+.v10-sudoku-board { gap: 2px; background: #3a3220; border-color: #5a4a30; }
+.v10-sudoku-cell {
+  background: #2a2418;
+  cursor: pointer;
+  font-size: 0;
+  transition: background .12s;
+}
+.v10-sudoku-cell:hover { background: #3a3228; }
+.v10-sudoku-cell.v10-given { background: #221e14; cursor: default; }
+.v10-sudoku-cell.v10-selected { background: #4a3f20; box-shadow: inset 0 0 0 2px #ffb86c; }
+.v10-sudoku-cell.v10-error { background: #5a2828; }
+.v10-sudoku-cell.v10-correct { background: #1a3a28; }
+.v10-sudoku-svg { width: 70%; height: 70%; }
+.v10-sudoku-palette {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+  justify-content: center;
+  margin: 12px 0 6px;
+}
+.v10-sudoku-palette button {
+  width: 44px; height: 44px;
+  background: #3a3220;
+  border: 1px solid #5a4a30;
+  border-radius: 6px;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: background .12s, transform .08s;
+}
+.v10-sudoku-palette button:hover { background: #4a3f28; }
+.v10-sudoku-palette button:active { transform: scale(.93); }
+.v10-sudoku-palette button svg { width: 26px; height: 26px; }
+
+/* --- 通用按鈕列 / 結果 --- */
+.v10-btnrow {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+  justify-content: center;
+  margin: 10px 0 6px;
+}
+.v10-btnrow .v6-btn { font-size: 13px; padding: 6px 12px; }
+.v10-result {
+  text-align: center;
+  margin: 10px auto;
+  padding: 10px 14px;
+  background: rgba(111, 212, 168, 0.1);
+  border: 1px solid rgba(111, 212, 168, 0.35);
+  border-radius: 8px;
+  max-width: 360px;
+}
+.v10-result .t { font-size: 16px; font-weight: 700; color: #6fd4a8; margin-bottom: 4px; }
+.v10-result .s { font-size: 12.5px; color: #a89e88; }
+.v10-result.v10-fail {
+  background: rgba(255, 120, 100, 0.08);
+  border-color: rgba(255, 120, 100, 0.3);
+}
+.v10-result.v10-fail .t { color: #ff8a70; }
+
+/* --- 戰績格（複用 v6-stat 風格） --- */
+.v10-stat-grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 8px;
+  margin: 10px 0 4px;
+}
+.v10-stat-grid .v10-stat {
+  text-align: center;
+  padding: 8px 4px;
+  background: rgba(255, 184, 108, 0.05);
+  border-radius: 6px;
+}
+.v10-stat-grid .v10-stat-v { font-size: 16px; font-weight: 700; color: #ffd27a; }
+.v10-stat-grid .v10-stat-l { font-size: 11px; color: #a89e88; margin-top: 2px; }
+
+/* --- 窄屏適配 --- */
+@media (max-width: 480px) {
+  .v10-wrap { max-width: 100%; padding: 2px; }
+  .v10-balance-beam { width: 260px; }
+  .v10-balance-tray { width: 90px; margin-left: -45px; }
+  .v10-balance-pan { width: 82px; }
+  .v10-dpad { grid-template-columns: repeat(3, 42px); grid-template-rows: repeat(2, 40px); }
+  .v10-stat-grid { grid-template-columns: repeat(3, 1fr); gap: 6px; }
+}
+
+/* --- 減少動態 --- */
+@media (prefers-reduced-motion: reduce) {
+  .v10-balance-beam { transition: none; }
+  .v10-othello-disc { transition: none; }
+  .v10-dpad button, .v10-sudoku-palette button { transition: none; }
+}
+
+/* ---- F：合成/每日/稱號/雷達/全域美化 ---- */
+/* ============================================================
+   F_ui.css — V10 全域 UIUX 美化
+   拼接錨點：插入到 `<\/style>` 之前（合約第 7 節，V9 L2108）
+   原則：
+   - 新 class 一律 v10- 前綴；可複用既有 .v6-* / .v6a-* 元件
+   - 暗色金黃（#ffb86c / #ffd27a）+ 玉色（#7fe0ad）體系；不引入重 indigo/purple
+   - 絕不增加畫面擁擠度：統一圓角/陰影/間距，hover/focus 回饋
+   - 必含：≤480px 媒體查詢、prefers-reduced-motion
+   ============================================================ */
+
+/* ---------- 設計 token（漸進覆蓋，向後相容） ---------- */
+:root{
+  --v10-gold:#ffd27a;
+  --v10-gold-deep:#ffb86c;
+  --v10-jade:#7fe0ad;
+  --v10-line:rgba(255,184,108,.18);
+  --v10-panel:rgba(20,20,28,.72);
+  --v10-shadow:0 4px 18px rgba(0,0,0,.35);
+  --v10-radius:12px;
+  --v10-radius-sm:8px;
+}
+
+/* ---------- 1. 滾軸美化（全域細條，不擠空間） ---------- */
+*::-webkit-scrollbar{ width:8px; height:8px; }
+*::-webkit-scrollbar-track{ background:transparent; }
+*::-webkit-scrollbar-thumb{
+  background:rgba(255,184,108,.22);
+  border-radius:8px;
+  border:2px solid transparent;
+  background-clip:content-box;
+}
+*::-webkit-scrollbar-thumb:hover{ background:rgba(255,184,108,.45); background-clip:content-box; border:2px solid transparent; }
+html{ scrollbar-width:thin; scrollbar-color:rgba(255,184,108,.28) transparent; }
+
+/* ---------- 2. 按鈕 / 面板統一回饋（只加過渡與 hover，不改色） ---------- */
+.v6-btn, .v6-pill, .v6-wing-btn, .v6-sheet-close,
+.v10-craft-toggle, .v10-daily-claim, .v10-daily-claim-all,
+.v10-titles-item button{
+  transition: background-color .15s ease, color .15s ease,
+              border-color .15s ease, box-shadow .15s ease,
+              transform .12s ease, opacity .15s ease;
+}
+.v6-btn:hover, .v10-daily-claim:hover, .v10-daily-claim-all:hover{
+  transform: translateY(-1px);
+  box-shadow: 0 4px 14px rgba(255,184,108,.18);
+}
+.v6-btn:active, .v10-daily-claim:active, .v10-daily-claim-all:active{
+  transform: translateY(0);
+}
+.v6-btn:focus-visible, .v10-craft-toggle:focus-visible,
+.v10-titles-item button:focus-visible{
+  outline: 2px solid var(--v10-gold);
+  outline-offset: 2px;
+}
+
+/* ---------- 3. 頂欄 / 分頁過渡（輕微，不擠） ---------- */
+.v6-sheet, .v6-overlay{
+  transition: opacity .22s ease;
+}
+.v6-sheet{
+  border-radius: var(--v10-radius);
+  box-shadow: var(--v10-shadow);
+}
+
+/* ---------- 4. Toast / 成就彈窗動畫（微調，不變布局） ---------- */
+.ach-toast{
+  transition: transform .28s cubic-bezier(.2,.9,.3,1.2), opacity .22s ease;
+}
+.ach-toast:not(.show){
+  transform: translateY(-8px) scale(.96);
+  opacity: 0;
+}
+
+/* ---------- 5. 背包「合成」切換按鈕（F_crafting_1） ---------- */
+.v10-craft-toggle{
+  position: absolute;
+  top: 6px;
+  right: 16px;
+  display: inline-flex;
+  align-items: center;
+  gap: 5px;
+  padding: 4px 10px;
+  font-size: .72rem;
+  letter-spacing: .08em;
+  color: var(--v10-gold-deep);
+  background: rgba(255,184,108,.06);
+  border: 1px solid var(--v10-line);
+  border-radius: 999px;
+  cursor: pointer;
+}
+.v10-craft-toggle:hover{
+  background: rgba(255,184,108,.14);
+  color: var(--v10-gold);
+}
+.v10-craft-toggle.active{
+  background: linear-gradient(180deg, rgba(255,190,100,.32), rgba(255,170,80,.18));
+  color: var(--v10-gold);
+  border-color: rgba(255,200,120,.5);
+  box-shadow: 0 0 12px rgba(255,184,108,.35);
+}
+.v10-craft-toggle-ic{ font-size: .85rem; line-height: 1; }
+
+/* 合成模式下已選第一件物品的高亮 */
+.inv-slot.v10-craft-sel{
+  border-color: var(--v10-gold) !important;
+  background: rgba(255,210,122,.22) !important;
+  box-shadow: 0 0 14px rgba(255,210,122,.45) !important;
+  transform: translateY(-4px);
+}
+
+/* ---------- 6. 每日挑戰房（F_room_daily） ---------- */
+.v10-daily-wrap{ display:flex; flex-direction:column; gap:10px; }
+.v10-daily-task{
+  display:flex; align-items:center; gap:12px;
+  padding:10px 12px;
+  background: var(--v10-panel);
+  border:1px solid var(--v10-line);
+  border-radius: var(--v10-radius);
+}
+.v10-daily-task.is-done{
+  border-color: rgba(127,224,173,.35);
+  background: rgba(127,224,173,.06);
+}
+.v10-daily-task-ic{
+  width:34px; height:34px; flex:0 0 34px;
+  display:flex; align-items:center; justify-content:center;
+  border-radius: 10px;
+  background: rgba(255,210,122,.12);
+  color: var(--v10-gold);
+  font-size: 1rem;
+}
+.v10-daily-task.is-done .v10-daily-task-ic{
+  background: rgba(127,224,173,.16);
+  color: var(--v10-jade);
+}
+.v10-daily-task-body{ flex:1; min-width:0; }
+.v10-daily-task-title{ color:var(--v10-gold); font-size:.86rem; }
+.v10-daily-task-desc{ color:var(--v10-bronze,#9c8a6a); font-size:.72rem; margin-top:2px; }
+.v10-daily-task-act{ flex:0 0 auto; }
+
+.v10-daily-reward{
+  margin-top:6px; padding:14px;
+  text-align:center;
+  border-radius: var(--v10-radius);
+  background: linear-gradient(180deg, rgba(255,210,122,.18), rgba(255,184,108,.08));
+  border:1px solid rgba(255,210,122,.35);
+}
+.v10-daily-reward-t{ color:var(--v10-gold); font-size:.95rem; margin-bottom:4px; }
+.v10-daily-reward-s{ color:var(--v10-bronze,#9c8a6a); font-size:.72rem; margin-bottom:10px; }
+.v10-daily-reward.is-claimed{
+  color: var(--v10-jade);
+  font-size:.82rem;
+  padding:12px;
+  background: rgba(127,224,173,.08);
+  border-color: rgba(127,224,173,.25);
+}
+
+/* ---------- 7. 稱號殿堂（F_room_titles） ---------- */
+.v10-titles-wrap{ display:flex; flex-direction:column; gap:10px; }
+.v10-titles-current{
+  display:flex; align-items:center; gap:10px;
+  padding:10px 14px;
+  border-radius: var(--v10-radius);
+  background: linear-gradient(180deg, rgba(255,210,122,.16), rgba(255,184,108,.06));
+  border:1px solid rgba(255,210,122,.3);
+  margin-bottom:4px;
+}
+.v10-titles-current-label{ color:var(--v10-bronze,#9c8a6a); font-size:.72rem; letter-spacing:.1em; }
+.v10-titles-current-name{ color:var(--v10-gold); font-size:1rem; font-weight:600; }
+.v10-titles-current-icon{ margin-left:auto; font-size:1.1rem; color:var(--v10-gold); }
+
+.v10-titles-item{
+  display:flex; align-items:center; gap:12px;
+  padding:10px 12px;
+  background: var(--v10-panel);
+  border:1px solid var(--v10-line);
+  border-radius: var(--v10-radius);
+}
+.v10-titles-item.is-equipped{
+  border-color: rgba(127,224,173,.45);
+  background: rgba(127,224,173,.07);
+}
+.v10-titles-ic{
+  width:34px; height:34px; flex:0 0 34px;
+  display:flex; align-items:center; justify-content:center;
+  border-radius:10px;
+  background: rgba(156,138,106,.12);
+  color: var(--v10-bronze,#9c8a6a);
+  font-size:1rem;
+}
+.v10-titles-item.is-unlocked .v10-titles-ic{
+  background: rgba(255,210,122,.14);
+  color: var(--v10-gold);
+}
+.v10-titles-body{ flex:1; min-width:0; }
+.v10-titles-name{ color:var(--v10-gold); font-size:.86rem; }
+.v10-titles-desc{ color:var(--v10-bronze,#9c8a6a); font-size:.72rem; margin-top:2px; }
+.v10-titles-prog{ display:flex; align-items:center; gap:8px; margin-top:6px; }
+.v10-titles-prog-bar{
+  flex:1; height:5px;
+  background: rgba(255,184,108,.1);
+  border-radius:3px;
+  overflow:hidden;
+}
+.v10-titles-prog-bar i{
+  display:block; height:100%;
+  background: linear-gradient(90deg, var(--v10-gold-deep), var(--v10-gold));
+  border-radius:3px;
+  transition: width .3s ease;
+}
+.v10-titles-prog-t{ color:var(--v10-bronze,#9c8a6a); font-size:.68rem; }
+.v10-titles-act{ flex:0 0 auto; }
+
+/* ---------- 8. 成就雷達（F_room_radar） ---------- */
+.v10-radar-wrap{ display:flex; flex-direction:column; gap:12px; }
+.v10-radar-layout{
+  display:grid;
+  grid-template-columns: minmax(220px, 320px) 1fr;
+  gap:16px;
+  align-items:start;
+}
+.v10-radar-svg .v10-radar-grid{
+  fill: none;
+  stroke: rgba(255,184,108,.14);
+  stroke-width: 1;
+}
+.v10-radar-svg .v10-radar-axis{
+  stroke: rgba(255,184,108,.2);
+  stroke-width: 1;
+}
+.v10-radar-svg .v10-radar-data{
+  fill: rgba(255,210,122,.22);
+  stroke: var(--v10-gold);
+  stroke-width: 1.6;
+}
+.v10-radar-svg .v10-radar-dot{
+  fill: var(--v10-gold);
+  stroke: #1a1a22;
+  stroke-width: 1.5;
+}
+.v10-radar-svg .v10-radar-label{
+  fill: var(--v10-gold);
+  font-size: 13px;
+  letter-spacing: .05em;
+}
+.v10-radar-side{ display:flex; flex-direction:column; gap:10px; }
+.v10-radar-row{
+  padding:8px 10px;
+  background: var(--v10-panel);
+  border:1px solid var(--v10-line);
+  border-radius: var(--v10-radius-sm);
+}
+.v10-radar-row-head{
+  display:flex; justify-content:space-between; align-items:baseline;
+  color:var(--v10-gold); font-size:.82rem;
+}
+.v10-radar-row-head span{ color:var(--v10-bronze,#9c8a6a); font-size:.72rem; }
+.v10-radar-bar{
+  height:5px; margin-top:6px;
+  background: rgba(255,184,108,.1);
+  border-radius:3px; overflow:hidden;
+}
+.v10-radar-bar i{
+  display:block; height:100%;
+  background: linear-gradient(90deg, var(--v10-jade), var(--v10-gold));
+  border-radius:3px;
+  transition: width .3s ease;
+}
+.v10-radar-row-sub{
+  margin-top:5px;
+  color:var(--v10-bronze,#9c8a6a);
+  font-size:.68rem;
+  line-height:1.45;
+}
+
+/* ---------- 9. 窄屏 ≤480px ---------- */
+@media (max-width: 480px){
+  .v10-craft-toggle{
+    top: 4px; right: 10px;
+    padding: 3px 8px;
+    font-size: .68rem;
+  }
+  .v10-daily-task, .v10-titles-item{
+    padding: 8px 10px;
+    gap: 10px;
+  }
+  .v10-daily-task-ic, .v10-titles-ic{
+    width: 30px; height: 30px; flex-basis: 30px;
+  }
+  .v10-radar-layout{
+    grid-template-columns: 1fr;
+    gap: 12px;
+  }
+  .v10-radar-chart{ max-width: 280px; margin: 0 auto; }
+
+  /* safe-area：避免底條/對話按鈕被手勢列遮擋 */
+  .v6-sheet{
+    padding-bottom: calc(16px + env(safe-area-inset-bottom, 0px));
+  }
+  /* 對話按鈕全寬堆疊 */
+  .dialog-actions{
+    flex-direction: column;
+    align-items: stretch;
+  }
+  .dialog-actions .v6-btn, .dialog-actions button{
+    width: 100%;
+  }
+}
+
+/* ---------- 10. 減少動畫偏好 ---------- */
+@media (prefers-reduced-motion: reduce){
+  *, *::before, *::after{
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+    scroll-behavior: auto !important;
+  }
+  .v6-btn:hover, .v10-daily-claim:hover, .v10-daily-claim-all:hover{
+    transform: none;
+  }
+  .inv-slot.v10-craft-sel{ transform: none; }
+}
+/* ================= V10.0.0 新增樣式結束 ================= */
 </style>
 </head>
 <body>
@@ -2174,6 +2914,10 @@ body{ padding-bottom: env(safe-area-inset-bottom, 0px); }
     </div>
     <div class="inventory-bar" id="inventoryBar" style="display:none;">
       <span class="inventory-label" id="inventoryLabel">背 包</span>
+      <!-- V10 F：合成模式切換按鈕（純加法，不影響既有背包行為） -->
+      <button type="button" id="v10CraftToggle" class="v10-craft-toggle" title="合成模式">
+        <span class="v10-craft-toggle-ic">✦</span><span>合成</span>
+      </button>
       <div class="inv-search-wrap" id="invSearchWrap" style="display:none;">
         <input type="text" class="inv-search-input" id="invSearchInput" placeholder="搜索物品…">
       </div>
@@ -2433,9 +3177,9 @@ body{ padding-bottom: env(safe-area-inset-bottom, 0px); }
           <button onclick="document.getElementById('aboutOverlay').style.display='none'" style="background:rgba(255,170,80,0.1);border:1px solid rgba(255,170,80,0.3);color:#ffd89a;width:30px;height:30px;border-radius:8px;cursor:pointer;font-size:0.9rem;">✕</button>
         </div>
         <div style="font-size:0.85rem;color:rgba(255,220,180,0.8);line-height:1.9;letter-spacing:0.03em;">
-          <div style="color:#ffb86c;font-size:1rem;margin-bottom:10px;font-weight:bold;">脑图密室逃脱 <span id="aboutVersionSpan" style="color:#fff;cursor:pointer;user-select:none;">V9.0.0</span></div>
+          <div style="color:#ffb86c;font-size:1rem;margin-bottom:10px;font-weight:bold;">脑图密室逃脱 <span id="aboutVersionSpan" style="color:#fff;cursor:pointer;user-select:none;">V10.0.0</span></div>
           <div style="background:rgba(180,220,255,0.1);border:1px solid rgba(180,220,255,0.4);border-radius:8px;padding:12px;margin-bottom:12px;font-size:0.78rem;line-height:1.8;">
-            <b style="color:#a8d8ff;">【V9.0.0 更新日誌】超級大自主+ 大版本迭代：暫停語義統一與移動端修復</b><br>· 修復打開筆記/統計/成就面板時氧氣、空氣、危險倒數照扣的問題；掙扎小遊戲中按 J 鍵不再扣進度<br>· 修復掛斷電話後答題面板崩潰、Circle 小遊戲生成鏈在對話框關閉後空轉<br>· 補齊 Ch3「留守」結局的通用成就檢查；存檔導入時結局收藏改為合併而非覆蓋<br>· 新增 8 個成就：打字機速通 / 閣樓大師 / 早起鳥 / 二周目老手 / 檔案管理員等<br>· 閣樓新增第 9 個小遊戲「記憶序列」，最佳成績入榜<br>· 移動端修復主選單腦圖節點出屏、對話框按鈕窄屏堆疊、iPhone 底部安全區適配<br>· GM 通行碼彈窗支援 ESC 關閉；版本號重複顯示修正<br><br><b style="color:#a8d8ff;">【V8.0.0 更新日誌】超级大自主+ 大版本迭代：全面修复与扩充</b><br>· 修复 049-2 挣脱后重复遇袭、笔记按钮双击失效、ch3 三个结局成就缺失、GM 清除存档删错 key、挣扎小游戏开设置即死等 20 余处问题<br>· 存档导出升级 v2，打包结局收藏进度；清除存档彻底重置成就与图鉴；游戏时长不再重复统计<br>· 新增 8 个成就：沉默的逃生者 / 迷宫住民 / 死亡 10 次 / 通话全收集 / 巧手速拧 等<br>· 结局收藏室为每个未知结局加上不剧透的半提示<br>· 对话框打字中点一下立刻补完全文；死亡结算新增「直接重开本章」<br>· 阁楼新增第 8 个小游戏「密码锁速拧」，音乐鉴赏新增 3 轨原声<br>· 节点支持键盘/手柄聚焦与金色焦点环，震动反馈按开关统一接通<br><br><b style="color:#a8d8ff;">【V7.0.0 更新日誌】超級自主+ 大版本迭代：全面體驗升級</b><br><b style="color:#a8d8ff;">新增內容：</b><br>· 新增「設定預覽」實時預覽功能，調整字體大小/佈局曲率時即時生效<br>· 新增「章節快速跳轉」收藏功能，常用場景一鍵直達<br>· 新增「成就進度條」可視化展示，距離下個成就還差多少一目了然<br>· 新增「存檔備份」導出/導入功能，換手機也能繼續玩<br>· 新增「自定義快捷鍵」設置，按個人習慣重新綁定按鍵<br>· 新增「日間/夜間模式」切換，白天玩也不刺眼<br><b style="color:#a8d8ff;">體驗優化：</b><br>· 腦圖節點展開動畫更加流暢，支持更多佈局模式切換<br>· 物品欄新增快速使用歷史記錄，最近用過的物品排在前面<br>· 提示系統優化：提示更加具體，不再是泛泛而談<br>· 小地圖新增場景名稱標籤，不再只靠記憶找路<br><b style="color:#a8d8ff;">修復與穩定性：</b><br>· 全面排查記憶體洩漏、事件監聽器清理、計時器泄漏問題<br>· 修復多個邊界情況：空存檔、極端螢幕尺寸、快速連點<br>· 優化大場景下的渲染性能，節點再多也不卡頓<br>· 增強無障礙支持：完整鍵盤導航、更高對比度模式<br><br>
+            <b style="color:#a8d8ff;">【V10.0.0 更新日誌】大版本迭代：內容擴充與穩定性強化</b><br>· 修复第一章好结局正常流程不可达、对话打字机连续开窗崩溃/文案覆写、ESC 关成就面板导致全局暂停卡死、多个计时器/音频在面板关闭后残留等 12 项问题<br>· 新增 8 个阁楼小游戏（摩斯电码、熄灯方阵、2048、管道拼接、推箱、黑白棋、天平称重、图形数独）<br>· 新增物品合成系统（7 种配方）与 3 个新厢房房间（每日挑战、称号殿堂、成就雷达）<br>· 全域 UI/UX 美化与移动端、safe-area、无障碍与性能优化<br>· 新增多个成就与「V10 收藏家」meta 成就<br><br><b style="color:#a8d8ff;">【V9.0.0 更新日誌】超級大自主+ 大版本迭代：暫停語義統一與移動端修復</b><br>· 修復打開筆記/統計/成就面板時氧氣、空氣、危險倒數照扣的問題；掙扎小遊戲中按 J 鍵不再扣進度<br>· 修復掛斷電話後答題面板崩潰、Circle 小遊戲生成鏈在對話框關閉後空轉<br>· 補齊 Ch3「留守」結局的通用成就檢查；存檔導入時結局收藏改為合併而非覆蓋<br>· 新增 8 個成就：打字機速通 / 閣樓大師 / 早起鳥 / 二周目老手 / 檔案管理員等<br>· 閣樓新增第 9 個小遊戲「記憶序列」，最佳成績入榜<br>· 移動端修復主選單腦圖節點出屏、對話框按鈕窄屏堆疊、iPhone 底部安全區適配<br>· GM 通行碼彈窗支援 ESC 關閉；版本號重複顯示修正<br><br><b style="color:#a8d8ff;">【V8.0.0 更新日誌】超级大自主+ 大版本迭代：全面修复与扩充</b><br>· 修复 049-2 挣脱后重复遇袭、笔记按钮双击失效、ch3 三个结局成就缺失、GM 清除存档删错 key、挣扎小游戏开设置即死等 20 余处问题<br>· 存档导出升级 v2，打包结局收藏进度；清除存档彻底重置成就与图鉴；游戏时长不再重复统计<br>· 新增 8 个成就：沉默的逃生者 / 迷宫住民 / 死亡 10 次 / 通话全收集 / 巧手速拧 等<br>· 结局收藏室为每个未知结局加上不剧透的半提示<br>· 对话框打字中点一下立刻补完全文；死亡结算新增「直接重开本章」<br>· 阁楼新增第 8 个小游戏「密码锁速拧」，音乐鉴赏新增 3 轨原声<br>· 节点支持键盘/手柄聚焦与金色焦点环，震动反馈按开关统一接通<br><br><b style="color:#a8d8ff;">【V7.0.0 更新日誌】超級自主+ 大版本迭代：全面體驗升級</b><br><b style="color:#a8d8ff;">新增內容：</b><br>· 新增「設定預覽」實時預覽功能，調整字體大小/佈局曲率時即時生效<br>· 新增「章節快速跳轉」收藏功能，常用場景一鍵直達<br>· 新增「成就進度條」可視化展示，距離下個成就還差多少一目了然<br>· 新增「存檔備份」導出/導入功能，換手機也能繼續玩<br>· 新增「自定義快捷鍵」設置，按個人習慣重新綁定按鍵<br>· 新增「日間/夜間模式」切換，白天玩也不刺眼<br><b style="color:#a8d8ff;">體驗優化：</b><br>· 腦圖節點展開動畫更加流暢，支持更多佈局模式切換<br>· 物品欄新增快速使用歷史記錄，最近用過的物品排在前面<br>· 提示系統優化：提示更加具體，不再是泛泛而談<br>· 小地圖新增場景名稱標籤，不再只靠記憶找路<br><b style="color:#a8d8ff;">修復與穩定性：</b><br>· 全面排查記憶體洩漏、事件監聽器清理、計時器泄漏問題<br>· 修復多個邊界情況：空存檔、極端螢幕尺寸、快速連點<br>· 優化大場景下的渲染性能，節點再多也不卡頓<br>· 增強無障礙支持：完整鍵盤導航、更高對比度模式<br><br>
             <b style="color:#a8d8ff;">【V6.0.7 更新日誌】修復點擊節點展開子節點無動畫</b><br>· 修復 DLC1 等場景中點擊節點後新子節點直接出現、沒有從父節點滑出淡入的問題<br>· 根因：no-transition class 移除與 transform 改變在同一幀同步執行，瀏覽器不觸發 CSS transition；改為先移除 class 並強制 reflow，下一幀才改 transform<br>· 同時保留 V6.0.6 平移時節點不變暗的修復<br><br>
             <b style="color:#a8d8ff;">【V6.0.6 更新日誌】修復平移時節點變暗、鬆手閃一下</b><br>· 拖曳期間不再強行 filter:none——之前連 lit 節點的 drop-shadow 發光一起關掉，導致平移時節點變暗、鬆手光暈恢復又閃一下<br>· 只保留關 transition／animation 與背景粒子，節點外觀在拖曳中保持一致<br><br>
             <b style="color:#a8d8ff;">【V6.0.5 更新日誌】根治平移畫布鬆手後閃一下</b><br>· 移除節點預設的 filter:blur(0.5px)——它讓每個節點都成為獨立合成層，拖曳鬆手恢復 filter 時整幅 SVG 被迫重新柵格化，就是那一下閃爍；lit/進度節點的 drop-shadow 保留<br>· 鬆手延遲約 90ms 才恢復 transition/filter，讓最後一次座標變換先在無動畫狀態下穩定，再切回正常外觀，避免「移動」與「恢復濾鏡」在同一幀重疊<br><br>
@@ -2713,7 +3457,7 @@ body{ padding-bottom: env(safe-area-inset-bottom, 0px); }
       </div>
       <div class="loading-tip" id="loadingTip"></div>
       <div class="loading-bar-wrap"><div class="loading-bar" id="loadingBar"></div></div>
-      <div class="loading-version" id="loadingVersion">V9.0.0</div>
+      <div class="loading-version" id="loadingVersion">V10.0.0</div>
     </div>
     <!-- 自動遊玩狀態遮罩 -->
     <div id="autoplay-overlay">
@@ -2894,7 +3638,7 @@ body{ padding-bottom: env(safe-area-inset-bottom, 0px); }
 <script>
 // ============================================================
 // 脑图密室逃脱 (Mind Map Escape Room)
-// Version: V9.0.0  (2026-10-11)
+// Version: V10.0.0  (2026-10-12)
 // Single-file HTML escape room game.
 // Changelog: see About overlay (關於本作) or aboutOverlay.
 // ============================================================
@@ -4579,6 +5323,8 @@ const Core = {
     document.body.setAttribute('data-page','menu');
     // V4.8.0：安全重置 _restoring，避免自動遊玩中斷返回菜單後殘留 true 導致 fadeScene 被永久跳過
     G._restoring = false;
+    // V10：防禦性歸零面板暫停引用計數，避免任何路徑殘留的 G.paused 帶入下一局
+    G.paused = false; G._panelPauseDepth = 0; G._panelPauseOwned = false;
     if (typeof HintSystem !== 'undefined') HintSystem.refresh(); // V2.10.0：隱藏提示按鈕
     const _pb = $('#pauseBtn'); if (_pb) _pb.style.display = 'none'; // V3.0.0：隱藏暫停按鈕
     document.body.classList.remove('chapter-scp', 'chapter-ch1', 'chapter-dawn');
@@ -5439,6 +6185,10 @@ const Core = {
       if (this._lastSkipBox && this._lastSkipTyping) {
         try { this._lastSkipBox.removeEventListener('click', this._lastSkipTyping); } catch(e) {}
       }
+      // V10：取消上一個對話框尚未跑完的打字機遞迴計時器，
+      // 避免舊鏈在 contentEl 被重置後仍操作已脫離 DOM 的 cursorSpan 拋出未捕獲異常，
+      // 或在打完整段時把舊文案蓋回新對話框
+      if (this._lastTypeTimer) { try { clearTimeout(this._lastTypeTimer); } catch(e) {} this._lastTypeTimer = null; }
       if (typeof this._lastDialogResolve === 'function') {
         try { this._lastDialogResolve(null); } catch(e) {}
         this._lastDialogResolve = null;
@@ -5545,7 +6295,7 @@ const Core = {
             cursorSpan.insertAdjacentHTML('beforebegin', tok);
             typeTextNode = null;
             ti++; tc = 0;
-            typeTimer = setTimeout(typeStep, 0);
+            typeTimer = setTimeout(typeStep, 0); this._lastTypeTimer = typeTimer;
           } else {
             if (!typeTextNode) {
               typeTextNode = document.createTextNode('');
@@ -5554,7 +6304,7 @@ const Core = {
             tc++;
             typeTextNode.appendData(tok.charAt(tc - 1));
             if (tc >= tok.length) { ti++; tc = 0; typeTextNode = null; }
-            typeTimer = setTimeout(typeStep, speed);
+            typeTimer = setTimeout(typeStep, speed); this._lastTypeTimer = typeTimer;
           }
         };
         typeStep();
@@ -5812,14 +6562,22 @@ const KeyboardShortcuts = {
     // ESC：優先關閉最上層彈窗，否則切換暫停
     if (e.key === 'Escape') {
       // V4.0.0：由上至下關閉最上層彈窗，避免多彈窗同時存在
+      // V10：設定/筆記/統計/成就面板優先於暫停選單關閉——它們常由暫停選單內打開，
+      // 應先關上層面板回到暫停選單；ach 分支補上 _panelPauseExit，修復 G.paused 卡住。
+      var _sp = $('#settingsPanel');
+      if (_sp && _sp.classList.contains('show')) { Settings.close(); return; }
+      var _co = $('#codexOverlay');
+      if (_co && _co.classList.contains('show')) { try { Codex.close(); } catch(err){} return; }
+      var _st2 = $('#statsOverlay');
+      if (_st2 && _st2.classList.contains('show')) { try { StatsPanel.close(); } catch(err){} return; }
+      var _ac = $('#achOverlay');
+      if (_ac && _ac.classList.contains('show')) { _ac.classList.remove('show'); _panelPauseExit(); return; }
       const po = $('#pauseOverlay');
       if (po && po.classList.contains('show')) { PauseMenu.close(); return; }
       const pw = $('#passwordOverlay');
       if (pw && pw.classList.contains('show')) { PasswordPanel.hide(); return; }
       const ph = $('#phoneOverlay');
       if (ph && ph.classList.contains('show')) { try { Phone.close(); } catch(err){} return; }
-      const sp = $('#settingsPanel');
-      if (sp && sp.classList.contains('show')) { Settings.close(); return; }
       const ao = $('#aboutOverlay');
       if (ao && ao.style.display === 'flex') { ao.style.display = 'none'; return; }
       // V5.0.6 修復(B-009)：對話框打開時 ESC 等同點預設按鈕關閉（此前 ESC 在對話框開啟時無反應）
@@ -6113,7 +6871,9 @@ const Inventory = {
     const q = this._searchQuery;
     list.forEach(item => {
       const slot = document.createElement('div');
-      slot.className = 'inv-slot filled' + (G.selectedItem === item.id ? ' selected' : '');
+      slot.className = 'inv-slot filled' + (G.selectedItem === item.id ? ' selected' : '')
+        // V10 F：合成模式下已選第一件物品的高亮
+        + (typeof V10Crafting !== 'undefined' && V10Crafting.mode && V10Crafting.selA === item.id ? ' v10-craft-sel' : '');
       // V4.2.0：SCP-714 佩戴狀態視覺標記
       const isWorn714 = (item.id === 'scp714' && typeof G !== 'undefined' && G.ch2 && G.ch2.wearing714);
       if (isWorn714) slot.classList.add('worn-714');
@@ -6133,6 +6893,11 @@ const Inventory = {
       }
       slot.innerHTML = `<div class="inv-icon">${_esc(safeIcon)}</div><div class="inv-name">${nameHtml}</div>` + (isWorn714 ? '<div class="worn-badge">已佩戴</div>' : '');
       slot.addEventListener('click', () => {
+        // V10 F：合成模式攔截（純加法，非合成模式下完全不走此分支）
+        if (typeof V10Crafting !== 'undefined' && V10Crafting.mode) {
+          V10Crafting.onSlotClick(item);
+          return;
+        }
         // SIM卡 + 手机：安装SIM卡
         if (G.selectedItem === 'sim' && item.id === 'phone' && typeof Ch1 !== 'undefined') {
           Ch1.installSim();
@@ -6211,6 +6976,136 @@ const Inventory = {
     });
   },
 };
+
+/* ============================================================
+   V10.0.0 F：物品合成系統（純加法，預設不影響既有物品使用）
+   - 進入合成模式後：先點物品 A（高亮），再點物品 B
+   - 命中 RECIPES → 移除 A、B，產出新物品，解鎖成就，離開合成模式
+   - 未命中 → toast「无法组合」，離開合成模式
+   - 離開合成模式後，點物品維持原本「使用/選中」行為（由 F_crafting_3 攔截）
+   ============================================================ */
+const V10Crafting = {
+  mode: false,
+  selA: null,            // 已選第一件的 item id
+  // 合成表：a/b 可互換；out 為新物品定義（v10_item_* 前綴）
+  RECIPES: [
+    { a:'lighter', b:'matches',    out:{ id:'v10_item_torch',        name:'火把',         icon:'◈', detail:'用打火机点燃纸卷制成的简易火把，能照亮偏僻角落。' } },
+    { a:'note1',   b:'note2',      out:{ id:'v10_item_full_code',   name:'完整密码纸条', icon:'§', detail:'两张纸条拼合后得到完整数字：7 在后四位之前。' } },
+    { a:'knife',   b:'notebook',   out:{ id:'v10_item_sharp_tool',  name:'削尖的工具',   icon:'▶', detail:'用小刀把笔记本纸卷削成尖头，可戳破薄物/软木。' } },
+    { a:'oxygen',   b:'lighter',    out:{ id:'v10_item_heat_pack',   name:'暖贴',         icon:'☾', detail:'氧气瓶余气与打火机反应产生的一次性暖包。' } },
+    { a:'v5_item_coin', b:'knife', out:{ id:'v10_item_screwdriver', name:'自制改锥',     icon:'⚙', detail:'用旧硬币在小刀边缘磨出的简易改锥。' } },
+    { a:'phone',   b:'v5_item_coin',out:{ id:'v10_item_lens',       name:'自制放大镜',   icon:'◉', detail:'手机屏幕反光面与旧硬币组合的简易放大镜。' } },
+    { a:'v10_item_lens', b:'v10_item_full_code', out:{ id:'v10_item_deciphered', name:'破译残页', icon:'✦', detail:'在放大镜下拼合出的完整密码，指向隐藏位置。' } },
+  ],
+  _unique: {},          // 已合成過的產出 id 集合（用於 v10_ach_craft_n）
+  _storeKey: 'youming_v10_craft_v1',
+
+  init() {
+    // 註冊新成就（若 defs 尚無）
+    try {
+      if (typeof AchievementSystem !== 'undefined' && AchievementSystem.defs) {
+        const extra = [
+          { id:'v10_ach_craft_3', icon:'◈', name:'合成新手', desc:'成功合成 3 种不同物品' },
+          { id:'v10_ach_craft_6', icon:'✦', name:'合成大师', desc:'成功合成 6 种不同物品' },
+        ];
+        extra.forEach(a => {
+          if (!AchievementSystem.defs.some(d => d.id === a.id)) AchievementSystem.defs.push(a);
+        });
+      }
+    } catch(e) {}
+    // 載入歷史合成記錄
+    try {
+      const saved = JSON.parse(localStorage.getItem(this._storeKey) || '{}');
+      this._unique = saved.unique || {};
+    } catch(e) { this._unique = {}; }
+    // 綁定切換按鈕
+    const btn = document.getElementById('v10CraftToggle');
+    if (btn && !btn._v10wired) {
+      btn._v10wired = true;
+      btn.addEventListener('click', () => this.toggle());
+    }
+  },
+
+  toggle() {
+    this.mode = !this.mode;
+    this.selA = null;
+    const btn = document.getElementById('v10CraftToggle');
+    if (btn) btn.classList.toggle('active', this.mode);
+    try { Audio.play('click'); } catch(e) {}
+    Core.toast(this.mode ? '合成模式：先选第一件，再选第二件' : '已退出合成模式');
+    Inventory.render();
+  },
+
+  onSlotClick(item) {
+    // 第一件：記錄並高亮
+    if (!this.selA) {
+      this.selA = item.id;
+      Core.toast('已选「' + (item.name || item.id) + '」，再选第二件');
+      try { Audio.play('click'); } catch(e) {}
+      Inventory.render();
+      return;
+    }
+    // 再點同一個 → 取消選擇
+    if (this.selA === item.id) {
+      this.selA = null;
+      Core.toast('已取消选择');
+      Inventory.render();
+      return;
+    }
+    const a = this.selA, b = item.id;
+    const recipe = this._find(a, b);
+    this.selA = null;
+    if (recipe) {
+      this._doCraft(recipe, a, b);
+    } else {
+      Core.toast('无法组合这两件物品');
+      try { Audio.play('error'); } catch(e) {}
+      // 失敗：離開合成模式
+      this.mode = false;
+      const btn = document.getElementById('v10CraftToggle');
+      if (btn) btn.classList.remove('active');
+      Inventory.render();
+    }
+  },
+
+  _find(a, b) {
+    return this.RECIPES.find(r =>
+      (r.a === a && r.b === b) || (r.a === b && r.b === a)
+    );
+  },
+
+  _doCraft(recipe, a, b) {
+    // 移除原料（Inventory.remove 內含 render 與 selectedItem 清理）
+    Inventory.remove(a);
+    Inventory.remove(b);
+    // 加入新物品（Inventory.add 內含 toast「获得：」與 pickup 音效）
+    Inventory.add(recipe.out);
+    // 首次合成成就
+    try { AchievementSystem.unlock('v9_ach_combo_first'); } catch(e) {}
+    // 累計唯一合成數
+    this._unique[recipe.out.id] = true;
+    const n = Object.keys(this._unique).length;
+    try {
+      if (n >= 3) AchievementSystem.unlock('v10_ach_craft_3');
+      if (n >= 6) AchievementSystem.unlock('v10_ach_craft_6');
+    } catch(e) {}
+    try {
+      localStorage.setItem(this._storeKey, JSON.stringify({ unique: this._unique }));
+    } catch(e) {}
+    // 合成成功的明亮雙音（Audio._tone，不嵌 base64）
+    try {
+      Audio._tone(523.25, 0.12, 'sine', 0.18);
+      setTimeout(() => { try { Audio._tone(783.99, 0.22, 'sine', 0.16); } catch(e) {} }, 130);
+    } catch(e) {}
+    // 離開合成模式
+    this.mode = false;
+    const btn = document.getElementById('v10CraftToggle');
+    if (btn) btn.classList.remove('active');
+    Inventory.render();
+  },
+};
+// 主 script 執行到此時 DOM 已就緒（按鈕在 body 前段），直接初始化
+V10Crafting.init();
 
 const Tutorial = {
   steps: [],
@@ -7190,6 +8085,7 @@ const Ch1 = {
     if (G.ch1.oxygenTimer) clearInterval(G.ch1.oxygenTimer);
     G.ch1.oxygenTimer = setInterval(() => {
       if (G.paused) return; // V9.0.0 A1：面板覆蓋（筆記/統計/成就）時暫停氧氣消耗
+      if (G.currentPage !== 'ch1') { clearInterval(G.ch1.oxygenTimer); G.ch1.oxygenTimer = null; return; } // V10 B-02：GM 直接切章節時自清除，避免殘留倒數在別章觸發 endingII
       G.ch1.oxygen--;
       this.updateOxygenDisplay();
       if (G.ch1.oxygen <= 0) {
@@ -7215,6 +8111,7 @@ const Ch1 = {
     if (G.ch1.batteryTimer) clearInterval(G.ch1.batteryTimer);
     G.ch1.batteryTimer = setInterval(() => {
       if (G.paused) return; // V9.0.0 A1：面板覆蓋時暫停電池消耗
+      if (G.currentPage !== 'ch1') { clearInterval(G.ch1.batteryTimer); G.ch1.batteryTimer = null; return; } // V10 B-02：同氧氣，避免殘留電池倒數/ DOM 更新
       const rate = G.ch1.flashlightOn ? 2 : 1;
       G.ch1.battery -= rate;
       if (G.ch1.battery <= 0) {
@@ -7908,6 +8805,10 @@ const Phone = {
         setTimeout(() => this.showQuiz(), 500);
       } else if (call.onEnd) {
         call.onEnd();
+      } else if (call.actions && call.actions.length) {
+        // V10 B-01：通話訊息播完後，若該通話帶有操作按鈕（9595 轉帳/座標），
+        // 必須呼叫 showCallActions 渲染按鈕；否則救援主線（轉帳→座標→groundScene→結局I）永遠無法觸發。
+        this.showCallActions();
       }
     }
   },
@@ -8638,7 +9539,7 @@ const AchievementSystem = {
     { id: 'v8_ach_attic_cipher',   icon: '🔢', name: '巧手开锁',     desc: '在阁楼密码锁速拧小游戏中通关' },
     /* --- V9.0.0 新增成就（過程型 + 統計型，icon 用文字符號不用 emoji） --- */
     { id: 'v9_ach_dialog_skipper', icon: '»',  name: '打字机速通', desc: '连点对话框跳过打字机补全文本累计 ≥20 次' },
-    { id: 'v9_ach_attic_master',   icon: '★',  name: '阁楼大师',   desc: '通关阁楼全部 9 个小游戏（含记忆序列）' },
+    { id: 'v9_ach_attic_master',   icon: '★',  name: '阁楼大师',   desc: '通关阁楼第九个小游戏「记忆序列」' },
     { id: 'v9_ach_early_bird',      icon: '◆',  name: '早起鸟',     desc: '在本地时间 5:00-9:59 之间通关任意章节' },
     { id: 'v9_ach_ngplus_veteran',  icon: '◈',  name: '二周目老手', desc: 'NG+ 模式通关任意章节且全程 0 死亡' },
     { id: 'v9_ach_codex_librarian', icon: '§',  name: '档案管理员', desc: '单周目收集 ≥15 条 Codex 笔记' },
@@ -8646,6 +9547,7 @@ const AchievementSystem = {
     { id: 'v9_ach_night_owl',       icon: '☾',  name: '夜猫子',     desc: '在本地时间 0:00-4:59 之间通关任意章节' },
     { id: 'v9_ach_no_hint_clear',   icon: '✓',  name: '无提示通关', desc: '不使用任何提示通关第一章' },
     { id: 'v9_ach_v9_all',          icon: '◉',  name: 'V9 收藏家',   desc: '解锁本版本全部 8 个新成就', spoiler: true },
+    { id:'v10_ach_v10_all', icon:'◉', name:'V10 收藏家', desc:'解锁本版本全部新成就', spoiler:true },
   ],
   init() {
     try {
@@ -8688,6 +9590,14 @@ const AchievementSystem = {
         var need9 = this.defs.filter(function(d){ return d.id.indexOf('v9_ach_') === 0 && d.id !== 'v9_ach_v9_all'; });
         var allDone9 = need9.every(function(d){ return !!this.unlocked[d.id]; }, this);
         if (allDone9) this.unlock('v9_ach_v9_all');
+      }
+    } catch(e) {}
+    // V10.0.0：檢查是否集滿 V10 的全部新成就（不含 v10_ach_v10_all 自身）
+    try {
+      if (id && id.indexOf('v10_ach_') === 0 && id !== 'v10_ach_v10_all') {
+        var need10 = this.defs.filter(function(d){ return d.id.indexOf('v10_ach_') === 0 && d.id !== 'v10_ach_v10_all'; });
+        var allDone10 = need10.every(function(d){ return !!this.unlocked[d.id]; }, this);
+        if (allDone10) this.unlock('v10_ach_v10_all');
       }
     } catch(e) {}
   },
@@ -10152,6 +11062,8 @@ const Ch2 = {
     });
   },
   openDialog(title, html) {
+    // V10：Ch2 自製對話框直接覆寫內容，順手取消上一個 showDialog 殘留的打字機鏈
+    try { if (Core._lastTypeTimer) { clearTimeout(Core._lastTypeTimer); Core._lastTypeTimer = null; } } catch(e){}
     $('#dialogTitle').textContent=title;
     $('#dialogContent').innerHTML=html;
     $('#dialogActions').innerHTML='';
@@ -15299,6 +16211,7 @@ if(typeof Ch2 !== 'undefined'){
       bind('v5_guideClose','v5_guideOverlay');
       bind('v5_eggClose','v5_eggOverlay');
       bind('v5_musicClose','v5_musicOverlay');
+      document.getElementById('v5_musicClose').addEventListener('click', function(){ (HomeRoom._melTimers||[]).forEach(clearTimeout); HomeRoom._melTimers=[]; });
       ['v5_endingsGalleryOverlay','v5_guideOverlay','v5_eggOverlay','v5_musicOverlay'].forEach(function(ovId){
         var ov=document.getElementById(ovId); if(ov) ov.addEventListener('click', function(e){ if(e.target===ov) ov.classList.remove('show'); });
       });
@@ -15587,10 +16500,12 @@ if(typeof Ch2 !== 'undefined'){
       // V8.0.0 P2-6：用現有 Audio._tone 合成簡短旋律（無真音頻文件）
       var playMelody = function(notes, wave){
         try {
+          (self._melTimers||[]).forEach(clearTimeout);
+          self._melTimers = [];
           var t = 0;
           notes.forEach(function(n){
             var freq = n[0], dur = n[1];
-            setTimeout(function(){ try{ Audio._tone(freq, dur, wave||'sine', 0.12); }catch(e){} }, t);
+            self._melTimers.push(setTimeout(function(){ try{ Audio._tone(freq, dur, wave||'sine', 0.12); }catch(e){} }, t));
             t += (dur * 1000) + 60;
           });
         } catch(e) {}
@@ -15660,10 +16575,18 @@ if(typeof Ch2 !== 'undefined'){
   // T-4: 快捷键扩展（J=笔记, Q=目标, O=统计, F=全屏）
   document.addEventListener('keydown', function(e){
     // V9.0.0 A2/A9：對話框/密碼面板/手機開啟時不觸發快捷鍵；排除 contenteditable
-    if (G.paused) return;
     if (e.target && (e.target.tagName === 'INPUT' || e.target.tagName === 'TEXTAREA' || e.target.isContentEditable)) return;
     if (document.getElementById('dialogOverlay') && document.getElementById('dialogOverlay').classList.contains('show')) return;
     var k = e.key.toLowerCase();
+    // V10：面板已開啟時（_panelPauseEnter 令 G.paused=true），仍允許同一快捷鍵把它關閉
+    if (k === 'j') {
+      var _coEl = document.getElementById('codexOverlay');
+      if (_coEl && _coEl.classList.contains('show')) { e.preventDefault(); Codex.close(); return; }
+    } else if (k === 'o') {
+      var _stEl = document.getElementById('statsOverlay');
+      if (_stEl && _stEl.classList.contains('show')) { e.preventDefault(); StatsPanel.close(); return; }
+    }
+    if (G.paused) return;
     if (k === 'j') {
       if (['ch1','ch2','ch3'].indexOf(G.currentPage) !== -1) { e.preventDefault(); Codex.toggle(); }
     } else if (k === 'q') {
@@ -16023,11 +16946,27 @@ window.addEventListener('DOMContentLoaded', () => MenuParticles.init());
   /* 新增某分區的環節點（不 render） */
   function addV6Nodes(wingId){
     const list=ROOMS[wingId]||[];
-    const R=210, N=list.length;
+    const N=list.length;
     if(!N) return;
+    // V10.0.0 UI/UX：節點多時自動雙同心環，避免單環弧間距 < 節點寬造成頂/底部疊字
+    // N<=10 維持原單環（annex=10、main=7 完全不受影響）；N>10 拆雙環：
+    //   偶數序 i=0,2,4… → 外環 R=210；奇數序 i=1,3,5… → 內環 R=132 錯半位填外環空档
+    const R_OUT=210, R_IN=132;
+    const cntO=Math.ceil(N/2), cntI=Math.floor(N/2);
     list.forEach(function(room,i){
-      const ang=(i/N)*Math.PI*2-Math.PI/2;
-      const kx=Math.cos(ang)*R, ky=Math.sin(ang)*R;
+      let kx,ky;
+      if(N<=10){
+        const ang=(i/N)*Math.PI*2-Math.PI/2;
+        kx=Math.cos(ang)*R_OUT; ky=Math.sin(ang)*R_OUT;
+      } else if(i%2===0){
+        const j=i/2;
+        const ang=(j/cntO)*Math.PI*2-Math.PI/2;
+        kx=Math.cos(ang)*R_OUT; ky=Math.sin(ang)*R_OUT;
+      } else {
+        const j=(i-1)/2;
+        const ang=((j+0.5)/cntI)*Math.PI*2-Math.PI/2;
+        kx=Math.cos(ang)*R_IN; ky=Math.sin(ang)*R_IN;
+      }
       const nid='v6r_'+room.id;
       Renderer.addNode(nid, room.label, kx, ky, { lit:true, w:120, h:40, data:{fixedX:kx,fixedY:ky},
         onClick:function(){ try{ openRoom(room); }catch(e){} } });
@@ -16902,7 +17841,6 @@ function journalSetup(body){
     V6.store.set(CHECKIN_KEY, d);
     V6.toast('簽到成功！連續 '+d.streak+' 天');
     try{ Audio.play('unlock'); }catch(e){}
-    V6.Panel.refresh && V6.Panel.anyOpen();
     // 重建本面板
     journalSetup(body);
   });
@@ -17416,8 +18354,11 @@ V6.Home.registerRoom('annex', {
       const KEY='youming_v6_reaction_v1';
       const best = store.get(KEY, {avg:0, combo:0});
       let mode='react';
+      let _wTick=null, _wSpawn=null;
 
       function build(){
+        if (_wTick){ clearInterval(_wTick); _wTick=null; }
+        if (_wSpawn){ clearInterval(_wSpawn); _wSpawn=null; }
         body.innerHTML =
           '<div class="v6a-modeseg">'
           + '<button data-m="react" class="'+(mode==='react'?'on':'')+'">反应测速</button>'
@@ -17517,13 +18458,14 @@ V6.Home.registerRoom('annex', {
             }
           });
         });
-        tickId = st.every(function(){
+        tickId = _wTick = st.every(function(){
           time--; host.querySelector('#v6aWTime').textContent=time;
           if (time<=0){ end(); }
         }, 1000);
-        spawnId = st.every(spawn, 900);
+        spawnId = _wSpawn = st.every(spawn, 900);
         function end(){
           clearInterval(tickId); clearInterval(spawnId);
+          _wTick=null; _wSpawn=null;
           if (upCell!=null) cells[upCell].classList.remove('up');
           if (combo > (best.combo||0)){ best.combo=combo; store.set(KEY,best); }
           sfx('success');
@@ -17719,7 +18661,7 @@ V6.Home.registerRoom('annex', {
       const st = hook(body);
       const KEY='youming_v6_cipher_v1';
       const best = store.get(KEY, {bestTime:0, runs:0});
-      let run=[], idx=0, startAt=0, wrong=0;
+      let run=[], idx=0, startAt=0, wrong=0, advancing=false;
 
       function newRun(){
         const pool = CIPHER_POOL.slice();
@@ -17733,6 +18675,7 @@ V6.Home.registerRoom('annex', {
           run.map(function(_,i){ return '<i class="'+(i<idx?'done':i===idx?'now':'')+'"></i>'; }).join('');
       }
       function renderQ(){
+        advancing = false;
         const q = run[idx];
         let inputHtml;
         if (q.type==='code'){
@@ -17769,8 +18712,10 @@ V6.Home.registerRoom('annex', {
         }
       }
       function check(v, btn){
+        if (advancing) return;
         const q = run[idx];
         if (String(v) === String(q.ans)){
+          advancing = true;
           sfx('unlock'); idx++; renderPips();
           if (idx>=run.length) finish(); else st.later(renderQ, 350);
         } else {
@@ -17910,7 +18855,7 @@ V6.Home.registerRoom('annex', {
         if (!el) return;
         el.style.filter = 'brightness(1.8)';
         el.style.transform = 'scale(0.94)';
-        setTimeout(function(){ el.style.filter=''; el.style.transform=''; }, ms);
+        st.later(function(){ el.style.filter=''; el.style.transform=''; }, ms);
       }
       function playSeq(){
         inputLocked = true; userIdx = 0;
@@ -17919,9 +18864,9 @@ V6.Home.registerRoom('annex', {
           if (i >= seq.length) { inputLocked = false; return; }
           flashPad(seq[i], 350); tone(seq[i], 180);
           i++;
-          setTimeout(step, 500);
+          st.later(step, 500);
         };
-        setTimeout(step, 400);
+        st.later(step, 400);
       }
       function newRound(){
         userIdx = 0; inputLocked = true;
@@ -17960,7 +18905,7 @@ V6.Home.registerRoom('annex', {
               var rn=body.querySelector('#v9sRuns'); if(rn) rn.textContent=best.runs;
             } else {
               round++; sfx('click');
-              setTimeout(newRound, 600);
+              st.later(newRound, 600);
             }
           }
         } else {
@@ -18000,7 +18945,2213 @@ V6.Home.registerRoom('annex', {
     }
   });
 
+/* ===== V10.0.0 閣樓新遊戲模組拼接開始 ===== */
+
+/* ============================================================
+   D_01_morse.js — 閣樓小遊戲：摩斯電碼訓練
+   拼接錨點：插入到閣樓 IIFE 結尾 `})();` 之前（合約第 5 節，V9 L18003 / _extracted.js L14890）
+   依賴：閉內助手 hook(body)、st.later、tone、sfx、ach、store、esc、I、V6.icon；CSS v10-attic-games.css
+   房間 id：v10_game_morse ；成就 id：v10_ach_morse_first / v10_ach_morse_clean
+   注意：本檔不含外層 IIFE，會被併入既有閣樓 IIFE；game 常數全部定在 setup 內避免跨檔 const 碰撞。
+   ============================================================ */
+(function(){
+  const A = [
+    { id:'v10_ach_morse_first', icon:'⌁', name:'电波初传', desc:'完成一次摩斯电码听写（10 题）' },
+    { id:'v10_ach_morse_clean', icon:'◉', name:'顺风耳', desc:'一局 10 题全部听对，零失误' }
+  ];
+  if (typeof AchievementSystem !== 'undefined' && AchievementSystem.defs)
+    A.forEach(function(a){ if(!AchievementSystem.defs.some(function(d){return d.id===a.id;})) AchievementSystem.defs.push(a); });
 })();
+
+V6.Home.registerRoom('attic', {
+  id:'v10_game_morse', label:'摩斯电码', title:'摩斯电码', sub:'MORSE TRAINER', icon:I.radio, wide:false,
+  setup(body, api){
+    const st = hook(body);
+    const KEY = 'youming_v10_morse_v1';
+    const TOTAL = 10;
+    const best = store.get(KEY, { runs:0, bestAcc:0, clean:0 });
+
+    const MORSE = {
+      A:'.-', B:'-...', C:'-.-.', D:'-..', E:'.', F:'..-.', G:'--.', H:'....', I:'..', J:'.---',
+      K:'-.-', L:'.-..', M:'--', N:'-.', O:'---', P:'.--.', Q:'--.-', R:'.-.', S:'...', T:'-',
+      U:'..-', V:'...-', W:'.--', X:'-..-', Y:'-.--', Z:'--..',
+      0:'-----', 1:'.----', 2:'..---', 3:'...--', 4:'....-', 5:'.....', 6:'-....', 7:'--...', 8:'---..', 9:'----.'
+    };
+    const POOL = Object.keys(MORSE);
+
+    let run = [], idx = 0, correct = 0, mistakes = 0, locked = false, playToken = 0;
+
+    function playCode(code){
+      playToken++; const my = playToken;
+      let t = 300;
+      for (let i=0;i<code.length;i++){
+        const sym = code.charAt(i);
+        if (sym === '.'){
+          (function(d){ st.later(function(){ if(playToken===my) tone(660, .12, 'sine', .20); }, d); })(t);
+          t += 120 + 120;
+        } else if (sym === '-'){
+          (function(d){ st.later(function(){ if(playToken===my) tone(660, .36, 'sine', .20); }, d); })(t);
+          t += 360 + 120;
+        }
+      }
+    }
+
+    function buildRun(){
+      const p = POOL.slice();
+      for (let i=p.length-1;i>0;i--){ const j=Math.floor(Math.random()*(i+1)); const tmp=p[i]; p[i]=p[j]; p[j]=tmp; }
+      run = p.slice(0, TOTAL).map(function(ch){ return { ch:ch, code:MORSE[ch] }; });
+      idx = 0; correct = 0; mistakes = 0;
+    }
+
+    function renderPips(){
+      body.querySelector('#v10MPips').innerHTML =
+        run.map(function(_,i){ return '<i class="'+(i<idx?'done':i===idx?'now':'')+'"></i>'; }).join('');
+    }
+
+    function showQ(){
+      locked = false;
+      const q = run[idx];
+      renderPips();
+      // 四個選項：正解 + 3 個干擾
+      const opts = [q.ch];
+      while (opts.length < 4){
+        const c = POOL[Math.floor(Math.random()*POOL.length)];
+        if (opts.indexOf(c) < 0) opts.push(c);
+      }
+      for (let i=opts.length-1;i>0;i--){ const j=Math.floor(Math.random()*(i+1)); const tmp=opts[i]; opts[i]=opts[j]; opts[j]=tmp; }
+
+      body.querySelector('#v10MQ').innerHTML =
+        '<div class="v10-hud">'
+        + '<button class="v6-pill" id="v10MReplay">▶ 再听一遍</button>'
+        + '<span class="v6-pill">第 <b>'+(idx+1)+'</b> / '+TOTAL+'</span>'
+        + '<span class="v6-pill jade">对 <b>'+correct+'</b> · 错 <b>'+mistakes+'</b></span>'
+        + '</div>'
+        + '<div class="v10-morse-echo" id="v10MEcho" style="color:var(--v6-bronze)">听声辨字</div>'
+        + '<div class="v10-morse-ans" id="v10MAns"></div>'
+        + '<div class="v10-optgrid" id="v10MOpts">'
+        + opts.map(function(c){ return '<button class="v10-optbtn" data-c="'+esc(c)+'">'+esc(c)+'</button>'; }).join('')
+        + '</div>';
+
+      body.querySelector('#v10MReplay').addEventListener('click', function(){ sfx('click'); playCode(q.code); });
+      body.querySelectorAll('#v10MOpts .v10-optbtn').forEach(function(btn){
+        btn.addEventListener('click', function(){ answer(btn, btn.getAttribute('data-c')); });
+      });
+      playCode(q.code);
+    }
+
+    function answer(btn, ch){
+      if (locked) return; locked = true;
+      const q = run[idx];
+      const echo = body.querySelector('#v10MEcho');
+      const ans = body.querySelector('#v10MAns');
+      const visual = q.code.replace(/\./g,'· ').replace(/-/g,'− ').trim();
+      body.querySelectorAll('#v10MOpts .v10-optbtn').forEach(function(b){
+        b.disabled = true;
+        if (b.getAttribute('data-c') === q.ch) b.classList.add('right');
+      });
+      if (ch === q.ch){
+        correct++; sfx('success'); btn.classList.remove('wrong');
+      } else {
+        mistakes++; sfx('error'); btn.classList.add('wrong');
+      }
+      echo.style.color = 'var(--v6-gold)';
+      echo.textContent = visual;
+      ans.textContent = '答案：' + q.ch;
+      st.later(next, 1200);
+    }
+
+    function next(){
+      idx++;
+      if (idx >= run.length) finish(); else showQ();
+    }
+
+    function finish(){
+      const acc = Math.round(correct / TOTAL * 100);
+      best.runs = (best.runs || 0) + 1;
+      if (acc > (best.bestAcc || 0)) best.bestAcc = acc;
+      if (mistakes === 0) best.clean = (best.clean || 0) + 1;
+      store.set(KEY, best);
+      ach('v10_ach_morse_first');
+      if (mistakes === 0) ach('v10_ach_morse_clean');
+      sfx('success');
+      body.querySelector('#v10MPips').innerHTML = run.map(function(){ return '<i class="done"></i>'; }).join('');
+      body.querySelector('#v10MQ').innerHTML =
+        '<div class="v6a-result"><div class="t">听写完成</div>'
+        + '<div class="s">答对 '+correct+' / '+TOTAL+'（'+acc+'%）· 失误 '+mistakes+' 次 · 最佳正确率 '+best.bestAcc+'%</div></div>'
+        + '<div class="v10-btnrow"><button class="v6-btn" id="v10MAgain">'+V6.icon(I.refresh,15)+'再练一轮</button></div>';
+      body.querySelector('#v10MAgain').addEventListener('click', function(){ sfx('click'); buildRun(); showQ(); });
+      const ba = body.querySelector('#v10MBest'); if (ba) ba.textContent = best.bestAcc + '%';
+      const rn = body.querySelector('#v10MRuns'); if (rn) rn.textContent = best.runs;
+    }
+
+    body.innerHTML =
+      '<div class="v10-game-wrap">'
+      + '<div class="v6-sec-title" style="margin-top:0">摩斯电码训练 <span class="v6-note">听节奏 · 选字母</span></div>'
+      + '<div class="v10-rule">戴上耳机、打开音量：听「滴(短)/答(长)」的电码节奏，从四个字符里选出听到的那一个。</div>'
+      + '<div class="v6a-progresspips" id="v10MPips"></div>'
+      + '<div id="v10MQ"></div>'
+      + '<div class="v6-sec-title">战绩</div>'
+      + '<div class="v6-stat-grid">'
+      + '<div class="v6-stat accent-jade"><div class="v6-stat-v" id="v10MBest">'+(best.bestAcc?best.bestAcc+'%':'—')+'</div><div class="v6-stat-l">最佳正确率</div></div>'
+      + '<div class="v6-stat"><div class="v6-stat-v" id="v10MRuns">'+(best.runs||0)+'</div><div class="v6-stat-l">完成轮数</div></div>'
+      + '</div></div>';
+
+    buildRun();
+    showQ();
+  }
+});
+
+/* ============================================================
+   D_02_lightout.js — 閣樓小遊戲：熄燈方陣（Lights Out）
+   拼接錨點：插入到閣樓 IIFE 結尾 `})();` 之前（合約第 5 節，V9 L18003 / _extracted.js L14890）
+   依賴：閉內助手 hook(body)、tone、sfx、ach、store、esc、I、V6.icon；CSS v10-attic-games.css
+   房間 id：v10_game_lightout ；成就 id：v10_ach_lightout_first / v10_ach_lightout_par
+   解法保證：由全滅局面隨機亂序點擊若干次生成，故生成的點擊序列即為一組合法解。
+   ============================================================ */
+(function(){
+  const A = [
+    { id:'v10_ach_lightout_first', icon:'▦', name:'熄灯能手', desc:'熄灭整个 5×5 灯阵' },
+    { id:'v10_ach_lightout_par', icon:'✦', name:'一步不多', desc:'用不超过参考解法的步数通关' }
+  ];
+  if (typeof AchievementSystem !== 'undefined' && AchievementSystem.defs)
+    A.forEach(function(a){ if(!AchievementSystem.defs.some(function(d){return d.id===a.id;})) AchievementSystem.defs.push(a); });
+})();
+
+V6.Home.registerRoom('attic', {
+  id:'v10_game_lightout', label:'熄灯方阵', title:'熄灯方阵', sub:'LIGHTS OUT', icon:I.bulb, wide:false,
+  setup(body, api){
+    const st = hook(body);
+    const KEY = 'youming_v10_lightout_v1';
+    const N = 5;
+    const best = store.get(KEY, { bestMoves:0, wins:0 });
+
+    let grid = [], moves = 0, par = 0, locked = false;
+
+    function newGame(){
+      grid = []; for (let r=0;r<N;r++){ grid.push([0,0,0,0,0]); }
+      // 由全滅局面亂序點擊 K 次，保證可解
+      const K = 5 + Math.floor(Math.random()*6); // 5~10 次
+      par = K;
+      for (let i=0;i<K;i++) press(Math.floor(Math.random()*N), Math.floor(Math.random()*N));
+      moves = 0; locked = false;
+      render();
+      updateHud();
+    }
+
+    function press(r, c){
+      const d = [[0,0],[-1,0],[1,0],[0,-1],[0,1]];
+      for (let k=0;k<d.length;k++){
+        const nr=r+d[k][0], nc=c+d[k][1];
+        if (nr>=0 && nr<N && nc>=0 && nc<N) grid[nr][nc] ^= 1;
+      }
+    }
+
+    function render(){
+      let html = '';
+      for (let r=0;r<N;r++) for (let c=0;c<N;c++)
+        html += '<button class="v10-lo-cell'+(grid[r][c]?' on':'')+'" data-r="'+r+'" data-c="'+c+'"></button>';
+      body.querySelector('#v10LOBoard').innerHTML = html;
+      body.querySelectorAll('#v10LOBoard .v10-lo-cell').forEach(function(cell){
+        cell.addEventListener('click', function(){ onCell(+cell.getAttribute('data-r'), +cell.getAttribute('data-c')); });
+      });
+    }
+
+    function onCell(r, c){
+      if (locked) return;
+      press(r, c); moves++;
+      sfx('click'); tone(300 + moves*12, .06, 'square', .10);
+      render(); updateHud();
+      // 判定全滅
+      let sum = 0;
+      for (let r2=0;r2<N;r2++) for (let c2=0;c2<N;c2++) sum += grid[r2][c2];
+      if (sum === 0) win();
+    }
+
+    function win(){
+      locked = true;
+      best.wins = (best.wins || 0) + 1;
+      if (!best.bestMoves || moves < best.bestMoves) best.bestMoves = moves;
+      store.set(KEY, best);
+      ach('v10_ach_lightout_first');
+      if (moves <= par) ach('v10_ach_lightout_par');
+      sfx('success'); tone(660,.15,'sine',.18); st.later(function(){ tone(880,.25,'sine',.18); },160);
+      body.querySelector('#v10LOMsg').innerHTML =
+        '<div class="v6a-result"><div class="t">全灭！</div>'
+        + '<div class="s">用了 '+moves+' 步 · 参考解 '+par+' 步 · 历史最佳 '+best.bestMoves+' 步</div></div>'
+        + '<div class="v10-btnrow"><button class="v6-btn" id="v10LONew">'+V6.icon(I.refresh,15)+'新的一局</button></div>';
+      body.querySelector('#v10LONew').addEventListener('click', function(){ sfx('click'); body.querySelector('#v10LOMsg').innerHTML=''; newGame(); });
+      const bm = body.querySelector('#v10LOBest'); if (bm) bm.textContent = best.bestMoves ? best.bestMoves+'步' : '—';
+    }
+
+    function updateHud(){
+      const el = body.querySelector('#v10LOHud');
+      if (el) el.innerHTML =
+        '<span class="v6-pill">步数 <b>'+moves+'</b></span>'
+        + '<span class="v6-pill jade">参考解 <b>'+par+'</b></span>';
+    }
+
+    body.innerHTML =
+      '<div class="v10-game-wrap">'
+      + '<div class="v6-sec-title" style="margin-top:0">熄灯方阵 <span class="v6-note">5×5 · 目标全灭</span></div>'
+      + '<div class="v10-rule">点一盏灯会连同它的上下左右一起翻转；把所有灯都熄灭即可通关。</div>'
+      + '<div class="v10-hud" id="v10LOHud"></div>'
+      + '<div class="v10-lo-board" id="v10LOBoard"></div>'
+      + '<div id="v10LOMsg"></div>'
+      + '<div class="v10-btnrow"><button class="v6-btn" id="v10LONewTop">'+V6.icon(I.refresh,15)+'新局</button></div>'
+      + '<div class="v6-sec-title">战绩</div>'
+      + '<div class="v6-stat-grid">'
+      + '<div class="v6-stat accent-jade"><div class="v6-stat-v" id="v10LOBest">'+(best.bestMoves?best.bestMoves+'步':'—')+'</div><div class="v6-stat-l">最少步数</div></div>'
+      + '<div class="v6-stat"><div class="v6-stat-v" id="v10LOWins">'+(best.wins||0)+'</div><div class="v6-stat-l">通关次数</div></div>'
+      + '</div></div>';
+
+    body.querySelector('#v10LONewTop').addEventListener('click', function(){ sfx('click'); body.querySelector('#v10LOMsg').innerHTML=''; newGame(); });
+    newGame();
+  }
+});
+
+/* ============================================================
+   D_03_2048.js — 閣樓小遊戲：數字合合（2048）
+   拼接錨點：插入到閣樓 IIFE 結尾 `})();` 之前（合約第 5 節，V9 L18003 / _extracted.js L14890）
+   依賴：閉內助手 hook(body)、st.later、tone、sfx、ach、store、esc、I、V6.icon；CSS v10-attic-games.css
+   房間 id：v10_game_2048 ；成就 id：v10_ach_2048_win / v10_ach_2048_super
+   操作：鍵盤方向鍵 / WASD；觸控滑動。達 2048 判定勝利但可繼續。
+   ============================================================ */
+(function(){
+  const A = [
+    { id:'v10_ach_2048_win', icon:'∑', name:'合出 2048', desc:'在数字合合中合成出 2048' },
+    { id:'v10_ach_2048_super', icon:'⬢', name:'无界之心', desc:'合成出 4096，突破 2048 后继续前进' }
+  ];
+  if (typeof AchievementSystem !== 'undefined' && AchievementSystem.defs)
+    A.forEach(function(a){ if(!AchievementSystem.defs.some(function(d){return d.id===a.id;})) AchievementSystem.defs.push(a); });
+})();
+
+V6.Home.registerRoom('attic', {
+  id:'v10_game_2048', label:'数字合合', title:'数字合合', sub:'2048', icon:I.chart, wide:false,
+  setup(body, api){
+    const st = hook(body);
+    const KEY = 'youming_v10_2048_v1';
+    const best = store.get(KEY, { best:0, games:0 });
+
+    let grid, score = 0, over = false, winShown = false;
+    let tsX = 0, tsY = 0;
+
+    function emptyGrid(){ return [[0,0,0,0],[0,0,0,0],[0,0,0,0],[0,0,0,0]]; }
+
+    function spawn(){
+      const empty = [];
+      for (let r=0;r<4;r++) for (let c=0;c<4;c++) if (grid[r][c]===0) empty.push([r,c]);
+      if (!empty.length) return;
+      const p = empty[Math.floor(Math.random()*empty.length)];
+      grid[p[0]][p[1]] = (Math.random() < 0.9) ? 2 : 4;
+    }
+
+    function newGame(){
+      grid = emptyGrid(); score = 0; over = false; winShown = false;
+      spawn(); spawn();
+      render(); updateScore();
+      const b = body.querySelector('#v10GOver'); if (b) b.innerHTML='';
+    }
+
+    function pack(arr){
+      const v = arr.filter(function(x){ return x!==0; });
+      const out = []; let g = 0;
+      for (let i=0;i<v.length;i++){
+        if (i+1<v.length && v[i]===v[i+1]){ const m=v[i]*2; out.push(m); g+=m; i++; }
+        else out.push(v[i]);
+      }
+      while (out.length<4) out.push(0);
+      return { line:out, g:g };
+    }
+
+    function slide(dir){
+      if (over) return;
+      const ng = emptyGrid();
+      let changed = false, gained = 0;
+      for (let i=0;i<4;i++){
+        let line;
+        if (dir==='up'){ line=[grid[0][i],grid[1][i],grid[2][i],grid[3][i]]; }
+        else if (dir==='down'){ line=[grid[3][i],grid[2][i],grid[1][i],grid[0][i]]; }
+        else if (dir==='left'){ line=grid[i].slice(); }
+        else { line=grid[i].slice().reverse(); }
+        const r = pack(line); gained += r.g;
+        const out = r.line;
+        if (dir==='up'){ for(let k=0;k<4;k++) ng[k][i]=out[k]; }
+        else if (dir==='down'){ for(let k=0;k<4;k++) ng[3-k][i]=out[k]; }
+        else if (dir==='left'){ ng[i]=out; }
+        else { for(let k=0;k<4;k++) ng[i][3-k]=out[k]; }
+      }
+      for (let r=0;r<4;r++) for (let c=0;c<4;c++) if (grid[r][c]!==ng[r][c]) changed = true;
+      if (!changed) return;
+      grid = ng; score += gained;
+      tone(240 + Math.min(gained, 2000)*0.05, .05, 'triangle', .08);
+      spawn();
+      afterMove();
+    }
+
+    function canMove(){
+      for (let r=0;r<4;r++) for (let c=0;c<4;c++){
+        if (grid[r][c]===0) return true;
+        if (c+1<4 && grid[r][c]===grid[r][c+1]) return true;
+        if (r+1<4 && grid[r][c]===grid[r+1][c]) return true;
+      }
+      return false;
+    }
+
+    function afterMove(){
+      let maxV = 0;
+      for (let r=0;r<4;r++) for (let c=0;c<4;c++){ if (grid[r][c]>maxV) maxV=grid[r][c]; }
+      if (maxV >= 2048 && !winShown){
+        winShown = true; ach('v10_ach_2048_win'); sfx('success');
+        body.querySelector('#v10GOver').innerHTML =
+          '<div class="v6a-result"><div class="t">达成 2048！</div><div class="s">已经通关，可以继续合成更大的数字。</div></div>';
+      }
+      if (maxV >= 4096) ach('v10_ach_2048_super');
+      if (score > best.best) best.best = score;
+      store.set(KEY, best);
+      render(); updateScore();
+      if (!canMove()){
+        over = true; best.games = (best.games||0)+1; store.set(KEY, best);
+        sfx('error');
+        body.querySelector('#v10GOver').innerHTML =
+          '<div class="v6a-result bad"><div class="t">无路可走</div>'
+          + '<div class="s">本局得分 '+score+' · 历史最佳 '+best.best+'</div></div>'
+          + '<div class="v10-btnrow"><button class="v6-btn" id="v10GAgain">'+V6.icon(I.refresh,15)+'再来一局</button></div>';
+        body.querySelector('#v10GAgain').addEventListener('click', function(){ sfx('click'); newGame(); });
+      }
+    }
+
+    function tileClass(v){
+      if (v>=4096) return 'v10-gt-super';
+      if (v>=2048) return 'v10-gt-2048';
+      if (v>=1024) return 'v10-gt-1024';
+      return 'v10-gt-'+v;
+    }
+
+    function render(){
+      let html = '';
+      for (let r=0;r<4;r++) for (let c=0;c<4;c++){
+        const v = grid[r][c];
+        html += v
+          ? '<div class="v10-g-tile '+tileClass(v)+'">'+v+'</div>'
+          : '<div class="v10-g-cell"></div>';
+      }
+      body.querySelector('#v10GGrid').innerHTML = html;
+    }
+
+    function updateScore(){
+      const s = body.querySelector('#v10GScore'); if (s) s.textContent = score;
+      const b = body.querySelector('#v10GBest'); if (b) b.textContent = best.best;
+    }
+
+    function onKey(e){
+      const k = e.key;
+      let dir = null;
+      if (k==='ArrowUp'||k==='w'||k==='W') dir='up';
+      else if (k==='ArrowDown'||k==='s'||k==='S') dir='down';
+      else if (k==='ArrowLeft'||k==='a'||k==='A') dir='left';
+      else if (k==='ArrowRight'||k==='d'||k==='D') dir='right';
+      if (dir){ e.preventDefault(); slide(dir); }
+    }
+
+    body.innerHTML =
+      '<div class="v10-game-wrap">'
+      + '<div class="v6-sec-title" style="margin-top:0">数字合合 <span class="v6-note">方向键 / 滑动</span></div>'
+      + '<div class="v10-rule">把相同数字合并到一起，凑出更大的方块；做出 2048 即通关，之后还能继续冲分。</div>'
+      + '<div class="v10-hud">'
+      +   '<span class="v6-pill">得分 <b id="v10GScore">0</b></span>'
+      +   '<span class="v6-pill jade">最佳 <b id="v10GBest">'+(best.best||0)+'</b></span>'
+      + '</div>'
+      + '<div class="v10-g-board" id="v10GBoard"><div class="v10-g-grid" id="v10GGrid"></div></div>'
+      + '<div id="v10GOver"></div>'
+      + '<div class="v10-btnrow"><button class="v6-btn" id="v10GNew">'+V6.icon(I.refresh,15)+'新游戏</button></div>'
+      + '</div>';
+
+    body.querySelector('#v10GNew').addEventListener('click', function(){ sfx('click'); newGame(); });
+
+    // 鍵盤：掛 document，離開面板時一併移除
+    document.addEventListener('keydown', onKey);
+    const origClear = st.clear;
+    st.clear = function(){ origClear(); try{ document.removeEventListener('keydown', onKey); }catch(e){} };
+
+    // 觸控滑動
+    const board = body.querySelector('#v10GBoard');
+    board.addEventListener('touchstart', function(e){ const t=e.touches[0]; tsX=t.clientX; tsY=t.clientY; }, {passive:true});
+    board.addEventListener('touchend', function(e){
+      const t=e.changedTouches[0]; const dx=t.clientX-tsX, dy=t.clientY-tsY;
+      if (Math.max(Math.abs(dx),Math.abs(dy)) < 24) return;
+      if (Math.abs(dx) > Math.abs(dy)) slide(dx>0?'right':'left');
+      else slide(dy>0?'down':'up');
+    }, {passive:true});
+
+    newGame();
+  }
+});
+
+/* ============================================================
+   D_04_pipes.js — 閣樓小遊戲：管道連通（Rotate Pipes / Flow）
+   拼接錨點：插入到閣樓 IIFE 結尾 `})();` 之前（合約第 5 節，V9 L18003 / _extracted.js L14890）
+   依賴：閉內助手 hook(body)、st.later、tone、sfx、ach、store、esc、I、V6.icon；CSS v10-attic-games.css
+   房間 id：v10_game_pipes ；成就 id：v10_ach_pipes_clear / v10_ach_pipes_efficient
+   方向位元：N=1 E=2 S=4 W=8。起/終固定，中間彎管/直管點擊旋轉；BFS 雙向連通判定。
+   保證可解：先沿一條由上到下的簡單路徑擺好正確朝向，再把中間管隨機旋轉打亂。
+   ============================================================ */
+(function(){
+  const A = [
+    { id:'v10_ach_pipes_clear', icon:'⊰', name:'水到渠成', desc:'把起点和终点用管道连通' },
+    { id:'v10_ach_pipes_efficient', icon:'⬡', name:'一步到位', desc:'某一关用不超过参考步数连通管道' }
+  ];
+  if (typeof AchievementSystem !== 'undefined' && AchievementSystem.defs)
+    A.forEach(function(a){ if(!AchievementSystem.defs.some(function(d){return d.id===a.id;})) AchievementSystem.defs.push(a); });
+})();
+
+V6.Home.registerRoom('attic', {
+  id:'v10_game_pipes', label:'管道连通', title:'管道连通', sub:'ROTATE PIPES', icon:I.flask, wide:false,
+  setup(body, api){
+    const st = hook(body);
+    const KEY = 'youming_v10_pipes_v1';
+    const LEVELS = [3, 4, 5, 6];
+    const best = store.get(KEY, { best:{}, cleared:false, runs:0 });
+
+    let n = 3, levelIdx = 0, cells = [], steps = 0, par = 0;
+    let srcR = 0, srcC = 0, sinkR = 0, sinkC = 0, locked = false;
+
+    // 方向工具
+    function dirFrom(cur, other){
+      if (other[0] < cur[0]) return 1; // N
+      if (other[0] > cur[0]) return 4; // S
+      if (other[1] < cur[1]) return 8; // W
+      return 2; // E
+    }
+    function rotSet(base, k){
+      let s = base;
+      for (let i=0;i<k;i++){
+        let ns = 0;
+        if (s&1) ns |= 2; if (s&2) ns |= 4; if (s&4) ns |= 8; if (s&8) ns |= 1;
+        s = ns;
+      }
+      return s;
+    }
+    function actual(r, c){ return rotSet(cells[r][c].base, cells[r][c].rot); }
+
+    function genPath(){
+      for (let att=0; att<300; att++){
+        const c0 = Math.floor(Math.random()*n);
+        const visited = {};
+        const path = [[0,c0]];
+        visited['0,'+c0] = true;
+        let r=0, c=c0, ok=false;
+        while (r < n-1){
+          const nb = [];
+          const D = [[1,0],[0,1],[0,-1]];
+          for (let k=0;k<D.length;k++){
+            const nr=r+D[k][0], nc=c+D[k][1];
+            if (nr>=0 && nr<n && nc>=0 && nc<n && !visited[nr+','+nc]) nb.push([nr,nc]);
+          }
+          if (!nb.length) break;
+          const pick = nb[Math.floor(Math.random()*nb.length)];
+          r=pick[0]; c=pick[1];
+          visited[r+','+c] = true;
+          path.push([r,c]);
+          if (r === n-1) ok = true;
+        }
+        if (ok) return path;
+      }
+      const cs = Math.floor(Math.random()*n);
+      const fb = []; for (let rr=0; rr<n; rr++) fb.push([rr,cs]); return fb;
+    }
+
+    function newLevel(){
+      n = LEVELS[levelIdx];
+      locked = false; steps = 0;
+      cells = [];
+      for (let r=0;r<n;r++){ const row=[]; for (let c=0;c<n;c++) row.push({base:0, rot:0, src:false, sink:false, pipe:false}); cells.push(row); }
+      const path = genPath();
+      srcR = path[0][0]; srcC = path[0][1];
+      sinkR = path[path.length-1][0]; sinkC = path[path.length-1][1];
+      par = 0;
+      const rotatables = [];
+      for (let i=0;i<path.length;i++){
+        const cell = cells[path[i][0]][path[i][1]];
+        cell.pipe = true;
+        let opens = 0;
+        if (i>0) opens |= dirFrom(path[i], path[i-1]);
+        if (i<path.length-1) opens |= dirFrom(path[i], path[i+1]);
+        cell.base = opens;
+        if (i===0){ cell.src = true; }
+        else if (i===path.length-1){ cell.sink = true; }
+        else {
+          const sc = 1 + Math.floor(Math.random()*3); // 打亂 1~3 個 90°
+          cell.rot = sc;
+          par += ((4 - sc) % 4); // 恢復正確朝向所需的確切點擊數
+          rotatables.push(cell);
+        }
+      }
+      // 保險：若初始局面已不巧連通，把任一中間管再多轉一下，避免白送
+      let guard = 0;
+      while (connected() && rotatables.length && guard < 20){
+        const c = rotatables[Math.floor(Math.random()*rotatables.length)];
+        c.rot = (c.rot + 1) % 4; guard++;
+      }
+      renderHud(); renderBoard();
+    }
+
+    function pipeSvg(op, isSrc, isSink){
+      let p = '';
+      if (op&1) p += '<line x1="20" y1="20" x2="20" y2="3"/>';
+      if (op&2) p += '<line x1="20" y1="20" x2="37" y2="20"/>';
+      if (op&4) p += '<line x1="20" y1="20" x2="20" y2="37"/>';
+      if (op&8) p += '<line x1="20" y1="20" x2="3" y2="20"/>';
+      const stroke = isSrc ? '#7fe0ad' : (isSink ? '#ffd27a' : '#ffb86c');
+      return '<svg viewBox="0 0 40 40">'+
+        '<g stroke="'+stroke+'" stroke-width="6" stroke-linecap="round">'+p+'</g>'+
+        '<circle cx="20" cy="20" r="5" fill="'+stroke+'"/></svg>';
+    }
+
+    function renderBoard(){
+      let html = '';
+      for (let r=0;r<n;r++) for (let c=0;c<n;c++){
+        const cell = cells[r][c];
+        if (!cell.pipe){ html += '<div class="v10-pipe-cell" style="cursor:default"></div>'; continue; }
+        const op = actual(r,c);
+        const cls = 'v10-pipe-cell'+(cell.src?' is-src':'')+(cell.sink?' is-sink':'');
+        const clickable = (!cell.src && !cell.sink) ? ' data-r="'+r+'" data-c="'+c+'"' : '';
+        html += '<button class="'+cls+'"'+clickable+'>'+pipeSvg(op, cell.src, cell.sink)+'</button>';
+      }
+      const board = body.querySelector('#v10PBoard');
+      board.style.gridTemplateColumns = 'repeat('+n+',1fr)';
+      board.innerHTML = html;
+      board.querySelectorAll('.v10-pipe-cell[data-r]').forEach(function(el){
+        el.addEventListener('click', function(){ onRotate(+el.getAttribute('data-r'), +el.getAttribute('data-c')); });
+      });
+    }
+
+    function connected(){
+      const seen = {}; const q = [[srcR, srcC]];
+      seen[srcR+','+srcC] = true;
+      while (q.length){
+        const cur = q.shift(); const r = cur[0], c = cur[1];
+        if (r===sinkR && c===sinkC) return true;
+        const op = actual(r,c);
+        if (op&1 && r-1>=0){ if (actual(r-1,c)&4 && !seen[(r-1)+','+c]){ seen[(r-1)+','+c]=true; q.push([r-1,c]); } }
+        if (op&2 && c+1<n){ if (actual(r,c+1)&8 && !seen[r+','+(c+1)]){ seen[r+','+(c+1)]=true; q.push([r,c+1]); } }
+        if (op&4 && r+1<n){ if (actual(r+1,c)&1 && !seen[(r+1)+','+c]){ seen[(r+1)+','+c]=true; q.push([r+1,c]); } }
+        if (op&8 && c-1>=0){ if (actual(r,c-1)&2 && !seen[r+','+(c-1)]){ seen[r+','+(c-1)]=true; q.push([r,c-1]); } }
+      }
+      return false;
+    }
+
+    function onRotate(r, c){
+      if (locked) return;
+      cells[r][c].rot = (cells[r][c].rot + 1) % 4;
+      steps++;
+      sfx('click'); tone(400 + steps*10, .05, 'triangle', .10);
+      renderBoard(); renderHud();
+      if (connected()) win();
+    }
+
+    function win(){
+      locked = true;
+      best.runs = (best.runs||0)+1;
+      if (!best.best[n] || steps < best.best[n]) best.best[n] = steps;
+      best.cleared = true;
+      store.set(KEY, best);
+      ach('v10_ach_pipes_clear');
+      if (steps <= par) ach('v10_ach_pipes_efficient');
+      sfx('success'); tone(660,.15,'sine',.18); st.later(function(){ tone(880,.25,'sine',.18); },160);
+      boardFlash();
+      const doneAll = (levelIdx >= LEVELS.length-1);
+      body.querySelector('#v10PMsg').innerHTML =
+        '<div class="v6a-result"><div class="t">连通成功！</div>'
+        + '<div class="s">'+n+'×'+n+' 关卡 · 用了 '+steps+' 步（参考 '+par+' 步）</div></div>'
+        + '<div class="v10-btnrow"><button class="v6-btn" id="v10PNext">'+(doneAll?V6.icon(I.refresh,15)+'再玩一轮':V6.icon(I.target,15)+'下一关')+'</button></div>';
+      body.querySelector('#v10PNext').addEventListener('click', function(){
+        sfx('click');
+        if (doneAll) levelIdx = 0; else levelIdx++;
+        body.querySelector('#v10PMsg').innerHTML='';
+        newLevel();
+      });
+      const bb = body.querySelector('#v10PBest');
+      if (bb){ const bm=best.best[n]; bb.textContent = bm? bm+'步':'—'; }
+    }
+
+    function boardFlash(){
+      const b = body.querySelector('#v10PBoard'); if (b){ b.classList.add('v10-flash'); st.later(function(){ b.classList.remove('v10-flash'); },500); }
+    }
+
+    function renderHud(){
+      const el = body.querySelector('#v10PHud');
+      if (el) el.innerHTML =
+        '<span class="v6-pill">关卡 <b>'+(levelIdx+1)+'/'+LEVELS.length+'</b></span>'
+        + '<span class="v6-pill">步数 <b>'+steps+'</b></span>'
+        + '<span class="v6-pill jade">参考 <b>'+par+'</b></span>';
+    }
+
+    body.innerHTML =
+      '<div class="v10-game-wrap">'
+      + '<div class="v6-sec-title" style="margin-top:0">管道连通 <span class="v6-note">点击旋转 · 由小到大</span></div>'
+      + '<div class="v10-rule">点一下管道就旋转 90°；把绿色起点和金色终点用管道接通即可过关。</div>'
+      + '<div class="v10-hud" id="v10PHud"></div>'
+      + '<div class="v10-pipe-board" id="v10PBoard"></div>'
+      + '<div id="v10PMsg"></div>'
+      + '<div class="v6-sec-title">战绩</div>'
+      + '<div class="v6-stat-grid">'
+      + '<div class="v6-stat accent-jade"><div class="v6-stat-v" id="v10PBest">—</div><div class="v6-stat-l">本关最少步</div></div>'
+      + '<div class="v6-stat"><div class="v6-stat-v" id="v10PRuns">'+(best.runs||0)+'</div><div class="v6-stat-l">通关次数</div></div>'
+      + '</div></div>';
+
+    newLevel();
+  }
+});
+
+/* ============================================================
+   E_01_sokoban.js — 推箱迷宮
+   拼接錨點：閣樓 IIFE 結尾 `})();` 之前（V9 L18003）
+   依賴：閉內 hook、st 計時器、tone、sfx、ach、store、esc、I、V6.icon
+   DOM id 前綴 v10eS*，class v10-*
+   ============================================================ */
+
+/* 新成就註冊 */
+(function(){
+  const A = [
+    { id:'v10_ach_soko_clear', icon:'▣', name:'推箱初成', desc:'推箱迷宮通关任意一关' },
+    { id:'v10_ach_soko_all',  icon:'▦', name:'推箱大师', desc:'推箱迷宮通关全部 5 关' },
+    { id:'v10_ach_soko_perfect', icon:'◈', name:'步数精算', desc:'任一關在最佳步数 1.2 倍以內通关' }
+  ];
+  if (typeof AchievementSystem!=='undefined' && AchievementSystem.defs)
+    A.forEach(a => { if(!AchievementSystem.defs.some(d=>d.id===a.id)) AchievementSystem.defs.push(a); });
+})();
+
+V6.Home.registerRoom('attic', {
+  id:'v10_game_sokoban', label:'推箱迷宮', title:'推箱迷宮', sub:'SOKOBAN', icon:I.box, wide:false,
+  setup(body, api){
+    const st = hook(body);
+    const KEY = 'youming_v10_sokoban_v1';
+    const saved = store.get(KEY, { best:{}, cleared:0, totalRuns:0 });
+
+    /* 關卡定義：#牆 $箱子 .目標 @玩家 *箱子在目標上 */
+    const LEVELS = [
+      [
+        '######',
+        '#@   #',
+        '# $ .#',
+        '#    #',
+        '######'
+      ],
+      [
+        '#######',
+        '#     #',
+        '# @$. #',
+        '#     #',
+        '#######'
+      ],
+      [
+        '#######',
+        '#. #  #',
+        '# $   #',
+        '# @ $ #',
+        '#   . #',
+        '#     #',
+        '#######'
+      ],
+      [
+        '########',
+        '#  .   #',
+        '# $$   #',
+        '#  @   #',
+        '#   .  #',
+        '#      #',
+        '########'
+      ],
+      [
+        '########',
+        '# .  . #',
+        '# $$$  #',
+        '#  @   #',
+        '#  $$  #',
+        '# .  . #',
+        '#      #',
+        '########'
+      ]
+    ];
+
+    let level = 0;
+    let grid = [];
+    let px = 0, py = 0;
+    let moves = 0;
+    let undoStack = [];
+    let usedUndo = false;
+    let lock = false;
+
+    function parseLevel(idx){
+      const raw = LEVELS[idx];
+      grid = [];
+      undoStack = [];
+      moves = 0;
+      usedUndo = false;
+      for (let y=0; y<raw.length; y++){
+        const row = [];
+        for (let x=0; x<raw[y].length; x++){
+          const c = raw[y][x];
+          row.push(c);
+          if (c === '@' || c === '+'){ px = x; py = y; }
+        }
+        grid.push(row);
+      }
+    }
+
+    function isWall(x,y){ return grid[y] && grid[y][x] === '#'; }
+    function isBox(x,y){ const c = grid[y] && grid[y][x]; return c === '$' || c === '*'; }
+    function isTarget(x,y){ const c = grid[y] && grid[y][x]; return c === '.' || c === '*' || c === '+'; }
+
+    function render(){
+      const h = grid.length, w = grid[0].length;
+      const cellSize = Math.floor(Math.min(360 / w, 46));
+      let html = '<div class="v10-board v10-soko-grid" style="grid-template-columns:repeat('+w+','+cellSize+'px);grid-template-rows:repeat('+h+','+cellSize+'px);">';
+      for (let y=0;y<h;y++){
+        for (let x=0;x<w;x++){
+          const c = grid[y][x];
+          let cls = 'v10-cell v10-soko-cell';
+          let inner = '';
+          if (c === '#') cls += ' v10-wall';
+          else if (c === '.' || c === '*' || c === '+') cls += ' v10-target';
+          if (c === '$' || c === '*') inner = '<div class="v10-soko-box'+(c==='*'?' v10-on-target':'')+'"></div>';
+          if (x === px && y === py) inner = '<div class="v10-soko-player"></div>';
+          html += '<div class="'+cls+'">'+inner+'</div>';
+        }
+      }
+      html += '</div>';
+
+      const bestMoves = saved.best[level];
+      html += '<div class="v10-hud">'
+        + '<span class="v10-hud-item">关卡 <b>'+(level+1)+'/'+LEVELS.length+'</b></span>'
+        + '<span class="v10-hud-item">步数 <b id="v10eSMoves">'+moves+'</b></span>'
+        + '<span class="v10-hud-item">最佳 <b>'+(bestMoves?bestMoves+' 步':'—')+'</b></span>'
+        + '</div>';
+
+      html += '<div class="v10-dpad">'
+        + '<button class="v10-dpad-up" data-dir="up">▲</button>'
+        + '<button class="v10-dpad-left" data-dir="left">◀</button>'
+        + '<button class="v10-dpad-down" data-dir="down">▼</button>'
+        + '<button class="v10-dpad-right" data-dir="right">▶</button>'
+        + '</div>';
+
+      html += '<div class="v10-btnrow">'
+        + '<button class="v6-btn ghost" id="v10eSUndo">↩ 撤销一步</button>'
+        + '<button class="v6-btn ghost" id="v10eSRestart">重开本关</button>'
+        + '</div>';
+
+      html += '<div class="v10-stat-grid">'
+        + '<div class="v10-stat"><div class="v10-stat-v">'+(saved.cleared||0)+'/'+LEVELS.length+'</div><div class="v10-stat-l">已通关卡</div></div>'
+        + '<div class="v10-stat"><div class="v10-stat-v">'+(saved.totalRuns||0)+'</div><div class="v10-stat-l">游玩次数</div></div>'
+        + '<div class="v10-stat"><div class="v10-stat-v">'+(level+1)+'</div><div class="v10-stat-l">当前关卡</div></div>'
+        + '</div>';
+
+      html += '<div id="v10eSResult"></div>';
+      body.innerHTML = '<div class="v10-wrap">' + html + '</div>';
+
+      /* 綁定方向鍵 */
+      body.querySelectorAll('.v10-dpad button').forEach(b=>{
+        b.addEventListener('click', ()=>{ sfx('click'); tryMove(b.getAttribute('data-dir')); });
+      });
+      body.querySelector('#v10eSUndo').addEventListener('click', ()=>{ sfx('click'); undo(); });
+      body.querySelector('#v10eSRestart').addEventListener('click', ()=>{ sfx('click'); restart(); });
+
+      /* 鍵盤 */
+      const onKey = (e)=>{
+        if (lock) return;
+        const k = e.key;
+        if (k==='ArrowUp'||k==='w'||k==='W'){ e.preventDefault(); tryMove('up'); }
+        else if (k==='ArrowDown'||k==='s'||k==='S'){ e.preventDefault(); tryMove('down'); }
+        else if (k==='ArrowLeft'||k==='a'||k==='A'){ e.preventDefault(); tryMove('left'); }
+        else if (k==='ArrowRight'||k==='d'||k==='D'){ e.preventDefault(); tryMove('right'); }
+      };
+      body.addEventListener('keydown', onKey);
+      st.later(()=>{ try{ body.focus(); }catch(e){} }, 50);
+    }
+
+    function delta(dir){
+      if (dir==='up') return [0,-1];
+      if (dir==='down') return [0,1];
+      if (dir==='left') return [-1,0];
+      return [1,0];
+    }
+
+    function tryMove(dir){
+      if (lock) return;
+      const [dx,dy] = delta(dir);
+      const nx = px+dx, ny = py+dy;
+      if (isWall(nx,ny)){ tone(120,.15,'square',.08); return; }
+      let pushed = false;
+      if (isBox(nx,ny)){
+        const bx = nx+dx, by = ny+dy;
+        if (isWall(bx,by) || isBox(bx,by)){ tone(120,.15,'square',.08); return; }
+        pushed = true;
+        /* 記錄 undo 快照 */
+        undoStack.push(JSON.stringify({grid:grid.map(r=>r.slice()), px:px, py:py, moves:moves}));
+        /* 移動箱子 */
+        const wasTarget = isTarget(nx,ny);
+        const willTarget = isTarget(bx,by);
+        grid[ny][nx] = wasTarget ? '.' : ' ';
+        grid[by][bx] = willTarget ? '*' : '$';
+      } else {
+        undoStack.push(JSON.stringify({grid:grid.map(r=>r.slice()), px:px, py:py, moves:moves}));
+      }
+      /* 移動玩家 */
+      const pWasTarget = isTarget(px,py);
+      grid[py][px] = pWasTarget ? '.' : ' ';
+      const pWillTarget = isTarget(nx,ny);
+      grid[ny][nx] = pWillTarget ? '+' : '@';
+      px = nx; py = ny;
+      moves++;
+      if (pushed) sfx('pickup'); else sfx('click');
+      render();
+      checkWin();
+    }
+
+    function undo(){
+      if (undoStack.length === 0){ tone(150,.1,'square',.06); return; }
+      const snap = JSON.parse(undoStack.pop());
+      grid = snap.grid; px = snap.px; py = snap.py; moves = snap.moves;
+      usedUndo = true;
+      lock = false;
+      render();
+    }
+
+    function restart(){
+      lock = false;
+      parseLevel(level);
+      render();
+    }
+
+    function checkWin(){
+      /* 所有目標點上都有箱子（* 或目標. 被箱子佔據） */
+      let totalTargets = 0, boxesOnTarget = 0;
+      for (let y=0;y<grid.length;y++){
+        for (let x=0;x<grid[y].length;x++){
+          const c = grid[y][x];
+          if (c === '.' || c === '*' || c === '+') totalTargets++;
+          if (c === '*') boxesOnTarget++;
+        }
+      }
+      /* 目標數 = 箱子數 */
+      const boxCount = LEVELS[level].join('').split('').filter(c=>c==='$'||c==='*').length;
+      if (boxesOnTarget === boxCount && boxCount > 0){
+        lock = true;
+        sfx('success');
+        ach('v10_ach_soko_clear');
+        saved.totalRuns = (saved.totalRuns||0)+1;
+        if (!saved.best[level] || moves < saved.best[level]){
+          saved.best[level] = moves;
+        }
+        /* 步數精算：本關未使用撤銷即通關 */
+        if (!usedUndo) ach('v10_ach_soko_perfect');
+        /* 計算通關數 */
+        saved.cleared = 0;
+        for (let i=0;i<LEVELS.length;i++){
+          if (saved.best[i] !== undefined) saved.cleared++;
+        }
+        if (saved.cleared >= LEVELS.length) ach('v10_ach_soko_all');
+        store.set(KEY, saved);
+
+        const resultEl = body.querySelector('#v10eSResult');
+        if (resultEl){
+          resultEl.innerHTML = '<div class="v10-result"><div class="t">通关！</div>'
+            + '<div class="s">用了 '+moves+' 步' + (level < LEVELS.length-1 ? ' · 下一关已解锁' : ' · 全部关卡完成！') + '</div></div>';
+        }
+        st.later(()=>{
+          if (level < LEVELS.length-1){
+            level++;
+            parseLevel(level);
+            render();
+          } else {
+            /* 全部通關，回到第一關 */
+            level = 0;
+            parseLevel(level);
+            render();
+          }
+        }, 1600);
+      }
+    }
+
+    parseLevel(level);
+    render();
+  }
+});
+
+/* ============================================================
+   E_02_reversi.js — 黑白棋（Othello）
+   拼接錨點：閣樓 IIFE 結尾 `})();` 之前（V9 L18003）
+   依賴：閉內 hook、st 計時器、tone、sfx、ach、store、esc、I、V6.icon
+   DOM id 前綴 v10eR*，class v10-*
+   ============================================================ */
+
+/* 新成就註冊 */
+(function(){
+  const A = [
+    { id:'v10_ach_rev_win',  icon:'●', name:'初胜AI', desc:'黑白棋战胜 AI 一局' },
+    { id:'v10_ach_rev_big',  icon:'◉', name:'碾压棋局', desc:'黑白棋以 40 子以上优势战胜 AI' },
+    { id:'v10_ach_rev_10wins', icon:'♦', name:'黑白连将', desc:'累计战胜 AI 10 局' }
+  ];
+  if (typeof AchievementSystem!=='undefined' && AchievementSystem.defs)
+    A.forEach(a => { if(!AchievementSystem.defs.some(d=>d.id===a.id)) AchievementSystem.defs.push(a); });
+})();
+
+V6.Home.registerRoom('attic', {
+  id:'v10_game_reversi', label:'黑白棋', title:'黑白棋', sub:'OTHELLO', icon:I.spark, wide:false,
+  setup(body, api){
+    const st = hook(body);
+    const KEY = 'youming_v10_reversi_v1';
+    const saved = store.get(KEY, { wins:0, losses:0, draws:0, totalGames:0 });
+
+    const N = 8;
+    let board = [];   // 0 empty, 1 black(player), 2 white(AI)
+    let turn = 1;     // 1 black, 2 white
+    let lock = false;
+
+    /* 八方向 */
+    const DIRS = [[-1,-1],[0,-1],[1,-1],[-1,0],[1,0],[-1,1],[0,1],[1,1]];
+
+    function initBoard(){
+      board = [];
+      for (let y=0;y<N;y++){ board.push(new Array(N).fill(0)); }
+      const m = N/2;
+      board[m-1][m-1] = 2; board[m][m] = 2;
+      board[m-1][m] = 1; board[m][m-1] = 1;
+      turn = 1;
+      lock = false;
+    }
+
+    function inB(x,y){ return x>=0 && x<N && y>=0 && y<N; }
+
+    /* 檢查在 (x,y) 放 color 能翻多少子，返回要翻的座標陣列；不能放返回空陣列 */
+    function getFlips(x,y,color){
+      if (!inB(x,y) || board[y][x] !== 0) return [];
+      const opp = color === 1 ? 2 : 1;
+      const flips = [];
+      for (const [dx,dy] of DIRS){
+        const line = [];
+        let nx = x+dx, ny = y+dy;
+        while (inB(nx,ny) && board[ny][nx] === opp){
+          line.push([nx,ny]);
+          nx += dx; ny += dy;
+        }
+        if (line.length > 0 && inB(nx,ny) && board[ny][nx] === color){
+          flips.push(...line);
+        }
+      }
+      return flips;
+    }
+
+    function getValidMoves(color){
+      const moves = [];
+      for (let y=0;y<N;y++){
+        for (let x=0;x<N;x++){
+          if (board[y][x] === 0 && getFlips(x,y,color).length > 0){
+            moves.push([x,y]);
+          }
+        }
+      }
+      return moves;
+    }
+
+    function countDiscs(color){
+      let c = 0;
+      for (let y=0;y<N;y++) for (let x=0;x<N;x++) if (board[y][x] === color) c++;
+      return c;
+    }
+
+    function render(){
+      const cellSize = Math.floor(Math.min(360 / N, 44));
+      const validMoves = turn === 1 && !lock ? getValidMoves(1) : [];
+      const validSet = new Set(validMoves.map(m=>m[0]+','+m[1]));
+
+      let html = '<div class="v10-board v10-othello-board" style="grid-template-columns:repeat('+N+','+cellSize+'px);grid-template-rows:repeat('+N+','+cellSize+'px);">';
+      for (let y=0;y<N;y++){
+        for (let x=0;x<N;x++){
+          const c = board[y][x];
+          let cls = 'v10-cell v10-othello-cell';
+          if (validSet.has(x+','+y)) cls += ' v10-valid';
+          let inner = '';
+          if (c === 1) inner = '<div class="v10-othello-disc v10-black"></div>';
+          else if (c === 2) inner = '<div class="v10-othello-disc v10-white"></div>';
+          html += '<div class="'+cls+'" data-x="'+x+'" data-y="'+y+'">'+inner+'</div>';
+        }
+      }
+      html += '</div>';
+
+      const bCount = countDiscs(1), wCount = countDiscs(2);
+      html += '<div class="v10-hud">'
+        + '<span class="v10-hud-item">● 黑(你) <b>'+bCount+'</b></span>'
+        + '<span class="v10-hud-item">○ 白(AI) <b>'+wCount+'</b></span>'
+        + '<span class="v10-hud-item">轮次 <b>'+(turn===1?'你':'AI')+'</b></span>'
+        + '</div>';
+
+      html += '<div class="v10-btnrow"><button class="v6-btn ghost" id="v10eRNew">新对局</button></div>';
+
+      html += '<div class="v10-stat-grid">'
+        + '<div class="v10-stat"><div class="v10-stat-v">'+(saved.wins||0)+'</div><div class="v10-stat-l">胜局</div></div>'
+        + '<div class="v10-stat"><div class="v10-stat-v">'+(saved.losses||0)+'</div><div class="v10-stat-l">负局</div></div>'
+        + '<div class="v10-stat"><div class="v10-stat-v">'+(saved.totalGames||0)+'</div><div class="v10-stat-l">总对局</div></div>'
+        + '</div>';
+
+      html += '<div id="v10eRResult"></div>';
+      body.innerHTML = '<div class="v10-wrap">' + html + '</div>';
+
+      /* 綁定落子 */
+      body.querySelectorAll('.v10-othello-cell').forEach(cell=>{
+        cell.addEventListener('click', ()=>{
+          if (lock || turn !== 1) return;
+          const x = parseInt(cell.getAttribute('data-x')), y = parseInt(cell.getAttribute('data-y'));
+          const flips = getFlips(x,y,1);
+          if (flips.length === 0){ tone(150,.12,'square',.08); return; }
+          placeDisc(x,y,1,flips);
+          sfx('pickup');
+          afterPlayerMove();
+        });
+      });
+      body.querySelector('#v10eRNew').addEventListener('click', ()=>{ sfx('click'); initBoard(); render(); });
+    }
+
+    function placeDisc(x,y,color,flips){
+      board[y][x] = color;
+      for (const [fx,fy] of flips) board[fy][fx] = color;
+    }
+
+    function afterPlayerMove(){
+      /* 檢查 AI 是否有棋可下 */
+      const aiMoves = getValidMoves(2);
+      if (aiMoves.length === 0){
+        /* AI 跳過，檢查玩家是否還有棋 */
+        const pMoves = getValidMoves(1);
+        if (pMoves.length === 0){ endGame(); return; }
+        turn = 1;
+        tone(300,.2,'triangle',.12);
+        const resEl = body.querySelector('#v10eRResult');
+        if (resEl) resEl.innerHTML = '<div class="v10-result"><div class="s">AI 无棋可下，轮到你继续。</div></div>';
+        render();
+        return;
+      }
+      /* AI 走棋 */
+      turn = 2;
+      lock = true;
+      render();
+      st.later(()=>{
+        aiMove();
+        lock = false;
+        /* 檢查玩家是否有棋 */
+        const pMoves = getValidMoves(1);
+        if (pMoves.length === 0){
+          const aiMoves2 = getValidMoves(2);
+          if (aiMoves2.length === 0){ endGame(); return; }
+          /* 玩家跳過，AI 繼續 */
+          turn = 2;
+          tone(280,.2,'triangle',.12);
+          render();
+          st.later(()=>{ aiMove(); lock=false; afterPlayerMove(); }, 600);
+          return;
+        }
+        turn = 1;
+        render();
+      }, 650);
+    }
+
+    function aiMove(){
+      const moves = getValidMoves(2);
+      if (moves.length === 0) return;
+      /* 角點加權：貪心翻子數 + 角點獎勵 */
+      const corners = [[0,0],[0,N-1],[N-1,0],[N-1,N-1]];
+      let best = null, bestScore = -Infinity;
+      for (const [x,y] of moves){
+        const flips = getFlips(x,y,2);
+        let score = flips.length;
+        /* 角點極高權重 */
+        if (corners.some(c=>c[0]===x&&c[1]===y)) score += 20;
+        /* 邊緣適度獎勵 */
+        if (x===0||x===N-1||y===0||y===N-1) score += 2;
+        /* 避免在角點旁邊（危險格） */
+        const danger = [[0,1],[1,0],[1,1],[0,N-2],[1,N-1],[1,N-2],[N-2,0],[N-1,1],[N-2,1],[N-2,N-1],[N-1,N-2],[N-2,N-2]];
+        if (danger.some(d=>d[0]===x&&d[1]===y)) score -= 5;
+        if (score > bestScore){ bestScore = score; best = [x,y]; }
+      }
+      if (best){
+        const [bx,by] = best;
+        const flips = getFlips(bx,by,2);
+        placeDisc(bx,by,2,flips);
+        sfx('click');
+      }
+    }
+
+    function endGame(){
+      lock = true;
+      const bCount = countDiscs(1), wCount = countDiscs(2);
+      saved.totalGames = (saved.totalGames||0)+1;
+      let msg, isWin = false;
+      if (bCount > wCount){
+        saved.wins = (saved.wins||0)+1;
+        isWin = true;
+        msg = '你赢了！黑 '+bCount+' : '+wCount;
+        sfx('success');
+        ach('v10_ach_rev_win');
+        if (bCount - wCount >= 40) ach('v10_ach_rev_big');
+        if (saved.wins >= 10) ach('v10_ach_rev_10wins');
+      } else if (wCount > bCount){
+        saved.losses = (saved.losses||0)+1;
+        msg = 'AI 赢了。黑 '+bCount+' : '+wCount;
+        sfx('error');
+      } else {
+        saved.draws = (saved.draws||0)+1;
+        msg = '平局！'+bCount+' : '+wCount;
+      }
+      store.set(KEY, saved);
+      render();
+      const resEl = body.querySelector('#v10eRResult');
+      if (resEl){
+        resEl.innerHTML = '<div class="'+(isWin?'v10-result':'v10-result v10-fail')+'"><div class="t">'+(isWin?'对局结束 · 胜利':'对局结束')+'</div>'
+          + '<div class="s">'+msg+'</div></div>';
+      }
+    }
+
+    initBoard();
+    render();
+  }
+});
+
+/* ============================================================
+   E_03_balance.js — 天平稱重
+   拼接錨點：閣樓 IIFE 結尾 `})();` 之前（V9 L18003）
+   依賴：閉內 hook、st 計時器、tone、sfx、ach、store、esc、I、V6.icon
+   DOM id 前綴 v10eB*，class v10-*
+   ============================================================ */
+
+/* 新成就註冊 */
+(function(){
+  const A = [
+    { id:'v10_ach_bal_clear',  icon:'⚖', name:'天平初平', desc:'天平称重通关任意一关' },
+    { id:'v10_ach_bal_all',    icon:'≡', name:'精准称量', desc:'天平称重通关全部 4 关' },
+    { id:'v10_ach_bal_clean',  icon:'✓', name:'零失误称量', desc:'一关内不撤换任何砝码直接平衡' }
+  ];
+  if (typeof AchievementSystem!=='undefined' && AchievementSystem.defs)
+    A.forEach(a => { if(!AchievementSystem.defs.some(d=>d.id===a.id)) AchievementSystem.defs.push(a); });
+})();
+
+V6.Home.registerRoom('attic', {
+  id:'v10_game_balance', label:'天平称重', title:'天平称重', sub:'BALANCE SCALE', icon:I.target, wide:false,
+  setup(body, api){
+    const st = hook(body);
+    const KEY = 'youming_v10_balance_v1';
+    const saved = store.get(KEY, { best:{}, cleared:0, totalRuns:0 });
+
+    /* 關卡：target = 左托盤目標物重量；weights = 貨架上可選砝碼列表 */
+    const LEVELS = [
+      { target: 10, weights: [5,5,2,2,1,1] },
+      { target: 18, weights: [10,5,5,2,2,1,1] },
+      { target: 27, weights: [20,10,5,5,2,2,1,1] },
+      { target: 38, weights: [20,10,10,5,5,2,2,1,1] }
+    ];
+
+    let level = 0;
+    let rightWeights = [];   /* 當前右托盤上的砝碼 */
+    let shelfWeights = [];    /* 貨架上剩餘的砝碼 */
+    let moves = 0;
+    let cleanRun = true;      /* 是否零失誤（沒有取出過已放的砝碼） */
+    let lock = false;
+
+    function loadLevel(idx){
+      rightWeights = [];
+      shelfWeights = LEVELS[idx].weights.slice();
+      moves = 0;
+      cleanRun = true;
+      lock = false;
+    }
+
+    function rightTotal(){ return rightWeights.reduce((a,b)=>a+b, 0); }
+
+    function render(){
+      const lv = LEVELS[level];
+      const rt = rightTotal();
+      const diff = rt - lv.target;
+      /* 視覺傾斜角度：每差 5 單位傾 3 度，最多 12 度 */
+      let tilt = 0;
+      if (Math.abs(diff) > 0){
+        tilt = Math.max(-12, Math.min(12, diff * 0.6));
+      }
+
+      /* 渲染貨架砝碼 */
+      let shelfHtml = '';
+      shelfWeights.forEach((w, i)=>{
+        const h = Math.max(14, w * 1.2);
+        shelfHtml += '<div class="v10-balance-weight" data-shelf="'+i+'" style="height:'+h+'px;width:'+Math.max(18, w*1.4)+'px;">'+w+'</div>';
+      });
+      if (shelfWeights.length === 0) shelfHtml = '<div style="font-size:12px;color:#a89e88;">砝码已全部放上托盘</div>';
+
+      /* 渲染右托盤砝碼 */
+      let trayHtml = '';
+      rightWeights.forEach((w, i)=>{
+        const h = Math.max(14, w * 1.2);
+        trayHtml += '<div class="v10-balance-weight" data-tray="'+i+'" style="height:'+h+'px;width:'+Math.max(18, w*1.4)+'px;">'+w+'</div>';
+      });
+
+      const bestMoves = saved.best[level];
+      let statusText;
+      if (diff === 0) statusText = '天平平衡！';
+      else if (diff < 0) statusText = '右侧轻了 '+(-diff)+' · 还差一点';
+      else statusText = '右侧重了 '+diff+' · 放多了';
+
+      let html = '';
+      html += '<div class="v10-hud">'
+        + '<span class="v10-hud-item">关卡 <b>'+(level+1)+'/'+LEVELS.length+'</b></span>'
+        + '<span class="v10-hud-item">目标 <b>'+lv.target+'</b></span>'
+        + '<span class="v10-hud-item">右侧 <b>'+rt+'</b></span>'
+        + '<span class="v10-hud-item">步数 <b>'+moves+'</b></span>'
+        + '</div>';
+
+      html += '<div class="v10-balance-stage">'
+        + '<div class="v10-balance-beam" id="v10eBBeam" style="transform:rotate('+tilt+'deg);">'
+        +   '<div class="v10-balance-pivot"></div>'
+        +   '<div class="v10-balance-tray v10-left">'
+        +     '<div class="v10-balance-rope"></div>'
+        +     '<div class="v10-balance-pan"><div class="v10-balance-weight" style="height:22px;width:28px;cursor:default;" title="目标物">'+lv.target+'</div></div>'
+        +   '</div>'
+        +   '<div class="v10-balance-tray v10-right">'
+        +     '<div class="v10-balance-rope"></div>'
+        +     '<div class="v10-balance-pan" id="v10eBRTray">'+trayHtml+'</div>'
+        +   '</div>'
+        + '</div></div>';
+
+      html += '<div class="v10-rule" id="v10eBStatus">'+statusText+'</div>';
+
+      html += '<div class="v10-shelf" id="v10eBShelf">'+shelfHtml+'</div>';
+
+      html += '<div class="v10-btnrow">'
+        + '<button class="v6-btn ghost" id="v10eBRestart">重开本关</button>'
+        + '</div>';
+
+      html += '<div class="v10-stat-grid">'
+        + '<div class="v10-stat"><div class="v10-stat-v">'+(saved.cleared||0)+'/'+LEVELS.length+'</div><div class="v10-stat-l">已通关卡</div></div>'
+        + '<div class="v10-stat"><div class="v10-stat-v">'+(bestMoves?bestMoves+' 步':'—')+'</div><div class="v10-stat-l">本关最佳</div></div>'
+        + '<div class="v10-stat"><div class="v10-stat-v">'+(saved.totalRuns||0)+'</div><div class="v10-stat-l">游玩次数</div></div>'
+        + '</div>';
+
+      html += '<div id="v10eBResult"></div>';
+
+      body.innerHTML = '<div class="v10-wrap">' + html + '</div>';
+
+      /* 綁定貨架點擊 → 放到右托盤 */
+      body.querySelectorAll('[data-shelf]').forEach(el=>{
+        el.addEventListener('click', ()=>{
+          if (lock) return;
+          const i = parseInt(el.getAttribute('data-shelf'));
+          const w = shelfWeights[i];
+          if (w === undefined) return;
+          shelfWeights.splice(i,1);
+          rightWeights.push(w);
+          moves++;
+          sfx('pickup');
+          render();
+          checkWin();
+        });
+      });
+
+      /* 綁定托盤點擊 → 取回貨架 */
+      body.querySelectorAll('[data-tray]').forEach(el=>{
+        el.addEventListener('click', ()=>{
+          if (lock) return;
+          const i = parseInt(el.getAttribute('data-tray'));
+          const w = rightWeights[i];
+          if (w === undefined) return;
+          rightWeights.splice(i,1);
+          shelfWeights.push(w);
+          moves++;
+          cleanRun = false;
+          sfx('click');
+          render();
+        });
+      });
+
+      body.querySelector('#v10eBRestart').addEventListener('click', ()=>{ sfx('click'); loadLevel(level); render(); });
+    }
+
+    function checkWin(){
+      const lv = LEVELS[level];
+      if (rightTotal() === lv.target){
+        lock = true;
+        sfx('success');
+        ach('v10_ach_bal_clear');
+        saved.totalRuns = (saved.totalRuns||0)+1;
+        if (!saved.best[level] || moves < saved.best[level]){
+          saved.best[level] = moves;
+        }
+        if (cleanRun) ach('v10_ach_bal_clean');
+        saved.cleared = 0;
+        for (let i=0;i<LEVELS.length;i++){
+          if (saved.best[i] !== undefined) saved.cleared++;
+        }
+        if (saved.cleared >= LEVELS.length) ach('v10_ach_bal_all');
+        store.set(KEY, saved);
+
+        const resEl = body.querySelector('#v10eBResult');
+        if (resEl){
+          resEl.innerHTML = '<div class="v10-result"><div class="t">天平平衡！</div>'
+            + '<div class="s">用了 '+moves+' 步' + (cleanRun?' · 零失误！':'') + (level < LEVELS.length-1?' · 下一关':' · 全部完成！') + '</div></div>';
+        }
+        st.later(()=>{
+          if (level < LEVELS.length-1){
+            level++;
+            loadLevel(level);
+            render();
+          } else {
+            level = 0;
+            loadLevel(level);
+            render();
+          }
+        }, 1800);
+      }
+    }
+
+    loadLevel(level);
+    render();
+  }
+});
+
+/* ============================================================
+   E_04_shapesudoku.js — 圖形數獨
+   拼接錨點：閣樓 IIFE 結尾 `})();` 之前（V9 L18003）
+   依賴：閉內 hook、st 計時器、tone、sfx、ach、store、esc、I、V6.icon
+   DOM id 前綴 v10eU*，class v10-*
+   ============================================================ */
+
+/* 新成就註冊 */
+(function(){
+  const A = [
+    { id:'v10_ach_sudoku_clear',  icon:'▦', name:'数独初成', desc:'完成一局图形数独' },
+    { id:'v10_ach_sudoku_nohint', icon:'✎', name:'无提示通关', desc:'不使用任何提示完成一局图形数独' },
+    { id:'v10_ach_sudoku_fast',   icon:'⏱', name:'极速数独', desc:'60 秒内完成一局 4×4 图形数独' }
+  ];
+  if (typeof AchievementSystem!=='undefined' && AchievementSystem.defs)
+    A.forEach(a => { if(!AchievementSystem.defs.some(d=>d.id===a.id)) AchievementSystem.defs.push(a); });
+})();
+
+V6.Home.registerRoom('attic', {
+  id:'v10_game_shapesudoku', label:'图形数独', title:'图形数独', sub:'SHAPE SUDOKU', icon:I.spark, wide:false,
+  setup(body, api){
+    const st = hook(body);
+    const KEY = 'youming_v10_shapesudoku_v1';
+    const saved = store.get(KEY, { best4:0, best6:0, games:0, noHintGames:0 });
+
+    /* 使用 ICONS 作為圖形 */
+    const SHAPES = [I.star, I.heart, I.gem, I.moon, I.flask, I.key];
+    const SHAPE_NAMES = ['星', '心', '宝石', '月', '瓶', '钥匙'];
+
+    let mode = '4';   /* '4' or '6' */
+    let solution = [];  /* 完整解 */
+    let puzzle = [];    /* 謎題（0 = 空格） */
+    let userGrid = [];  /* 玩家當前輸入 */
+    let givens = [];    /* 是否為預給 */
+    let selected = null; /* [x,y] */
+    let hintsUsed = 0;
+    let seconds = 0;
+    let timerId = null;
+    let started = false;
+    let lock = false;
+
+    function getSize(){ return mode === '4' ? 4 : 6; }
+    function getBoxRows(){ return mode === '4' ? 2 : 2; }
+    function getBoxCols(){ return mode === '4' ? 2 : 3; }
+    function getNumShapes(){ return mode === '4' ? 4 : 6; }
+
+    /* 檢查在 (r,c) 放 n 是否合法 */
+    function isValid(grid, r, c, n){
+      const N = getSize();
+      for (let i=0;i<N;i++){
+        if (grid[r][i] === n) return false;
+        if (grid[i][c] === n) return false;
+      }
+      const br = Math.floor(r/getBoxRows())*getBoxRows();
+      const bc = Math.floor(c/getBoxCols())*getBoxCols();
+      for (let i=0;i<getBoxRows();i++){
+        for (let j=0;j<getBoxCols();j++){
+          if (grid[br+i][bc+j] === n) return false;
+        }
+      }
+      return true;
+    }
+
+    /* 回溯生成完整解 */
+    function generateSolution(){
+      const N = getSize();
+      const grid = [];
+      for (let i=0;i<N;i++) grid.push(new Array(N).fill(0));
+      function solve(){
+        for (let r=0;r<N;r++){
+          for (let c=0;c<N;c++){
+            if (grid[r][c] === 0){
+              const nums = [];
+              for (let n=1;n<=N;n++) nums.push(n);
+              /* 打亂順序 */
+              for (let i=nums.length-1;i>0;i--){
+                const j = Math.floor(Math.random()*(i+1));
+                [nums[i],nums[j]] = [nums[j],nums[i]];
+              }
+              for (const n of nums){
+                if (isValid(grid, r, c, n)){
+                  grid[r][c] = n;
+                  if (solve()) return true;
+                  grid[r][c] = 0;
+                }
+              }
+              return false;
+            }
+          }
+        }
+        return true;
+      }
+      solve();
+      return grid;
+    }
+
+    /* 挖洞生成謎題 */
+    function makePuzzle(){
+      solution = generateSolution();
+      const N = getSize();
+      puzzle = solution.map(r=>r.slice());
+      /* 4x4 挖 6-8 格；6x6 挖 12-16 格 */
+      const removeCount = mode === '4' ? 6 + Math.floor(Math.random()*3) : 12 + Math.floor(Math.random()*5);
+      const cells = [];
+      for (let r=0;r<N;r++) for (let c=0;c<N;c++) cells.push([r,c]);
+      for (let i=cells.length-1;i>0;i--){
+        const j = Math.floor(Math.random()*(i+1));
+        [cells[i],cells[j]] = [cells[j],cells[i]];
+      }
+      for (let i=0;i<removeCount && i<cells.length;i++){
+        puzzle[cells[i][0]][cells[i][1]] = 0;
+      }
+      userGrid = puzzle.map(r=>r.slice());
+      givens = puzzle.map(r=>r.map(v=>v!==0));
+      selected = null;
+      hintsUsed = 0;
+      seconds = 0;
+      started = false;
+      lock = false;
+      if (timerId){ clearInterval(timerId); timerId = null; }
+    }
+
+    function tick(){
+      seconds++;
+      const el = body.querySelector('#v10eUTime');
+      if (el) el.textContent = seconds + 's';
+    }
+
+    function render(){
+      const N = getSize();
+      const cellSize = mode === '4' ? 64 : 48;
+      const numShapes = getNumShapes();
+
+      let html = '';
+      html += '<div class="v10-hud">'
+        + '<span class="v10-hud-item">计时 <b id="v10eUTime">0s</b></span>'
+        + '<span class="v10-hud-item">提示 <b id="v10eUHints">'+hintsUsed+'</b></span>'
+        + '<span class="v10-hud-item">最佳 <b>'+(saved['best'+mode]?saved['best'+mode]+'s':'—')+'</b></span>'
+        + '</div>';
+
+      /* 畫網格 */
+      html += '<div class="v10-board v10-sudoku-board" style="grid-template-columns:repeat('+N+','+cellSize+'px);grid-template-rows:repeat('+N+','+cellSize+'px);">';
+      for (let r=0;r<N;r++){
+        for (let c=0;c<N;c++){
+          const v = userGrid[r][c];
+          let cls = 'v10-cell v10-sudoku-cell';
+          if (givens[r][c]) cls += ' v10-given';
+          if (selected && selected[0]===r && selected[1]===c) cls += ' v10-selected';
+          let inner = '';
+          if (v > 0){
+            inner = '<svg class="v10-sudoku-svg" viewBox="0 0 24 24">'+SHAPES[v-1]+'</svg>';
+          }
+          /* 粗邊框分隔宮 */
+          const style = [];
+          if (c % getBoxCols() === 0 && c > 0) style.push('border-left:2px solid #ffb86c');
+          if (r % getBoxRows() === 0 && r > 0) style.push('border-top:2px solid #ffb86c');
+          html += '<div class="'+cls+'" data-r="'+r+'" data-c="'+c+'" style="'+style.join(';')+'">'+inner+'</div>';
+        }
+      }
+      html += '</div>';
+
+      /* 調色盤 */
+      html += '<div class="v10-sudoku-palette">';
+      for (let i=0;i<numShapes;i++){
+        html += '<button data-shape="'+(i+1)+'" title="'+SHAPE_NAMES[i]+'"><svg viewBox="0 0 24 24">'+SHAPES[i]+'</svg></button>';
+      }
+      html += '</div>';
+
+      /* 按鈕 */
+      html += '<div class="v10-btnrow">'
+        + '<button class="v6-btn ghost" id="v10eUCheck">检查</button>'
+        + '<button class="v6-btn ghost" id="v10eUHint">提示一处</button>'
+        + '<button class="v6-btn ghost" id="v10eUClear">清空</button>'
+        + '<button class="v6-btn" id="v10eUNew">新题</button>'
+        + '</div>';
+
+      /* 模式切換 */
+      html += '<div class="v10-btnrow">'
+        + '<button class="v6-btn '+(mode==='4'?'':'ghost')+'" id="v10eUMode4">4×4</button>'
+        + '<button class="v6-btn '+(mode==='6'?'':'ghost')+'" id="v10eUMode6">6×6</button>'
+        + '</div>';
+
+      html += '<div id="v10eUResult"></div>';
+      body.innerHTML = '<div class="v10-wrap">' + html + '</div>';
+
+      /* 綁定格子點擊 */
+      body.querySelectorAll('.v10-sudoku-cell').forEach(cell=>{
+        cell.addEventListener('click', ()=>{
+          if (lock) return;
+          const r = parseInt(cell.getAttribute('data-r')), c = parseInt(cell.getAttribute('data-c'));
+          if (givens[r][c]){ tone(150,.1,'square',.06); return; }
+          selected = [r,c];
+          sfx('click');
+          render();
+        });
+      });
+
+      /* 調色盤 */
+      body.querySelectorAll('.v10-sudoku-palette button').forEach(btn=>{
+        btn.addEventListener('click', ()=>{
+          if (lock || !selected) return;
+          if (!started){ started = true; timerId = st.every(tick, 1000); }
+          const shape = parseInt(btn.getAttribute('data-shape'));
+          const [r,c] = selected;
+          /* 若點同一個圖形則清空 */
+          userGrid[r][c] = (userGrid[r][c] === shape) ? 0 : shape;
+          sfx('pickup');
+          render();
+          checkWin();
+        });
+      });
+
+      body.querySelector('#v10eUCheck').addEventListener('click', ()=>{
+        if (lock) return;
+        checkErrors();
+      });
+      body.querySelector('#v10eUHint').addEventListener('click', ()=>{
+        if (lock) return;
+        giveHint();
+      });
+      body.querySelector('#v10eUClear').addEventListener('click', ()=>{
+        if (lock) return;
+        for (let r=0;r<N;r++) for (let c=0;c<N;c++){
+          if (!givens[r][c]) userGrid[r][c] = 0;
+        }
+        selected = null;
+        sfx('click');
+        render();
+      });
+      body.querySelector('#v10eUNew').addEventListener('click', ()=>{
+        sfx('click');
+        makePuzzle();
+        render();
+      });
+      body.querySelector('#v10eUMode4').addEventListener('click', ()=>{
+        if (mode === '4') return;
+        mode = '4'; sfx('click'); makePuzzle(); render();
+      });
+      body.querySelector('#v10eUMode6').addEventListener('click', ()=>{
+        if (mode === '6') return;
+        mode = '6'; sfx('click'); makePuzzle(); render();
+      });
+    }
+
+    function checkErrors(){
+      const N = getSize();
+      let hasError = false;
+      /* 標記錯誤 */
+      body.querySelectorAll('.v10-sudoku-cell').forEach(cell=>{
+        cell.classList.remove('v10-error','v10-correct');
+      });
+      for (let r=0;r<N;r++){
+        for (let c=0;c<N;c++){
+          const v = userGrid[r][c];
+          if (v === 0) continue;
+          /* 檢查行列宮 */
+          let err = false;
+          for (let i=0;i<N;i++){
+            if (i!==c && userGrid[r][i]===v) err = true;
+            if (i!==r && userGrid[i][c]===v) err = true;
+          }
+          const br = Math.floor(r/getBoxRows())*getBoxRows();
+          const bc = Math.floor(c/getBoxCols())*getBoxCols();
+          for (let i=0;i<getBoxRows();i++){
+            for (let j=0;j<getBoxCols();j++){
+              if ((br+i)!==r || (bc+j)!==c){
+                if (userGrid[br+i][bc+j]===v) err = true;
+              }
+            }
+          }
+          if (err){
+            hasError = true;
+            const el = body.querySelector('.v10-sudoku-cell[data-r="'+r+'"][data-c="'+c+'"]');
+            if (el) el.classList.add('v10-error');
+          }
+        }
+      }
+      if (hasError){
+        sfx('error');
+        const resEl = body.querySelector('#v10eUResult');
+        if (resEl) resEl.innerHTML = '<div class="v10-result v10-fail"><div class="t">有冲突</div><div class="s">红色格子存在重复，请调整。</div></div>';
+      } else {
+        sfx('success');
+        const resEl = body.querySelector('#v10eUResult');
+        if (resEl) resEl.innerHTML = '<div class="v10-result"><div class="s">当前没有冲突，继续加油！</div></div>';
+      }
+    }
+
+    function giveHint(){
+      const N = getSize();
+      /* 找一個空格或錯誤格，填入正確答案 */
+      const empties = [];
+      for (let r=0;r<N;r++){
+        for (let c=0;c<N;c++){
+          if (!givens[r][c] && userGrid[r][c] !== solution[r][c]){
+            empties.push([r,c]);
+          }
+        }
+      }
+      if (empties.length === 0){ tone(200,.15,'triangle',.1); return; }
+      const [r,c] = empties[Math.floor(Math.random()*empties.length)];
+      userGrid[r][c] = solution[r][c];
+      hintsUsed++;
+      if (!started){ started = true; timerId = st.every(tick, 1000); }
+      sfx('pickup');
+      render();
+      checkWin();
+    }
+
+    function checkWin(){
+      const N = getSize();
+      for (let r=0;r<N;r++){
+        for (let c=0;c<N;c++){
+          if (userGrid[r][c] !== solution[r][c]) return;
+        }
+      }
+      /* 通關 */
+      lock = true;
+      if (timerId){ clearInterval(timerId); timerId = null; }
+      sfx('success');
+      ach('v10_ach_sudoku_clear');
+      saved.games = (saved.games||0)+1;
+      if (hintsUsed === 0){
+        saved.noHintGames = (saved.noHintGames||0)+1;
+        ach('v10_ach_sudoku_nohint');
+      }
+      if (mode === '4' && seconds <= 60) ach('v10_ach_sudoku_fast');
+      const bk = 'best'+mode;
+      if (!saved[bk] || seconds < saved[bk]){
+        saved[bk] = seconds;
+      }
+      store.set(KEY, saved);
+
+      const resEl = body.querySelector('#v10eUResult');
+      if (resEl){
+        resEl.innerHTML = '<div class="v10-result"><div class="t">完成！</div>'
+          + '<div class="s">用时 '+seconds+' 秒 · 提示 '+hintsUsed+' 次' + (hintsUsed===0?' · 无提示！':'') + '</div></div>';
+      }
+    }
+
+    makePuzzle();
+    render();
+  }
+});
+/* ===== V10.0.0 閣樓新遊戲模組拼接結束 ===== */
+
+})();
+
+/* ===== V10.0.0 廂房新房間模組拼接開始 ===== */
+
+/* ============================================================
+   F_room_daily.js — V10 廂房：每日挑戰
+   拼接錨點：插入到主 script 結尾 `<\/script>` 之前（合約第 6 節，V9 L18005）
+   依賴：window.V6（Home.registerRoom / store / toast / icon / ICONS）、
+         G.stats、G.completed、AchievementSystem.unlocked、Audio._tone
+   儲存鍵：youming_v10_daily_v1
+   房間 id：v10_room_daily
+   ============================================================ */
+(function(){
+  'use strict';
+  if (!window.V6 || !V6.Home) return;
+  const I = V6.ICONS, esc = V6.esc, store = V6.store;
+
+  function todayKey(){
+    const d = new Date();
+    return d.getFullYear() + '-' + (d.getMonth()+1) + '-' + d.getDate();
+  }
+  function tone(f, dur, type, vol){
+    try { if (typeof Audio !== 'undefined' && Audio._tone) Audio._tone(f, dur||0.15, type||'sine', vol||0.14); } catch(e){}
+  }
+
+  /* ---------- 任務池（每個任務附 check() 與可讀文案） ---------- */
+  function stat(){ return (typeof G !== 'undefined' && G.stats) ? G.stats : {}; }
+  function achCount(){
+    try { return Object.keys(AchievementSystem.unlocked || {}).length; } catch(e){ return 0; }
+  }
+  function endingCount(){
+    const s = stat();
+    try {
+      if (s.endingsV2 && Object.keys(s.endingsV2).length) return Object.keys(s.endingsV2).length;
+    } catch(e){}
+    // fallback: global endings
+    try {
+      const g = JSON.parse(localStorage.getItem('mindmap_endings_global') || '{}');
+      return Object.keys(g).length;
+    } catch(e){ return 0; }
+  }
+  function chapterCleared(){
+    try {
+      const c = (typeof G !== 'undefined' && G.completed) ? G.completed : {};
+      return ['tutorial','ch1','ch2','ch3'].filter(k => c[k]).length;
+    } catch(e){ return 0; }
+  }
+
+  const TASK_POOL = [
+    { id:'ach_1',     icon:'★', label:'解锁任意 1 个成就',        desc:'成就殿堂里至少点亮一枚图标', check:() => achCount() >= 1 },
+    { id:'ach_5',     icon:'✦', label:'累计解锁 5 个成就',       desc:'在密室里留下 5 道痕迹',     check:() => achCount() >= 5 },
+    { id:'item_10',   icon:'◈', label:'收集过 10 件物品',        desc:'物品图鉴里至少 10 条记录',  check:() => (stat().itemsCollected || 0) >= 10 },
+    { id:'time_30',   icon:'◉', label:'累计游玩 30 分钟',        desc:'总游戏时长 ≥ 1800 秒',      check:() => (stat().totalPlayTime || 0) >= 1800 },
+    { id:'end_1',     icon:'☾', label:'达成任意 1 种结局',        desc:'看过至少一段结局动画',      check:() => endingCount() >= 1 },
+    { id:'end_3',     icon:'✎', label:'达成 3 种不同结局',       desc:'多周目体验不同分支',        check:() => endingCount() >= 3 },
+    { id:'ch_1',      icon:'▶', label:'通关任意 1 个章节',        desc:'教学/活埋/DLC/黎明任一',    check:() => chapterCleared() >= 1 },
+    { id:'hint_1',    icon:'⚙', label:'使用过一次提示',          desc:'在谜题卡住时点过灯泡',      check:() => (stat().totalHints || 0) >= 1 },
+    { id:'death_1',   icon:'♦', label:'经历过一次死亡',          desc:'失败也是旅程的一部分',      check:() => (stat().totalDeaths || 0) >= 1 },
+  ];
+
+  /* 依今天日期隨機選 3 個（seeded，同一天結果固定） */
+  function pickTodayTasks(){
+    const key = todayKey();
+    let seed = 0;
+    for (let i=0;i<key.length;i++) seed = (seed * 31 + key.charCodeAt(i)) >>> 0;
+    function rnd(){ seed = (seed * 1103515245 + 12345) >>> 0; return seed / 4294967296; }
+    const pool = TASK_POOL.slice();
+    for (let i=pool.length-1;i>0;i--){
+      const j = Math.floor(rnd() * (i+1));
+      const t = pool[i]; pool[i] = pool[j]; pool[j] = t;
+    }
+    return pool.slice(0, 3);
+  }
+
+  /* ---------- 房間 setup ---------- */
+  function setup(body, api){
+    const KEY = 'youming_v10_daily_v1';
+    const today = todayKey();
+    let data = store.get(KEY, { streak: 0, lastDate: null, days: {} });
+    if (!data.days || typeof data.days !== 'object') data.days = {};
+
+    // 跨天檢查：若昨天沒全完成，streak 歸零
+    // （這裡只在「開房」時檢查；簡單實作：lastDate 不是今天就不變，等玩家完成今天再更新）
+    const todayRec = data.days[today] || { done: [], claimed: false };
+
+    function save(){
+      data.days[today] = todayRec;
+      store.set(KEY, data);
+    }
+
+    const tasks = pickTodayTasks();
+
+    function render(){
+      // 計算可完成數
+      const doneSet = {}; todayRec.done.forEach(t => doneSet[t] = true);
+      const allDone = tasks.every(t => doneSet[t.id]);
+
+      let html = '<div class="v10-daily-wrap">';
+      html += '<div class="v6-sec-title" style="margin-top:0">每日挑战 <span class="v6-note">' + esc(today) + '</span></div>';
+      html += '<div class="v6-mut" style="margin-bottom:10px">每天 3 个随机挑战，全部完成可累积连续天数。</div>';
+
+      // 連續天數
+      html += '<div class="v6-stat-grid" style="margin-bottom:12px">';
+      html += '<div class="v6-stat accent-jade"><div class="v6-stat-v">' + (data.streak || 0) + '</div><div class="v6-stat-l">连续天数</div></div>';
+      html += '<div class="v6-stat"><div class="v6-stat-v">' + todayRec.done.length + ' / ' + tasks.length + '</div><div class="v6-stat-l">今日已完成</div></div>';
+      html += '</div>';
+
+      // 任務列表
+      tasks.forEach((t, idx) => {
+        const done = !!doneSet[t.id];
+        const pass = t.check();
+        html += '<div class="v10-daily-task' + (done ? ' is-done' : '') + '">';
+        html +=   '<div class="v10-daily-task-ic">' + esc(t.icon) + '</div>';
+        html +=   '<div class="v10-daily-task-body">';
+        html +=     '<div class="v10-daily-task-title">' + (done ? '✓ ' : '') + esc(t.label) + '</div>';
+        html +=     '<div class="v10-daily-task-desc">' + esc(t.desc) + '</div>';
+        html +=   '</div>';
+        html +=   '<div class="v10-daily-task-act">';
+        if (done) {
+          html += '<span class="v6-pill jade">已完成</span>';
+        } else if (pass) {
+          html += '<button class="v6-btn v10-daily-claim" data-idx="' + idx + '">标记完成</button>';
+        } else {
+          html += '<span class="v6-pill">未达成</span>';
+        }
+        html +=   '</div>';
+        html += '</div>';
+      });
+
+      // 全部完成獎勵
+      if (allDone && !todayRec.claimed) {
+        html += '<div class="v10-daily-reward">';
+        html +=   '<div class="v10-daily-reward-t">今日挑战全部完成！</div>';
+        html +=   '<div class="v10-daily-reward-s">可领取连续天数奖励</div>';
+        html +=   '<button class="v6-btn v10-daily-claim-all">领取奖励</button>';
+        html += '</div>';
+      } else if (allDone && todayRec.claimed) {
+        html += '<div class="v10-daily-reward is-claimed">今日奖励已领取，明天再来。</div>';
+      }
+
+      html += '</div>';
+      body.innerHTML = html;
+
+      // 綁定單任務「標記完成」
+      body.querySelectorAll('.v10-daily-claim').forEach(btn => {
+        btn.addEventListener('click', () => {
+          const idx = parseInt(btn.getAttribute('data-idx'), 10);
+          const t = tasks[idx];
+          if (!t || doneSet[t.id]) return;
+          if (!t.check()) { V6.toast('还未达成条件'); return; }
+          todayRec.done.push(t.id);
+          tone(660, 0.1, 'sine', 0.16);
+          V6.toast('已完成：' + t.label);
+          save();
+          render();
+        });
+      });
+
+      // 綁定「領取獎勵」
+      const claimAll = body.querySelector('.v10-daily-claim-all');
+      if (claimAll) {
+        claimAll.addEventListener('click', () => {
+          // 連續天數：若 lastDate 是昨天（today-1），streak+1；否則 streak=1
+          const y = new Date(); y.setDate(y.getDate() - 1);
+          const yKey = y.getFullYear() + '-' + (y.getMonth()+1) + '-' + y.getDate();
+          if (data.lastDate === yKey) data.streak = (data.streak || 0) + 1;
+          else data.streak = 1;
+          data.lastDate = today;
+          todayRec.claimed = true;
+          save();
+          tone(523, 0.12, 'sine', 0.18);
+          setTimeout(() => tone(784, 0.18, 'sine', 0.16), 130);
+          V6.toast('领取成功！连续 ' + data.streak + ' 天');
+          render();
+        });
+      }
+    }
+
+    render();
+  }
+
+  V6.Home.registerRoom('annex', {
+    id: 'v10_room_daily',
+    label: '每日挑战',
+    title: '每日挑战',
+    sub: 'DAILY CHALLENGE',
+    icon: I.calendar,
+    wide: false,
+    setup: setup,
+  });
+})();
+
+/* ============================================================
+   F_room_titles.js — V10 廂房：稱號殿堂
+   拼接錨點：插入到主 script 結尾 `<\/script>` 之前（合約第 6 節，V9 L18005）
+   依賴：window.V6、G.stats、G.completed、AchievementSystem.unlocked
+   儲存鍵：youming_v10_titles_v1（裝備中的稱號 id）
+   房間 id：v10_room_titles
+   ============================================================ */
+(function(){
+  'use strict';
+  if (!window.V6 || !V6.Home) return;
+  const I = V6.ICONS, esc = V6.esc, store = V6.store;
+
+  function stat(){ return (typeof G !== 'undefined' && G.stats) ? G.stats : {}; }
+  function isUnlocked(id){
+    try { return !!(AchievementSystem.unlocked && AchievementSystem.unlocked[id]); } catch(e){ return false; }
+  }
+  function achCount(){
+    try { return Object.keys(AchievementSystem.unlocked || {}).length; } catch(e){ return 0; }
+  }
+  function endingCount(){
+    try {
+      const s = stat();
+      if (s.endingsV2 && Object.keys(s.endingsV2).length) return Object.keys(s.endingsV2).length;
+      const g = JSON.parse(localStorage.getItem('mindmap_endings_global') || '{}');
+      return Object.keys(g).length;
+    } catch(e){ return 0; }
+  }
+  function chapterCleared(){
+    try {
+      const c = (typeof G !== 'undefined' && G.completed) ? G.completed : {};
+      return ['tutorial','ch1','ch2','ch3'].filter(k => c[k]).length;
+    } catch(e){ return 0; }
+  }
+  // 閣樓小遊戲成就數（粗略：v6_ach_* + v10_ach_* 中屬於遊戲的）
+  function atticGameAchCount(){
+    try {
+      if (!AchievementSystem.unlocked) return 0;
+      const keys = Object.keys(AchievementSystem.unlocked);
+      // 認定為閣樓遊戲的成就前綴
+      const prefixes = ['v6_ach_music_','v6_ach_gacha_','v6_ach_fortune','v6_ach_memory','v6_ach_reaction','v6_ach_slide','v6_ach_cipher',
+                         'v8_ach_attic_cipher','v9_ach_attic_master','v10_ach_morse_'];
+      return keys.filter(k => prefixes.some(p => k.indexOf(p) === 0)).length;
+    } catch(e){ return 0; }
+  }
+
+  /* ---------- 稱號表 ---------- */
+  // each: { id, name, icon, desc, progress() -> [cur, need], unlocked() -> bool }
+  const TITLES = [
+    { id:'novice',    name:'见习者',       icon:'◆', desc:'通关教学关卡',
+      unlocked:() => !!((typeof G!=='undefined' && G.completed && G.completed.tutorial)),
+      progress:() => { const c = (typeof G!=='undefined' && G.completed && G.completed.tutorial) ? 1 : 0; return [c,1]; } },
+    { id:'escaper',   name:'逃生者',       icon:'▶', desc:'通关第一章「活埋」',
+      unlocked:() => !!((typeof G!=='undefined' && G.completed && G.completed.ch1)),
+      progress:() => { const c = (typeof G!=='undefined' && G.completed && G.completed.ch1) ? 1 : 0; return [c,1]; } },
+    { id:'collector', name:'收藏家',       icon:'◈', desc:'累计收集 20 件物品',
+      unlocked:() => (stat().itemsCollected || 0) >= 20,
+      progress:() => [Math.min(stat().itemsCollected||0, 20), 20] },
+    { id:'nightowl',  name:'夜行者',       icon:'☾', desc:'在深夜时段通关任意章节',
+      unlocked:() => isUnlocked('v9_ach_night_owl') || isUnlocked('night_owl') || isUnlocked('v6_ach_fortune'),
+      progress:() => { const u = isUnlocked('v9_ach_night_owl') || isUnlocked('night_owl') || isUnlocked('v6_ach_fortune'); return [u?1:0,1]; } },
+    { id:'attic',     name:'阁楼常客',     icon:'⌂', desc:'解锁 3 个阁楼小游戏相关成就',
+      unlocked:() => atticGameAchCount() >= 3,
+      progress:() => [Math.min(atticGameAchCount(), 3), 3] },
+    { id:'loop',      name:'轮回看清者',   icon:'↻', desc:'在监控室看到那段无限循环的录像',
+      unlocked:() => isUnlocked('v8_ach_saw_loop'),
+      progress:() => [isUnlocked('v8_ach_saw_loop')?1:0, 1] },
+    { id:'endings',   name:'结局收藏家',   icon:'✦', desc:'达成 10 种不同结局',
+      unlocked:() => endingCount() >= 10,
+      progress:() => [Math.min(endingCount(), 10), 10] },
+    { id:'perfect',   name:'完美主义者',   icon:'★', desc:'累计解锁 30 个成就',
+      unlocked:() => achCount() >= 30,
+      progress:() => [Math.min(achCount(), 30), 30] },
+  ];
+
+  function setup(body, api){
+    const KEY = 'youming_v10_titles_v1';
+    let equipped = store.get(KEY, '');
+
+    function render(){
+      let html = '<div class="v10-titles-wrap">';
+      html += '<div class="v6-sec-title" style="margin-top:0">称号殿堂 <span class="v6-note">可装备 1 个</span></div>';
+      html += '<div class="v6-mut" style="margin-bottom:10px">已解锁 <b style="color:var(--v6-gold)">' +
+        TITLES.filter(t => t.unlocked()).length + '</b> / ' + TITLES.length + ' 个称号。点击已解锁称号即可装备。</div>';
+
+      // 當前裝備
+      const eq = TITLES.find(t => t.id === equipped);
+      html += '<div class="v10-titles-current">';
+      html +=   '<span class="v10-titles-current-label">当前称号</span>';
+      html +=   '<span class="v10-titles-current-name">' + (eq ? esc(eq.name) : '（未装备）') + '</span>';
+      if (eq) html += '<span class="v10-titles-current-icon">' + esc(eq.icon) + '</span>';
+      html += '</div>';
+
+      // 列表
+      TITLES.forEach(t => {
+        const u = t.unlocked();
+        const p = t.progress();
+        const isEq = (t.id === equipped);
+        html += '<div class="v10-titles-item' + (u ? ' is-unlocked' : ' is-locked') + (isEq ? ' is-equipped' : '') + '">';
+        html +=   '<div class="v10-titles-ic">' + esc(t.icon) + '</div>';
+        html +=   '<div class="v10-titles-body">';
+        html +=     '<div class="v10-titles-name">' + esc(t.name) + (isEq ? ' <span class="v6-pill jade" style="margin-left:6px">装备中</span>' : '') + '</div>';
+        html +=     '<div class="v10-titles-desc">' + esc(t.desc) + '</div>';
+        // 進度條
+        const pct = p[1] > 0 ? Math.round(p[0] / p[1] * 100) : 0;
+        html +=     '<div class="v10-titles-prog"><div class="v10-titles-prog-bar"><i style="width:' + pct + '%"></i></div>'
+                 +  '<span class="v10-titles-prog-t">' + p[0] + ' / ' + p[1] + '</span></div>';
+        html +=   '</div>';
+        html +=   '<div class="v10-titles-act">';
+        if (u) {
+          html += isEq ? '<button class="v6-btn" data-id="' + esc(t.id) + '" data-act="unequip">卸下</button>'
+                       : '<button class="v6-btn" data-id="' + esc(t.id) + '" data-act="equip">装备</button>';
+        } else {
+          html += '<span class="v6-pill">未解锁</span>';
+        }
+        html +=   '</div>';
+        html += '</div>';
+      });
+
+      html += '</div>';
+      body.innerHTML = html;
+
+      function doAction(id, act){
+        if (act === 'equip') {
+          equipped = id;
+          store.set(KEY, id);
+          V6.toast('已装备称号');
+        } else {
+          equipped = '';
+          store.set(KEY, '');
+          V6.toast('已卸下称号');
+        }
+        try { if (typeof Audio !== 'undefined' && Audio._tone) Audio._tone(660, 0.1, 'sine', 0.14); } catch(e){}
+        render();
+      }
+      body.querySelectorAll('.v10-titles-item button').forEach(btn => {
+        btn.addEventListener('click', (e) => {
+          e.stopPropagation();
+          doAction(btn.getAttribute('data-id'), btn.getAttribute('data-act'));
+        });
+      });
+      // V10 UX：整条已解锁称号卡片可点（与说明「点击称号即可装备」一致）
+      body.querySelectorAll('.v10-titles-item').forEach(item => {
+        item.addEventListener('click', () => {
+          const btn = item.querySelector('button');
+          if (btn) doAction(btn.getAttribute('data-id'), btn.getAttribute('data-act'));
+        });
+      });
+    }
+
+    render();
+  }
+
+  V6.Home.registerRoom('annex', {
+    id: 'v10_room_titles',
+    label: '称号殿堂',
+    title: '称号殿堂',
+    sub: 'TITLE HALL',
+    icon: I.trophy,
+    wide: true,
+    setup: setup,
+  });
+})();
+
+/* ============================================================
+   F_room_radar.js — V10 廂房：成就雷達
+   拼接錨點：插入到主 script 結尾 `<\/script>` 之前（合約第 6 節，V9 L18005）
+   依賴：window.V6、G.stats、G.completed、AchievementSystem.unlocked
+   房間 id：v10_room_radar
+   維度（6 軸）：教學 / 章節 / 收集 / 閣遊 / 探索 / 時長
+   ============================================================ */
+(function(){
+  'use strict';
+  if (!window.V6 || !V6.Home) return;
+  const I = V6.ICONS, esc = V6.esc, store = V6.store;
+
+  function stat(){ return (typeof G !== 'undefined' && G.stats) ? G.stats : {}; }
+  function isUnlocked(id){
+    try { return !!(AchievementSystem.unlocked && AchievementSystem.unlocked[id]); } catch(e){ return false; }
+  }
+  function achCount(){
+    try { return Object.keys(AchievementSystem.unlocked || {}).length; } catch(e){ return 0; }
+  }
+  function achTotal(){
+    try { return (AchievementSystem.defs || []).length; } catch(e){ return 1; }
+  }
+  function endingCount(){
+    try {
+      const s = stat();
+      if (s.endingsV2 && Object.keys(s.endingsV2).length) return Object.keys(s.endingsV2).length;
+      const g = JSON.parse(localStorage.getItem('mindmap_endings_global') || '{}');
+      return Object.keys(g).length;
+    } catch(e){ return 0; }
+  }
+  function atticGameAchCount(){
+    try {
+      if (!AchievementSystem.unlocked) return 0;
+      const keys = Object.keys(AchievementSystem.unlocked);
+      const prefixes = ['v6_ach_music_','v6_ach_gacha_','v6_ach_fortune','v6_ach_memory','v6_ach_reaction','v6_ach_slide','v6_ach_cipher',
+                         'v8_ach_attic_cipher','v9_ach_attic_master','v10_ach_morse_'];
+      return keys.filter(k => prefixes.some(p => k.indexOf(p) === 0)).length;
+    } catch(e){ return 0; }
+  }
+
+  /* 6 維度，每維回傳 [0..1 進度, 目前值, 目標值, 建議文案] */
+  function dims(){
+    const c = (typeof G !== 'undefined' && G.completed) ? G.completed : {};
+    const tutorial = c.tutorial ? 1 : 0;
+    const chapters = ['ch1','ch2','ch3'].filter(k => c[k]).length;
+    const items = stat().itemsCollected || 0;
+    const attic = atticGameAchCount();
+    const endings = endingCount();
+    const playSec = stat().totalPlayTime || 0;
+
+    return [
+      { key:'tut',   name:'教学',   v: tutorial,            t: 1,     p: tutorial/1,                     tip: tutorial ? '已通关教学' : '先去教学关熟悉操作' },
+      { key:'chap',  name:'章节',   v: chapters,            t: 3,     p: Math.min(chapters/3, 1),        tip: chapters < 3 ? '继续通关未完成章节' : '三章皆已通关' },
+      { key:'coll',  name:'收集',   v: items,               t: 30,    p: Math.min(items/30, 1),           tip: items < 30 ? '多在各章节拾取物品' : '物品收集已达高位' },
+      { key:'attic', name:'阁游',   v: attic,               t: 8,     p: Math.min(attic/8, 1),           tip: attic < 8 ? '去阁楼挑战小游戏' : '阁楼小游戏已完成大半' },
+      { key:'expl',  name:'探索',   v: endings,             t: 15,    p: Math.min(endings/15, 1),        tip: endings < 15 ? '多周目尝试不同分支' : '结局探索已达高位' },
+      { key:'time',  name:'时长',   v: Math.floor(playSec/60), t: 60,  p: Math.min(Math.floor(playSec/60)/60, 1), tip: Math.floor(playSec/60) < 60 ? '累计游玩满 60 分钟' : '游玩时长已达高位' },
+    ];
+  }
+
+  /* 繪製六邊形雷達 */
+  function svgRadar(d){
+    const size = 320, cx = size/2, cy = size/2, R = 110;
+    const N = d.length;
+    // 軸端點（從正上方順時針）
+    function pt(i, r){
+      const ang = -Math.PI/2 + (i / N) * Math.PI * 2;
+      return [cx + Math.cos(ang)*r, cy + Math.sin(ang)*r];
+    }
+    let s = '<svg viewBox="0 0 ' + size + ' ' + size + '" class="v10-radar-svg" width="100%" height="auto">';
+    // 多層網格（25/50/75/100%）
+    [0.25, 0.5, 0.75, 1].forEach(fr => {
+      let pts = [];
+      for (let i=0;i<N;i++) pts.push(pt(i, R*fr).join(','));
+      s += '<polygon points="' + pts.join(' ') + '" class="v10-radar-grid"/>';
+    });
+    // 軸線
+    for (let i=0;i<N;i++){
+      const p = pt(i, R);
+      s += '<line x1="' + cx + '" y1="' + cy + '" x2="' + p[0] + '" y2="' + p[1] + '" class="v10-radar-axis"/>';
+    }
+    // 數據多邊形
+    let dataPts = [];
+    for (let i=0;i<N;i++){
+      const p = pt(i, R * Math.max(0, Math.min(1, d[i].p)));
+      dataPts.push(p.join(','));
+    }
+    s += '<polygon points="' + dataPts.join(' ') + '" class="v10-radar-data"/>';
+    // 數據頂點
+    for (let i=0;i<N;i++){
+      const p = pt(i, R * Math.max(0, Math.min(1, d[i].p)));
+      s += '<circle cx="' + p[0] + '" cy="' + p[1] + '" r="3.5" class="v10-radar-dot"/>';
+    }
+    // 軸標籤
+    for (let i=0;i<N;i++){
+      const p = pt(i, R + 22);
+      s += '<text x="' + p[0] + '" y="' + p[1] + '" text-anchor="middle" dominant-baseline="middle" class="v10-radar-label">' + esc(d[i].name) + '</text>';
+    }
+    s += '</svg>';
+    return s;
+  }
+
+  function setup(body, api){
+    const d = dims();
+
+    let html = '<div class="v10-radar-wrap">';
+    html += '<div class="v6-sec-title" style="margin-top:0">成就雷达 <span class="v6-note">即时计算</span></div>';
+    html += '<div class="v6-mut" style="margin-bottom:10px">依据当前成就、统计、结局即时计算六维完成度。</div>';
+
+    html += '<div class="v10-radar-layout">';
+    html +=   '<div class="v10-radar-chart">' + svgRadar(d) + '</div>';
+    html +=   '<div class="v10-radar-side">';
+    d.forEach(x => {
+      const pct = Math.round(x.p * 100);
+      html += '<div class="v10-radar-row">';
+      html +=   '<div class="v10-radar-row-head"><b>' + esc(x.name) + '</b><span>' + pct + '%</span></div>';
+      html +=   '<div class="v10-radar-bar"><i style="width:' + pct + '%"></i></div>';
+      html +=   '<div class="v10-radar-row-sub">' + esc(x.tip) + '（' + x.v + ' / ' + x.t + '）</div>';
+      html += '</div>';
+    });
+    html +=   '</div>';
+    html += '</div>';
+
+    html += '</div>';
+    body.innerHTML = html;
+  }
+
+  V6.Home.registerRoom('annex', {
+    id: 'v10_room_radar',
+    label: '成就雷达',
+    title: '成就雷达',
+    sub: 'ACHIEVEMENT RADAR',
+    icon: I.chart,
+    wide: true,
+    setup: setup,
+  });
+})();
+/* ===== V10.0.0 廂房新房間模組拼接結束 ===== */
 
 </script>
 
@@ -18135,8 +21286,8 @@ V6.Home.registerRoom('annex', {
     <svg class="cut-line-svg cut-line-top" viewBox="0 0 1000 20" preserveAspectRatio="none"><path class="cut-path cyan" d=""/></svg>
     <svg class="cut-line-svg cut-line-bottom" viewBox="0 0 1000 20" preserveAspectRatio="none"><path class="cut-path cyan" d=""/></svg>
   </div>
-  <div class="version-display">脑图密室逃脱 V9.0.0</div>
-  <div id="versionWatermark" style="display:none;">幽冥密室 V9.0.0</div>
+  <div class="version-display">脑图密室逃脱 V10.0.0</div>
+  <div id="versionWatermark" style="display:none;">幽冥密室 V10.0.0</div>
   <div id="questBar"><div class="quest-title" onclick="QuestTracker.toggle()">任务清单</div><ul id="questList"></ul></div>
   <div class="codex-overlay" id="codexOverlay"><div class="codex-panel">
     <div class="codex-header"><div class="codex-title">笔记 · 线索收集册</div>
