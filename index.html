@@ -4,7 +4,7 @@
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no" />
 <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='%23ffc27a' stroke-width='1.8' stroke-linecap='round' stroke-linejoin='round'%3E%3Ccircle cx='7.5' cy='15.5' r='3.5'/%3E%3Cpath d='M10 13l10-10M16 6l3 3M13 9l2 2'/%3E%3C/svg%3E" />
-  <title>幽冥密室 · 脑图密室逃脱 V10.1.0</title>
+  <title>幽冥密室 · 脑图密室逃脱 V11.0.0</title>
   <style>
 *,*::before,*::after{box-sizing:border-box;}
 img,video{max-width:100%;height:auto;display:block;}
@@ -591,6 +591,42 @@ body.chapter-dawn .inventory-bar{background:linear-gradient(to top,var(--invento
 body.chapter-dawn .status-item{background:rgba(14,24,32,0.7);border-color:rgba(79,179,217,0.2);}
 body.chapter-dawn .dialog-btn.primary{background:rgba(79,179,217,0.2);border-color:var(--accent);}
 body.chapter-dawn .setting-opt.active{background:rgba(79,179,217,0.22);border-color:var(--accent);}
+
+/* ===== V11.0.0：第四章「K組織實驗」主題（body.chapter-korg 作用域） ===== */
+body.chapter-korg{
+  --bg-deep:#0c0e12;
+  --bg-mid:#12151c;
+  --node-bg-dark:rgba(22,26,34,0.6);
+  --node-border-dark:rgba(90,100,115,0.4);
+  --node-text-dark:rgba(140,150,165,0.6);
+  --node-bg-lit:rgba(212,160,70,0.10);
+  --node-border-lit:rgba(230,180,90,0.7);
+  --node-text-lit:#f0e6d0;
+  --node-glow:rgba(212,160,70,0.45);
+  --accent:#d4a046;
+  --accent-strong:#e6b45a;
+  --line-dark:rgba(80,90,105,0.3);
+  --line-lit:rgba(212,160,70,0.5);
+  --inventory-bg:rgba(12,14,18,0.95);
+  --node-bg-dark:#161a22;--node-border-dark:#2a3040;
+  --node-text:#8a94a5;--node-text-lit:#f0e6d0;
+}
+body.chapter-korg .bg-atmosphere{background:radial-gradient(ellipse at 50% 30%,#141821 0%,#08090d 75%);}
+body.chapter-korg .node-rect{rx:8;ry:8;fill:var(--node-bg-dark);stroke:var(--node-border-dark);stroke-width:1.5;}
+body.chapter-korg .node-group.root .node-rect{fill:var(--node-bg-lit);stroke:var(--accent);stroke-width:2;}
+body.chapter-korg .node-group.root.lit .node-rect{fill:var(--node-bg-lit);stroke:var(--accent-strong);filter:drop-shadow(0 0 12px var(--glow));}
+body.chapter-korg .node-group.lit .node-rect{fill:var(--node-bg-lit);stroke:var(--node-border-lit);}
+body.chapter-korg .node-text{fill:var(--node-text);}
+body.chapter-korg .node-group.lit .node-text{fill:var(--node-text-lit);}
+body.chapter-korg .node-group.root .node-text{fill:var(--accent-strong);}
+body.chapter-korg .top-bar .title{color:var(--accent-strong);text-shadow:0 0 12px var(--glow);}
+body.chapter-korg .inventory-bar{background:linear-gradient(to top,var(--inventory-bg),rgba(18,20,26,0.6));border-top-color:rgba(212,160,70,0.2);}
+body.chapter-korg .status-item{background:rgba(18,20,26,0.7);border-color:rgba(212,160,70,0.2);}
+body.chapter-korg .dialog-box{background:linear-gradient(145deg,#1a1d26,#12141b);border:1px solid rgba(212,160,70,0.35);box-shadow:0 0 30px rgba(212,160,70,0.15);}
+body.chapter-korg .dialog-title{color:#e6b45a;}
+body.chapter-korg .dialog-content{color:#ddd2bc;line-height:1.9;}
+body.chapter-korg .dialog-btn.primary{background:linear-gradient(135deg,#a87c2e,#d4a046);border-color:#e6b45a;color:#fff;}
+body.chapter-korg .ending-screen{background:radial-gradient(ellipse at center,#1a150c 0%,#0a0805 70%) !important;}
 
 /* ===== SCP基金会主题（body.chapter-scp 作用域，仅第二章生效，不影响教学关/第一章） ===== */
 body.chapter-scp{
@@ -3177,9 +3213,9 @@ html{ scrollbar-width:thin; scrollbar-color:rgba(255,184,108,.28) transparent; }
           <button onclick="document.getElementById('aboutOverlay').style.display='none'" style="background:rgba(255,170,80,0.1);border:1px solid rgba(255,170,80,0.3);color:#ffd89a;width:30px;height:30px;border-radius:8px;cursor:pointer;font-size:0.9rem;">✕</button>
         </div>
         <div style="font-size:0.85rem;color:rgba(255,220,180,0.8);line-height:1.9;letter-spacing:0.03em;">
-          <div style="color:#ffb86c;font-size:1rem;margin-bottom:10px;font-weight:bold;">脑图密室逃脱 <span id="aboutVersionSpan" style="color:#fff;cursor:pointer;user-select:none;">V10.1.0</span></div>
+          <div style="color:#ffb86c;font-size:1rem;margin-bottom:10px;font-weight:bold;">脑图密室逃脱 <span id="aboutVersionSpan" style="color:#fff;cursor:pointer;user-select:none;">V11.0.0</span></div>
           <div style="background:rgba(180,220,255,0.1);border:1px solid rgba(180,220,255,0.4);border-radius:8px;padding:12px;margin-bottom:12px;font-size:0.78rem;line-height:1.8;">
-            <b style="color:#a8d8ff;">【V10.1.0 更新日誌】bug 修復版：</b><br>· 修复第一章救援电话9595先转账后提交坐标导致好结局「欠下钜债」无法触发的 soft-lock<br>· 修复通讯簿中蟒蛇银行/妈妈/中奖诈骗三个号码无法拨打、导致「深夜来电」「电话簿全收集」成就永久锁定的问题<br>· 修复 GM 清除结局后重载被 global 存储还原的问题<br>· 修复「双栖动物」成就误判 DLC1 而非第二章黎明的问题<br>· 修复读档后第一章/DLC1 暂停按钮消失、速通计时起点错误<br>· 合成模式加入关键道具消耗确认提示，避免误耗打火机/手机/氧气瓶<br>· 修复移动端 390px 主菜单节点出屏、成就雷达 SVG height 报错<br>· 修复阁楼新游戏成就未计入雷达与称号进度、管道参考步数、推箱键盘聚焦等细节<br><br><b style="color:#a8d8ff;">【V10.0.0 更新日誌】大版本迭代：內容擴充與穩定性強化</b><br>· 修复第一章好结局正常流程不可达、对话打字机连续开窗崩溃/文案覆写、ESC 关成就面板导致全局暂停卡死、多个计时器/音频在面板关闭后残留等 12 项问题<br>· 新增 8 个阁楼小游戏（摩斯电码、熄灯方阵、2048、管道拼接、推箱、黑白棋、天平称重、图形数独）<br>· 新增物品合成系统（7 种配方）与 3 个新厢房房间（每日挑战、称号殿堂、成就雷达）<br>· 全域 UI/UX 美化与移动端、safe-area、无障碍与性能优化<br>· 新增多个成就与「V10 收藏家」meta 成就<br><br><b style="color:#a8d8ff;">【V9.0.0 更新日誌】超級大自主+ 大版本迭代：暫停語義統一與移動端修復</b><br>· 修復打開筆記/統計/成就面板時氧氣、空氣、危險倒數照扣的問題；掙扎小遊戲中按 J 鍵不再扣進度<br>· 修復掛斷電話後答題面板崩潰、Circle 小遊戲生成鏈在對話框關閉後空轉<br>· 補齊 Ch3「留守」結局的通用成就檢查；存檔導入時結局收藏改為合併而非覆蓋<br>· 新增 8 個成就：打字機速通 / 閣樓大師 / 早起鳥 / 二周目老手 / 檔案管理員等<br>· 閣樓新增第 9 個小遊戲「記憶序列」，最佳成績入榜<br>· 移動端修復主選單腦圖節點出屏、對話框按鈕窄屏堆疊、iPhone 底部安全區適配<br>· GM 通行碼彈窗支援 ESC 關閉；版本號重複顯示修正<br><br><b style="color:#a8d8ff;">【V8.0.0 更新日誌】超级大自主+ 大版本迭代：全面修复与扩充</b><br>· 修复 049-2 挣脱后重复遇袭、笔记按钮双击失效、ch3 三个结局成就缺失、GM 清除存档删错 key、挣扎小游戏开设置即死等 20 余处问题<br>· 存档导出升级 v2，打包结局收藏进度；清除存档彻底重置成就与图鉴；游戏时长不再重复统计<br>· 新增 8 个成就：沉默的逃生者 / 迷宫住民 / 死亡 10 次 / 通话全收集 / 巧手速拧 等<br>· 结局收藏室为每个未知结局加上不剧透的半提示<br>· 对话框打字中点一下立刻补完全文；死亡结算新增「直接重开本章」<br>· 阁楼新增第 8 个小游戏「密码锁速拧」，音乐鉴赏新增 3 轨原声<br>· 节点支持键盘/手柄聚焦与金色焦点环，震动反馈按开关统一接通<br><br><b style="color:#a8d8ff;">【V7.0.0 更新日誌】超級自主+ 大版本迭代：全面體驗升級</b><br><b style="color:#a8d8ff;">新增內容：</b><br>· 新增「設定預覽」實時預覽功能，調整字體大小/佈局曲率時即時生效<br>· 新增「章節快速跳轉」收藏功能，常用場景一鍵直達<br>· 新增「成就進度條」可視化展示，距離下個成就還差多少一目了然<br>· 新增「存檔備份」導出/導入功能，換手機也能繼續玩<br>· 新增「自定義快捷鍵」設置，按個人習慣重新綁定按鍵<br>· 新增「日間/夜間模式」切換，白天玩也不刺眼<br><b style="color:#a8d8ff;">體驗優化：</b><br>· 腦圖節點展開動畫更加流暢，支持更多佈局模式切換<br>· 物品欄新增快速使用歷史記錄，最近用過的物品排在前面<br>· 提示系統優化：提示更加具體，不再是泛泛而談<br>· 小地圖新增場景名稱標籤，不再只靠記憶找路<br><b style="color:#a8d8ff;">修復與穩定性：</b><br>· 全面排查記憶體洩漏、事件監聽器清理、計時器泄漏問題<br>· 修復多個邊界情況：空存檔、極端螢幕尺寸、快速連點<br>· 優化大場景下的渲染性能，節點再多也不卡頓<br>· 增強無障礙支持：完整鍵盤導航、更高對比度模式<br><br>
+            <b style="color:#a8d8ff;">【V11.0.0 更新日誌】第四章「K組織實驗」：</b><br>· 新增第四章：K組織實驗系列，內含五個關卡（時間迷宮/鏡中世界/致命巨物/蝴蝶效應/虛擬接入）<br>· 新增 18 個結局與 12 個新成就，GM 面板可跳任一關<br>· 五關串聯：實驗體10023/20004/30012/40002，最終章虛擬接入揭開K組織代理人計劃<br><br><b style="color:#a8d8ff;">【V10.1.0 更新日誌】bug 修復版：</b><br>· 修复第一章救援电话9595先转账后提交坐标导致好结局「欠下钜债」无法触发的 soft-lock<br>· 修复通讯簿中蟒蛇银行/妈妈/中奖诈骗三个号码无法拨打、导致「深夜来电」「电话簿全收集」成就永久锁定的问题<br>· 修复 GM 清除结局后重载被 global 存储还原的问题<br>· 修复「双栖动物」成就误判 DLC1 而非第二章黎明的问题<br>· 修复读档后第一章/DLC1 暂停按钮消失、速通计时起点错误<br>· 合成模式加入关键道具消耗确认提示，避免误耗打火机/手机/氧气瓶<br>· 修复移动端 390px 主菜单节点出屏、成就雷达 SVG height 报错<br>· 修复阁楼新游戏成就未计入雷达与称号进度、管道参考步数、推箱键盘聚焦等细节<br><br><b style="color:#a8d8ff;">【V10.0.0 更新日誌】大版本迭代：內容擴充與穩定性強化</b><br>· 修复第一章好结局正常流程不可达、对话打字机连续开窗崩溃/文案覆写、ESC 关成就面板导致全局暂停卡死、多个计时器/音频在面板关闭后残留等 12 项问题<br>· 新增 8 个阁楼小游戏（摩斯电码、熄灯方阵、2048、管道拼接、推箱、黑白棋、天平称重、图形数独）<br>· 新增物品合成系统（7 种配方）与 3 个新厢房房间（每日挑战、称号殿堂、成就雷达）<br>· 全域 UI/UX 美化与移动端、safe-area、无障碍与性能优化<br>· 新增多个成就与「V10 收藏家」meta 成就<br><br><b style="color:#a8d8ff;">【V9.0.0 更新日誌】超級大自主+ 大版本迭代：暫停語義統一與移動端修復</b><br>· 修復打開筆記/統計/成就面板時氧氣、空氣、危險倒數照扣的問題；掙扎小遊戲中按 J 鍵不再扣進度<br>· 修復掛斷電話後答題面板崩潰、Circle 小遊戲生成鏈在對話框關閉後空轉<br>· 補齊 Ch3「留守」結局的通用成就檢查；存檔導入時結局收藏改為合併而非覆蓋<br>· 新增 8 個成就：打字機速通 / 閣樓大師 / 早起鳥 / 二周目老手 / 檔案管理員等<br>· 閣樓新增第 9 個小遊戲「記憶序列」，最佳成績入榜<br>· 移動端修復主選單腦圖節點出屏、對話框按鈕窄屏堆疊、iPhone 底部安全區適配<br>· GM 通行碼彈窗支援 ESC 關閉；版本號重複顯示修正<br><br><b style="color:#a8d8ff;">【V8.0.0 更新日誌】超级大自主+ 大版本迭代：全面修复与扩充</b><br>· 修复 049-2 挣脱后重复遇袭、笔记按钮双击失效、ch3 三个结局成就缺失、GM 清除存档删错 key、挣扎小游戏开设置即死等 20 余处问题<br>· 存档导出升级 v2，打包结局收藏进度；清除存档彻底重置成就与图鉴；游戏时长不再重复统计<br>· 新增 8 个成就：沉默的逃生者 / 迷宫住民 / 死亡 10 次 / 通话全收集 / 巧手速拧 等<br>· 结局收藏室为每个未知结局加上不剧透的半提示<br>· 对话框打字中点一下立刻补完全文；死亡结算新增「直接重开本章」<br>· 阁楼新增第 8 个小游戏「密码锁速拧」，音乐鉴赏新增 3 轨原声<br>· 节点支持键盘/手柄聚焦与金色焦点环，震动反馈按开关统一接通<br><br><b style="color:#a8d8ff;">【V7.0.0 更新日誌】超級自主+ 大版本迭代：全面體驗升級</b><br><b style="color:#a8d8ff;">新增內容：</b><br>· 新增「設定預覽」實時預覽功能，調整字體大小/佈局曲率時即時生效<br>· 新增「章節快速跳轉」收藏功能，常用場景一鍵直達<br>· 新增「成就進度條」可視化展示，距離下個成就還差多少一目了然<br>· 新增「存檔備份」導出/導入功能，換手機也能繼續玩<br>· 新增「自定義快捷鍵」設置，按個人習慣重新綁定按鍵<br>· 新增「日間/夜間模式」切換，白天玩也不刺眼<br><b style="color:#a8d8ff;">體驗優化：</b><br>· 腦圖節點展開動畫更加流暢，支持更多佈局模式切換<br>· 物品欄新增快速使用歷史記錄，最近用過的物品排在前面<br>· 提示系統優化：提示更加具體，不再是泛泛而談<br>· 小地圖新增場景名稱標籤，不再只靠記憶找路<br><b style="color:#a8d8ff;">修復與穩定性：</b><br>· 全面排查記憶體洩漏、事件監聽器清理、計時器泄漏問題<br>· 修復多個邊界情況：空存檔、極端螢幕尺寸、快速連點<br>· 優化大場景下的渲染性能，節點再多也不卡頓<br>· 增強無障礙支持：完整鍵盤導航、更高對比度模式<br><br>
             <b style="color:#a8d8ff;">【V6.0.7 更新日誌】修復點擊節點展開子節點無動畫</b><br>· 修復 DLC1 等場景中點擊節點後新子節點直接出現、沒有從父節點滑出淡入的問題<br>· 根因：no-transition class 移除與 transform 改變在同一幀同步執行，瀏覽器不觸發 CSS transition；改為先移除 class 並強制 reflow，下一幀才改 transform<br>· 同時保留 V6.0.6 平移時節點不變暗的修復<br><br>
             <b style="color:#a8d8ff;">【V6.0.6 更新日誌】修復平移時節點變暗、鬆手閃一下</b><br>· 拖曳期間不再強行 filter:none——之前連 lit 節點的 drop-shadow 發光一起關掉，導致平移時節點變暗、鬆手光暈恢復又閃一下<br>· 只保留關 transition／animation 與背景粒子，節點外觀在拖曳中保持一致<br><br>
             <b style="color:#a8d8ff;">【V6.0.5 更新日誌】根治平移畫布鬆手後閃一下</b><br>· 移除節點預設的 filter:blur(0.5px)——它讓每個節點都成為獨立合成層，拖曳鬆手恢復 filter 時整幅 SVG 被迫重新柵格化，就是那一下閃爍；lit/進度節點的 drop-shadow 保留<br>· 鬆手延遲約 90ms 才恢復 transition/filter，讓最後一次座標變換先在無動畫狀態下穩定，再切回正常外觀，避免「移動」與「恢復濾鏡」在同一幀重疊<br><br>
@@ -3457,7 +3493,7 @@ html{ scrollbar-width:thin; scrollbar-color:rgba(255,184,108,.28) transparent; }
       </div>
       <div class="loading-tip" id="loadingTip"></div>
       <div class="loading-bar-wrap"><div class="loading-bar" id="loadingBar"></div></div>
-      <div class="loading-version" id="loadingVersion">V10.1.0</div>
+      <div class="loading-version" id="loadingVersion">V11.0.0</div>
     </div>
     <!-- 自動遊玩狀態遮罩 -->
     <div id="autoplay-overlay">
@@ -3543,6 +3579,13 @@ html{ scrollbar-width:thin; scrollbar-color:rgba(255,184,108,.28) transparent; }
         <button class="gm-btn" onclick="gmGoto('ch3_comm')">通訊室</button>
         <button class="gm-btn" onclick="gmGoto('ch3_filter')">濾氣室</button>
         <button class="gm-btn" onclick="gmGoto('ch3_rooftop')">屋頂（結局）</button>
+        <div class="gm-h" style="margin-top:.8rem;font-size:.78rem">第四章 · K組織實驗</div>
+        <button class="gm-btn" onclick="gmGoto('ch4_hub')">實驗室首頁（關卡選擇）</button>
+        <button class="gm-btn" onclick="gmGoto('ch4_l1')">第1關：時間迷宮</button>
+        <button class="gm-btn" onclick="gmGoto('ch4_l2')">第2關：鏡中世界</button>
+        <button class="gm-btn" onclick="gmGoto('ch4_l3')">第3關：致命巨物</button>
+        <button class="gm-btn" onclick="gmGoto('ch4_l4')">第4關：蝴蝶效應</button>
+        <button class="gm-btn" onclick="gmGoto('ch4_l5')">第5關：虛擬接入</button>
         <button class="gm-btn" onclick="gmToggleNG()">切換 NG+ 模式：<span id="gm-ng-status">關</span></button>
         <div class="gm-h" style="margin-top:1.2rem">狀態設置</div>
         <button class="gm-btn" onclick="gmSetExploded(true)">設置為爆炸後狀態</button>
@@ -3638,7 +3681,7 @@ html{ scrollbar-width:thin; scrollbar-color:rgba(255,184,108,.28) transparent; }
 <script>
 // ============================================================
 // 脑图密室逃脱 (Mind Map Escape Room)
-// Version: V10.1.0  (2026-10-15)
+// Version: V11.0.0  (2026-10-16)
 // Single-file HTML escape room game.
 // Changelog: see About overlay (關於本作) or aboutOverlay.
 // ============================================================
@@ -3652,7 +3695,7 @@ const G = {
   dragging: false, dragStart: null, viewportStart: null,
   nodes: [], connections: [],
   selectedItem: null,
-  completed: { tutorial: false, ch1: false, ch2: false, ch3: false },
+  completed: { tutorial: false, ch1: false, ch2: false, ch3: false, ch4: false },
   remoteConfig: null,
   remoteConfigLoaded: false,
   settings: { layout: 'radial', curvature: 'medium', fontSize: 'medium', bgm: 'on', expandDir: 'right', lineWidth: 'normal', animDuration: 0.5, language: 'zh-CN', remoteConfigUrl: '', difficulty: 'normal', quality: 'high', haptics: 'on', showNodeIds: false, highContrast: false, showSpeedTimer: false, minimap: true, textSpeed: 'normal', reduceAnimations: false },
@@ -3717,6 +3760,13 @@ const G = {
     deathCount: 0,
     segments: {},
   },
+  // ===== V11.0.0：第四章「K組織實驗」狀態 =====
+  ch4: {
+    level: 1,
+    levelDone: {1:false,2:false,3:false,4:false,5:false},
+    flags: {},
+    startTime: 0, deathCount: 0,
+  },
   // ===== V4.0.0：New Game+ 與回憶碎片 =====
   ngplusUnlocked: false,   // 通關任意章節後解鎖
   ngplus: false,           // 本局是否為 NG+
@@ -3737,6 +3787,7 @@ const G = {
     ch1Completions: 0,    // 第一章通關次數
     ch2Completions: 0,    // 第二章通關次數
     ch3Completions: 0,    // V4.0.0：第三章通關次數
+    ch4Completions: 0,    // V11.0.0：第四章通關次數
     ngplusRuns: 0,        // V4.0.0：NG+ 通關次數
     fragmentsFound: 0,    // V4.0.0：回憶碎片收集總數
     endings: { e1: 0, e2: 0, e3: 0 }, // 各結局達成次數（舊欄位，向後相容）
@@ -3780,6 +3831,25 @@ const ENDINGS_REGISTRY = [
   {id:'ch3_sacrifice',   chapter:'ch3', name:'犧牲',       type:'good',   weight:10,  hint:'在最后的抉择里，把机会让给别人'},
   {id:'ch3_air',         chapter:'ch3', name:'空氣耗盡',   type:'bad',    weight:12,  hint:'空气值耗尽仍没修好通风系统'},
   {id:'ch3_stay',        chapter:'ch3', name:'留守',       type:'bad',    weight:8,   hint:'黎明来临时，选择继续等待下一次'},
+  // --- 第四章 K組織實驗 (ch4) ---
+  {id:'ch4_l1_escape',   chapter:'ch4', name:'最后一个我逃了出来', type:'good', weight:6, hint:'在时间迷宫里把钥匙从门缝塞给过去的自己，闭合循环'},
+  {id:'ch4_l2_escape',   chapter:'ch4', name:'调查报告',     type:'good', weight:6,  hint:'用铝热反应炸开钛合金门，看看镜中世界的怪物'},
+  {id:'ch4_l3_escape',    chapter:'ch4', name:'弹射逃生',    type:'good', weight:6,  hint:'驾驶高达冲向巨型生物时启动核爆程序并弹射'},
+  {id:'ch4_l4_1',         chapter:'ch4', name:'现实幻境真相', type:'good', weight:8,  hint:'稳定人造太阳，走进最大的安全门'},
+  {id:'ch4_l4_2',         chapter:'ch4', name:'K组织总部',   type:'hidden',weight:6, hint:'不给稳定器，造不出人造太阳'},
+  {id:'ch4_l4_3',         chapter:'ch4', name:'刑场',       type:'bad',   weight:5,  hint:'医学院+留下生发水+扔掉毒鼠强，疫苗有缺陷'},
+  {id:'ch4_l4_4',         chapter:'ch4', name:'基因病毒',    type:'bad',   weight:5,  hint:'医学院+补全蓝色溶液，却被恐怖分子绑架'},
+  {id:'ch4_l4_5',         chapter:'ch4', name:'亚洲猛虎',    type:'good',  weight:6,  hint:'科学院+救石强+扔掉毒鼠强'},
+  {id:'ch4_l4_6',         chapter:'ch4', name:'走马灯',     type:'hidden',weight:6, hint:'种下樱花树，不救石强，也不扔毒药'},
+  {id:'ch4_l4_fail',      chapter:'ch4', name:'炮灰飞烟灭',  type:'bad',   weight:4,  hint:'蝴蝶效应里选错了路'},
+  {id:'ch4_l4_beg',       chapter:'ch4', name:'乞讨残生',   type:'bad',   weight:4,  hint:'被抢劫打残，流落街头'},
+  {id:'ch4_l4_genefail',  chapter:'ch4', name:'基因实验失败', type:'bad',  weight:4,  hint:'基因实验出了岔子'},
+  {id:'ch4_l5_agent',     chapter:'ch4', name:'代理人',      type:'good',  weight:8,  hint:'接受K组织的代理人计划'},
+  {id:'ch4_l5_rebel',     chapter:'ch4', name:'反骨',       type:'hidden',weight:6, hint:'拒绝代理人计划'},
+  {id:'ch4_l5_true',      chapter:'ch4', name:'下一个你',    type:'hidden',weight:10,hint:'在治疗室输入漏洞代码2333'},
+  {id:'ch4_l5_palace',    chapter:'ch4', name:'擅闯皇宫',    type:'bad',   weight:3,  hint:'咸阳宫里别硬闯'},
+  {id:'ch4_l5_drink',     chapter:'ch4', name:'烈酒中毒',    type:'bad',   weight:3,  hint:'蒸馏酒要喝中酒，别喝头酒'},
+  {id:'ch4_l5_bite',       chapter:'ch4', name:'咬舌自尽',    type:'bad',   weight:3,  hint:'黑死病恶魔出现时，跑'},
 ];
 
 // 記錄一次結局達成
@@ -3896,6 +3966,7 @@ const I18n = {
       'menu.chapter.ch1': '第一章 · 活埋',
       'menu.chapter.ch2': 'DLC1 · 收容失效',
       'menu.chapter.ch3': '第二章 · 黎明',
+      'menu.chapter.ch4': '第四章 · K组织实验',
       'menu.chapter.dlc': 'DLC 章节',
       'menu.back': '返回',
       // 设置
@@ -3986,6 +4057,7 @@ const I18n = {
       'menu.chapter.ch1': '第一章 · 活埋',
       'menu.chapter.ch2': 'DLC1 · 收容失效',
       'menu.chapter.ch3': '第二章 · 黎明',
+      'menu.chapter.ch4': '第四章 · K組織實驗',
       'menu.chapter.dlc': 'DLC 章節',
       'menu.back': '返回',
       'settings.layout': '佈局',
@@ -4072,6 +4144,7 @@ const I18n = {
       'menu.chapter.ch1': 'Chapter 1 · Buried Alive',
       'menu.chapter.ch2': 'DLC1 · Containment Breach',
       'menu.chapter.ch3': 'Chapter 2 · Dawn',
+      'menu.chapter.ch4': 'Chapter 4 · K-Org Experiments',
       'menu.chapter.dlc': 'DLC Chapters',
       'menu.back': 'Back',
       'settings.layout': 'Layout',
@@ -5489,6 +5562,7 @@ const Core = {
       { id: 'cs_ch1', label: I18n.t('menu.chapter.ch1'), chapterId: 'ch1', unlocked: true, completed: G.completed.ch1 },
       { id: 'cs_ch3', label: I18n.t('menu.chapter.ch3'), chapterId: 'ch3', unlocked: true, comingSoon: true, completed: G.completed.ch3 },
       { id: 'cs_dlc', label: I18n.t('menu.chapter.dlc'), chapterId: 'ch2', unlocked: true, completed: G.completed.ch2 },
+      { id: 'cs_ch4', label: I18n.t('menu.chapter.ch4'), chapterId: 'ch4', unlocked: !!G.completed.ch1, completed: G.completed.ch4 },
     ];
     // V4.5.3：第二章「黎明」暫標記為「即將推出」——節點永遠顯示但灰色半透明，普通玩家點擊彈提示不可進入。
     // 不再需要通關第一章解鎖；第二章解鎖動畫暫時禁用。GM 仍可透過 gmGoto 跳關，已有存檔仍可繼續。
@@ -5499,6 +5573,7 @@ const Core = {
       { x: 200, y: 30 },    // 第一章：右
       { x: -200, y: 30 },   // 第二章·黎明：左
       { x: 0, y: 190 },     // DLC：下方
+      { x: -220, y: -120 }, // 第四章：左上
     ];
     chapters.forEach((ch, i) => {
       const pos = chapterPos[i] || { x: 0, y: 0 };
@@ -5515,6 +5590,7 @@ const Core = {
           if (ch.id === 'cs_tutorial') this.startChapter('tutorial');
           else if (ch.id === 'cs_ch1') this.startChapter('ch1');
           else if (ch.id === 'cs_ch3') this.startChapter('ch3');
+          else if (ch.id === 'cs_ch4') this.startChapter('ch4');
           else if (ch.id === 'cs_dlc') this.showDLCSelect();
         };
       } else {
@@ -6065,6 +6141,7 @@ const Core = {
       ch1: { icon: '⚰️', title: '第一章 · 活埋', subtitle: 'CHAPTER 1', desc: '你在黑暗中醒来，发现自己被活埋在一口棺材里。氧气正在耗尽，手机还有信号……你能逃出生天吗？' },
       ch2: { icon: '🔬', title: 'DLC1 · 收容失效', subtitle: 'DLC 1', desc: 'SCP基金会Site-19发生大规模收容失效事件。作为D级人员，你必须在充满异常实体的设施中寻找出路。' },
       ch3: { icon: '🌅', title: '第二章 · 黎明', subtitle: 'CHAPTER 2', desc: '你逃离了废墟般的城市，在地下避难所中喘息。但基金会的阴影并未散去——空气正在变质，而黎明之前，你必须揭开最后的真相。' },
+      ch4: { icon: '◈', title: '第四章 · K组织实验', subtitle: 'CHAPTER 4', desc: 'K组织的实验室里沉睡着五个实验体：时间迷宫、镜中世界、致命巨物、蝴蝶效应……而你，是第六个——编号50001。' },
     };
     const info = chapterInfo[chId] || chapterInfo.ch1;
     document.getElementById('chapterIntroIcon').textContent = info.icon;
@@ -6143,10 +6220,11 @@ const Core = {
     document.getElementById('chapterIntroOverlay').classList.remove('show');
 
     // 主题切换
-    document.body.classList.remove('chapter-ch1', 'chapter-scp', 'chapter-dawn');
+    document.body.classList.remove('chapter-ch1', 'chapter-scp', 'chapter-dawn', 'chapter-korg');
     if (chId === 'ch1') { document.body.classList.add('chapter-ch1'); }
     else if (chId === 'ch2') { document.body.classList.add('chapter-scp'); }
     else if (chId === 'ch3') { document.body.classList.add('chapter-dawn'); }
+    else if (chId === 'ch4') { document.body.classList.add('chapter-korg'); }
     
     if (G._menuSavedLayout) { G.settings.layout = G._menuSavedLayout; }
     if (G.settings.layout === 'fixed' || !G.settings.layout) {
@@ -6161,6 +6239,7 @@ const Core = {
     else if (chId === 'ch1') Ch1.start();
     else if (chId === 'ch2') Ch2.start();
     else if (chId === 'ch3' && typeof Ch3 !== 'undefined') Ch3.start();
+    else if (chId === 'ch4' && typeof Ch4 !== 'undefined') Ch4.start();
     
     // 等待一帧确保渲染完成，然后显示转场遮罩并开始动画
     requestAnimationFrame(() => {
@@ -6187,6 +6266,7 @@ const Core = {
     if (G.currentChapter === 'ch1') Ch1.onNodeClick(node);
     else if (G.currentChapter === 'ch2') Ch2.onNodeClick(node);
     else if (G.currentChapter === 'ch3' && typeof Ch3 !== 'undefined') Ch3.onNodeClick(node);
+    else if (G.currentChapter === 'ch4' && typeof Ch4 !== 'undefined') Ch4.onNodeClick(node);
   },
   toast(msg, duration=2000) {
     const t = $('#toast');
@@ -9056,6 +9136,7 @@ const SaveSystem = {
       currentChapter: G.currentChapter,
       ch2: ch2data,
       ch3: ch3data,
+      ch4: { levelDone: (G.ch4 && G.ch4.levelDone) || {1:false,2:false,3:false,4:false,5:false} },
       ngplus: !!G.ngplus,
       ngplusUnlocked: !!G.ngplusUnlocked,
       fragments: G.fragments || [],
@@ -9128,6 +9209,8 @@ const SaveSystem = {
       if (Array.isArray(data.fragments)) G.fragments = data.fragments;
       // V4.3.0：還原第二章解鎖動畫已播放標記
       if (data.ch2UnlockAnimPlayed) G._ch2UnlockAnimPlayed = true;
+      // V11.0.0：還原第四章關卡進度
+      if (data.ch4 && data.ch4.levelDone) { G.ch4.levelDone = data.ch4.levelDone; }
       G._savedState = data;
       G._sessionStart = Date.now();
       return true;
@@ -9619,6 +9702,19 @@ const AchievementSystem = {
     { id: 'v9_ach_no_hint_clear',   icon: '✓',  name: '无提示通关', desc: '不使用任何提示通关第一章' },
     { id: 'v9_ach_v9_all',          icon: '◉',  name: 'V9 收藏家',   desc: '解锁本版本全部 8 个新成就', spoiler: true },
     { id:'v10_ach_v10_all', icon:'◉', name:'V10 收藏家', desc:'解锁本版本全部新成就', spoiler:true },
+    /* --- V11.0.0 第四章 K組織實驗 --- */
+    { id: 'ch4_l1_clear',      icon: '◷', name: '时间迷宫',   desc: '通关第四章·时间迷宫（实验体10023）' },
+    { id: 'ch4_l2_clear',      icon: '◐', name: '镜中世界',   desc: '通关第四章·镜中世界（实验体20004）' },
+    { id: 'ch4_l3_clear',      icon: '▲', name: '致命巨物',   desc: '通关第四章·致命巨物（实验体30012）' },
+    { id: 'ch4_l4_clear',      icon: '❋', name: '蝴蝶效应',   desc: '通关第四章·蝴蝶效应（实验体40002）' },
+    { id: 'ch4_l5_clear',      icon: '◎', name: '虚拟接入',   desc: '通关第四章·虚拟接入（实验体50001）' },
+    { id: 'ch4_ach_toilet',    icon: '≈', name: '痴迷马桶',   desc: '在镜中世界累计冲马桶100次' },
+    { id: 'ch4_ach_confucius', icon: '德', name: '以德服人',   desc: '用剑刺向孔子——当然是被杀' },
+    { id: 'ch4_ach_animal',    icon: '✕', name: '动物终结者', desc: '消灭屋顶上所有的动物' },
+    { id: 'ch4_ach_agent',      icon: '⍝', name: '代理人',     desc: '接受K组织代理人计划' },
+    { id: 'ch4_ach_rebel',      icon: '↯', name: '反骨',       desc: '拒绝代理人计划' },
+    { id: 'ch4_all',            icon: '☷', name: '实验体观察者', desc: '通关第四章全部五个关卡', spoiler:true },
+    { id: 'v11_ach_v11_all',    icon: '◉', name: 'V11 收藏家', desc: '解锁本版本全部新成就', spoiler:true },
   ],
   init() {
     try {
@@ -9661,6 +9757,15 @@ const AchievementSystem = {
         var need9 = this.defs.filter(function(d){ return d.id.indexOf('v9_ach_') === 0 && d.id !== 'v9_ach_v9_all'; });
         var allDone9 = need9.every(function(d){ return !!this.unlocked[d.id]; }, this);
         if (allDone9) this.unlock('v9_ach_v9_all');
+      }
+    } catch(e) {}
+    // V11.0.0：檢查是否集滿 V11 的全部新成就
+    try {
+      if (id && id.indexOf('ch4_') === 0) {
+        var need11 = this.defs.filter(function(d){ return d.id.indexOf('ch4_') === 0; });
+        need11 = need11.filter(function(d){ return d.id !== 'ch4_all'; });
+        var allDone11 = need11.every(function(d){ return !!this.unlocked[d.id]; }, this);
+        if (allDone11) this.unlock('v11_ach_v11_all');
       }
     } catch(e) {}
     // V10.0.0：檢查是否集滿 V10 的全部新成就（不含 v10_ach_v10_all 自身）
@@ -14147,6 +14252,2551 @@ function gmGiveAll(){
   gmRefreshAll();
 }
 
+
+// ============================================================
+// V11.0.0：第四章「K組織實驗」
+// 五個關卡：時間迷宮(10023) / 鏡中世界(20004) / 致命巨物(30012) /
+//           蝴蝶效應(40002) / 虛擬接入(50001=你)
+// ============================================================
+const Ch4 = {
+  levels: {},
+  start() {
+    G.currentPage = 'ch4';
+    G.currentChapter = 'ch4';
+    document.body.setAttribute('data-page','ch4');
+    try { if (G.ch1) { clearInterval(G.ch1.oxygenTimer); clearInterval(G.ch1.batteryTimer); } } catch(eClr){}
+    if (G.ch2 && G.ch2.timers) { Object.keys(G.ch2.timers).forEach(function(k){ try{ var _t=G.ch2.timers[k]; if(_t&&_t.interval) clearInterval(_t.interval);}catch(e){} }); G.ch2.timers={}; }
+    Audio.startBGM && Audio.startBGM();
+    if (!G.ch4.levelDone) G.ch4.levelDone = {1:false,2:false,3:false,4:false,5:false};
+    $('#backBtn').classList.remove('hidden');
+    $('#pageTitle').textContent = '第 四 章 · K組織實驗';
+    $('#inventoryBar').style.display = 'flex';
+    $('#statusBar').style.display = 'none';
+    $('#bgAtmosphere').className = 'bg-atmosphere';
+    $('#lampGlow').classList.remove('on');
+    $('#lowOxygenVignette').classList.remove('on');
+    Inventory.init();
+    try { resetChapterTracking(); } catch(e){}
+    try { Speedrun.start('ch4'); } catch(e){}
+    this.showHub();
+  },
+  showHub() {
+    Renderer.clear();
+    Renderer.addNode('ch4_hub', 'K组织实验室', 0, 0, { root:true, lit:true, w:180, h:50,
+      onClick: () => Core.showDialog('K组织实验室',
+        '五个实验舱静静排列在你面前。<br><br>' +
+        '<span style="color:#e6b45a;">10023 · 时间迷宫<br>20004 · 镜中世界<br>30012 · 致命巨物<br>40002 · 蝴蝶效应<br>50001 · 你自己</span><br><br>' +
+        '选择一个实验舱进入。')
+    });
+    var pods = [
+      {n:1, label:'实验体10023 · 时间迷宫', x:-200, y:-140},
+      {n:2, label:'实验体20004 · 镜中世界', x:200, y:-140},
+      {n:3, label:'实验体30012 · 致命巨物', x:-240, y:60},
+      {n:4, label:'实验体40002 · 蝴蝶效应', x:240, y:60},
+      {n:5, label:'实验体50001 · 虚拟接入', x:0, y:200},
+    ];
+    var self = this;
+    pods.forEach(function(p){
+      var unlocked = (p.n === 1) || G.ch4.levelDone[p.n-1];
+      var done = !!G.ch4.levelDone[p.n];
+      var opts = { lit:true, w:200, h:44 };
+      if (done) opts.completed = true;
+      if (!unlocked) opts.locked = true;
+      opts.onClick = (function(pod){
+        return function(){
+          if (!unlocked) { Core.toast('先通关前一个实验体'); return; }
+          self.enterLevel(pod.n);
+        };
+      })(p);
+      Renderer.addNode('ch4_pod'+p.n, p.label, p.x, p.y, opts);
+      Renderer.addConnection('ch4_hub', 'ch4_pod'+p.n, { alwaysVisible:true });
+    });
+    Renderer.render();
+    Renderer.centerView();
+  },
+  enterLevel(n) {
+    G.ch4.level = n;
+    G.ch4.flags = {};
+    G.ch4.startTime = Date.now();
+    Renderer.clear();
+    Inventory.init();
+    $('#pageTitle').textContent = 'K组织实验 · 第'+n+'关';
+    if (this.levels[n] && this.levels[n].start) this.levels[n].start();
+    else Core.toast('本关尚未实装');
+  },
+  onNodeClick(node) {
+    var lv = this.levels[G.ch4.level];
+    if (!lv) return;
+    if (G.selectedItem) {
+      if (lv.useItemOnNode && lv.useItemOnNode(G.selectedItem, node.id)) {
+        G.selectedItem = null; Inventory.render(); return;
+      }
+    }
+    if (lv.onNodeClick) lv.onNodeClick(node);
+  },
+  toast(m) { Core.toast(m); },
+  node(id) { return G.nodes.find(function(n){return n.id===id;}); },
+  conn(a,b) { Renderer.addConnection(a,b); },
+  add(id,label,opts) {
+    opts = opts||{};
+    var self = this;
+    var origClick = opts.onClick;
+    if (origClick) {
+      opts.onClick = function(node){
+        if (G.selectedItem) {
+          var lv = self.levels[G.ch4.level];
+          if (lv && lv.useItemOnNode && lv.useItemOnNode(G.selectedItem, node.id)) {
+            G.selectedItem = null; Inventory.render(); return;
+          }
+        }
+        origClick(node);
+      };
+    }
+    opts.data = opts.data || {};
+    return Renderer.addNode(id,label,0,0,Object.assign({lit:true,w:120,h:40},opts));
+  },
+  levelCleared(n, endingId, endingName) {
+    G.ch4.levelDone[n] = true;
+    try { recordEnding(endingId, endingName); } catch(e){}
+    if (n === 5) {
+      G.completed.ch4 = true;
+      try { G.stats.ch4Completions = (G.stats.ch4Completions||0)+1; } catch(e){}
+    }
+    try { SaveSystem.save(); } catch(e){}
+    try {
+      var d = G.ch4.levelDone;
+      if (d[1]&&d[2]&&d[3]&&d[4]&&d[5]) AchievementSystem.unlock('ch4_all');
+    } catch(e){}
+  },
+  showEnding(html) {
+    var es = $('#endingScreen');
+    es.classList.remove('ending-ending1','ending-ending2','ending-ending3');
+    $('#endingText').innerHTML = html;
+    es.classList.add('show');
+    try { Speedrun.decorateEnding($('#endingText'), Speedrun.stop('ch4')); } catch(e){}
+  },
+};
+
+
+// ===== V11.0.0：五關關卡內容（由各關實作片段組裝） =====
+
+// ===== CH4 LEVEL 1：時間迷宮 =====
+// 實驗體 10023。三輪時間循環：房間→大廳被打暈→房間變化→門縫塞鑰匙→閉合循環→柱狀物解謎→逃脫。
+(function () {
+  function F() { G.ch4.flags = G.ch4.flags || {}; return G.ch4.flags; }
+
+  // ---------- 重建場景 ----------
+  function rebuildRound1() {
+    Renderer.clear();
+    var f = F();
+    f.l1_round = 1;
+    Ch4.add('l1_bed', '床', { root: true, w: 120, h: 40, onClick: function () {
+      Core.showDialog('床', '你在床上醒来，脸上戴着面具却摘不下来');
+    }});
+    Ch4.add('l1_room', '房间', { onClick: function () {
+      Core.showDialog('房间', '一个简洁的房间');
+    }});
+    Ch4.add('l1_darkwall', '漆黑的墙', { onClick: function () {
+      Core.showDialog('漆黑的墙', '一面漆黑的墙挂着三幅画和一张纸');
+    }});
+
+    // 畫
+    Ch4.add('l1_paint', '三幅画', { onClick: function () {
+      Core.showDialog('三幅画', '墙上并排挂着三幅动物画。');
+    }});
+    Ch4.add('l1_sheep', '羊', { onClick: function () {
+      Core.showDialog('羊', '画着三只羊<br><span style="color:rgba(200,210,230,.7);">十二生肖故事：羊位居第八，温顺群居，是「吉祥」的象征。</span>');
+    }});
+    Ch4.add('l1_cow', '牛', { onClick: function () {
+      Core.showDialog('牛', '画着两头牛');
+    }});
+    Ch4.add('l1_horse', '马', { onClick: function () {
+      Core.showDialog('马', '画着一匹马');
+    }});
+
+    // 紙（牆上便簽）
+    Ch4.add('l1_wallnote', '便签', { onClick: function () {
+      Core.showDialog('便签', '明天实验室有交流会，需要提前半小时出门，早点起床');
+    }});
+
+    // 桌子
+    Ch4.add('l1_table', '桌子', { onClick: function () {
+      Core.showDialog('桌子', '一张简易的木桌');
+    }});
+    Ch4.add('l1_tablenote', '便签', { onClick: function () {
+      Core.showDialog('便签', '一张写着随手记的便签。');
+    }});
+    Ch4.add('l1_schedule', '行程表', { onClick: function () {
+      Core.showDialog('行程表',
+        '贴在桌子上的行程表：<br>' +
+        '<b style="color:#ffb86c;">9:00</b> 起床<br>' +
+        '<b style="color:#ffb86c;">10:00</b> 实验室<br>' +
+        '<b style="color:#ffb86c;">17:00</b> 健身房<br>' +
+        '<b style="color:#ffb86c;">20:00</b> 洗澡');
+    }});
+    Ch4.add('l1_pentagon', '五角形柱状物', { onClick: function () {
+      if (!f.l1_gotPentagon) {
+        f.l1_gotPentagon = true;
+        Inventory.add({ id: 'l1_pentagon', name: '五角形柱状物', icon: '⬟', detail: '五角形，柱状，不知道有什么用' });
+        Inventory.render();
+        Ch4.toast('拾取了五角形柱状物');
+      }
+      Core.showDialog('五角形柱状物', '五角形，柱状的柱状物不知道有什么用');
+    }});
+    Ch4.add('l1_clock', '老旧的闹钟', { onClick: function () {
+      Core.showDialog('闹钟', '一个老旧的闹钟，似乎不能正常工作了');
+    }});
+    Ch4.add('l1_clockface', '钟盘', { onClick: openClockFace });
+
+    // 門與密碼鎖
+    Ch4.add('l1_door', '锁着的门', { onClick: function () {
+      if (f.l1_doorOpen) {
+        Core.showDialog('门', '门已经开了');
+      } else {
+        Core.showDialog('锁着的门', '门锁住了，无法打开<br>门上有密码锁');
+      }
+    }});
+    Ch4.add('l1_password', '密码锁', { onClick: function () {
+      if (f.l1_doorOpen) { Ch4.toast('密码锁已经解开了'); return; }
+      PasswordPanel.show(3, '728', '动物的数量和排名', function () {
+        f.l1_doorOpen = true;
+        var n = Ch4.node('l1_password');
+        if (n) { n.completed = true; n.label = '密码锁（已开）'; }
+        Renderer.render();
+        Ch4.toast('咔哒——锁开了');
+        setTimeout(enterHallRound1, 600);
+      });
+    }});
+    Ch4.add('l1_locknote', '线索纸条', { onClick: function () {
+      Core.showDialog('线索纸条', '动物的数量和排名');
+    }});
+
+    // 置物櫃
+    Ch4.add('l1_locker', '置物柜', { onClick: function () {
+      if (f.l1_lockerOpen) {
+        Core.showDialog('置物柜', '柜子已经打开了，里面空空如也');
+      } else {
+        Core.showDialog('置物柜', '被锁住了，需要钥匙');
+      }
+    }});
+
+    // 連接
+    Ch4.conn('l1_bed', 'l1_room');
+    Ch4.conn('l1_room', 'l1_darkwall');
+    Ch4.conn('l1_darkwall', 'l1_paint');
+    Ch4.conn('l1_paint', 'l1_sheep');
+    Ch4.conn('l1_paint', 'l1_cow');
+    Ch4.conn('l1_paint', 'l1_horse');
+    Ch4.conn('l1_darkwall', 'l1_wallnote');
+    Ch4.conn('l1_room', 'l1_table');
+    Ch4.conn('l1_table', 'l1_tablenote');
+    Ch4.conn('l1_table', 'l1_schedule');
+    Ch4.conn('l1_table', 'l1_pentagon');
+    Ch4.conn('l1_table', 'l1_clock');
+    Ch4.conn('l1_clock', 'l1_clockface');
+    Ch4.conn('l1_room', 'l1_door');
+    Ch4.conn('l1_door', 'l1_password');
+    Ch4.conn('l1_door', 'l1_locknote');
+    Ch4.conn('l1_room', 'l1_locker');
+
+    Renderer.render();
+    Renderer.centerView();
+  }
+
+  function openClockFace() {
+    var f = F();
+    if (f.l1_clockSolved) { Ch4.toast('闹钟已经响过了'); return; }
+    Core.showDialog('钟盘', '一个钟盘上面有两个指针。<br>要把指针拨到几点？', [
+      { label: '7:00', onClick: function () { Core.showDialog('7:00', '指针停在七点，没有任何反应。'); } },
+      { label: '8:30', primary: true, onClick: function () {
+        f.l1_clockSolved = true;
+        Core.showDialog('8:30', '似乎触发了闹铃，一只布谷鸟钻了出来<br><b style="color:#ffb86c;">有钥匙。一把钥匙</b>').then(function () {
+          Inventory.add({ id: 'l1_clock_key', name: '钥匙', icon: '🗝️', detail: '从布谷鸟闹钟里掉出来的小钥匙' });
+          Inventory.render();
+          Ch4.toast('获得物品：钥匙');
+        });
+      }},
+      { label: '9:00', onClick: function () { Core.showDialog('9:00', '指针停在九点，没有任何反应。'); } },
+      { label: '其他', onClick: function () { Core.showDialog('其他', '老闹钟的齿轮卡住了，拨不动。'); } }
+    ]);
+  }
+
+  function enterHallRound1() {
+    Renderer.clear();
+    Ch4.add('l1_hall', '大厅', { root: true, w: 140, h: 50, onClick: function () {
+      Core.showDialog('大厅', '昏暗的大厅<br>看不清太远的地方');
+    }});
+    Ch4.add('l1_square_pillar_r1', '方形柱状物', { onClick: function () {
+      Core.showDialog('方形柱状物', '一只方形的柱状物，不知有什么用');
+    }});
+    Ch4.add('l1_big_painting_r1', '巨大的画', { onClick: function () {
+      Core.showDialog('巨大的画', '一幅巨大的画');
+    }});
+    Ch4.add('l1_door_out', '出口方向', { onClick: function () {
+      Core.showDialog('黑影', '你眼前一黑，晕了过去，你分明觉得那个面具人像自己').then(function () {
+        rebuildRound2();
+      });
+    }});
+    Ch4.conn('l1_hall', 'l1_square_pillar_r1');
+    Ch4.conn('l1_hall', 'l1_big_painting_r1');
+    Ch4.conn('l1_hall', 'l1_door_out');
+    Renderer.render();
+    Renderer.centerView();
+  }
+
+  // ---------- 第二輪 ----------
+  function rebuildRound2() {
+    Renderer.clear();
+    var f = F();
+    f.l1_round = 2;
+    Ch4.add('l1_bed2', '床', { root: true, w: 120, h: 40, onClick: function () {
+      Core.showDialog('床', '你又在床上醒来，面具还在脸上。');
+    }});
+    Ch4.add('l1_room2', '房间', { onClick: function () {
+      Core.showDialog('房间', '房间里的画已经消失了。');
+    }});
+    Ch4.add('l1_darkwall2', '漆黑的墙', { onClick: function () {
+      Core.showDialog('漆黑的墙', '墙上的画不见了，多了一根破水管和一张纸条。');
+    }});
+    Ch4.add('l1_pipe', '破水管', { onClick: function () {
+      Core.showDialog('破水管', '隐隐约约看到一把钥匙');
+    }});
+    Ch4.add('l1_note2', '纸条', { onClick: function () {
+      Core.showDialog('纸条', '一张纸条，上面写着：<br><b style="color:#ffb86c;">把钥匙从门缝塞给我</b>');
+    }});
+
+    Ch4.add('l1_table2', '桌子', { onClick: function () {
+      Core.showDialog('桌子', '桌上摆着鱼缸和一些杂物。');
+    }});
+    Ch4.add('l1_fishtank', '鱼缸', { onClick: function () {
+      if (f.l1_fished) {
+        Core.showDialog('鱼缸', '鱼缸已经空了，螃蟹被钓走了。');
+      } else {
+        Core.showDialog('鱼缸', '缸里有几只小螃蟹，看起来很美味');
+      }
+    }});
+    Ch4.add('l1_fishing_line', '鱼线', { onClick: function () {
+      if (!f.l1_gotLine) {
+        f.l1_gotLine = true;
+        Inventory.add({ id: 'l1_fishing_line', name: '鱼线', icon: '🎣', detail: '一些鱼线' });
+        Inventory.render();
+        Ch4.toast('拾取了鱼线');
+      }
+      Core.showDialog('鱼线', '一些鱼线');
+    }});
+    Ch4.add('l1_bait', '蟹饵', { onClick: function () {
+      if (!f.l1_gotBait) {
+        f.l1_gotBait = true;
+        Inventory.add({ id: 'l1_bait', name: '蟹饵', icon: '🦀', detail: '一些蟹饵' });
+        Inventory.render();
+        Ch4.toast('拾取了蟹饵');
+      }
+      Core.showDialog('蟹饵', '一些蟹饵');
+    }});
+    Ch4.add('l1_cylinder', '圆形柱状物', { onClick: function () {
+      if (!f.l1_gotCylinder) {
+        f.l1_gotCylinder = true;
+        Inventory.add({ id: 'l1_cylinder', name: '圆形柱状物', icon: '◯', detail: '一只圆形的柱状物，不知道有什么用' });
+        Inventory.render();
+        Ch4.toast('拾取了圆形柱状物');
+      }
+      Core.showDialog('圆形柱状物', '一只圆形的柱状物，不知道有什么用');
+    }});
+
+    Ch4.add('l1_door2', '锁着的门', { onClick: function () {
+      Core.showDialog('锁着的门', '锁着的门似乎只能从外面开启');
+    }});
+    Ch4.add('l1_door_gap', '门缝', { onClick: function () {
+      if (f.l1_keyPassed) {
+        Core.showDialog('门缝', '钥匙已经塞出去了。');
+      } else {
+        Core.showDialog('门缝', '门缝很窄，隐约能看到另一边。');
+      }
+    }});
+
+    Ch4.conn('l1_bed2', 'l1_room2');
+    Ch4.conn('l1_room2', 'l1_darkwall2');
+    Ch4.conn('l1_darkwall2', 'l1_pipe');
+    Ch4.conn('l1_darkwall2', 'l1_note2');
+    Ch4.conn('l1_room2', 'l1_table2');
+    Ch4.conn('l1_table2', 'l1_fishtank');
+    Ch4.conn('l1_table2', 'l1_fishing_line');
+    Ch4.conn('l1_table2', 'l1_bait');
+    Ch4.conn('l1_table2', 'l1_cylinder');
+    Ch4.conn('l1_room2', 'l1_door2');
+    Ch4.conn('l1_door2', 'l1_door_gap');
+
+    Renderer.render();
+    Renderer.centerView();
+  }
+
+  // ---------- 第三輪 ----------
+  function rebuildRound3() {
+    Renderer.clear();
+    var f = F();
+    f.l1_round = 3;
+    Ch4.add('l1_table3', '桌子', { root: true, w: 120, h: 40, onClick: function () {
+      Core.showDialog('桌子', '桌上放着两张纸条和一根柱状物。');
+    }});
+    Ch4.add('l1_note3a', '纸条1', { onClick: function () {
+      Core.showDialog('纸条1', '把钥匙从门缝塞给我');
+    }});
+    Ch4.add('l1_note3b', '纸条2', { onClick: function () {
+      Core.showDialog('纸条2', '原来如此——钥匙是我自己塞给自己的。<br>时间的循环闭合了。');
+    }});
+    Ch4.add('l1_triangle', '三角形柱状物', { onClick: function () {
+      if (!f.l1_gotTriangle) {
+        f.l1_gotTriangle = true;
+        Inventory.add({ id: 'l1_triangle', name: '三角形柱状物', icon: '△', detail: '一只三角形的柱状物' });
+        Inventory.render();
+        Ch4.toast('拾取了三角形柱状物');
+      }
+      Core.showDialog('三角形柱状物', '一只三角形的柱状物。');
+    }});
+
+    Ch4.add('l1_hall3', '大厅', { onClick: function () {
+      Core.showDialog('大厅', '昏暗的大厅，这一次你看清楚了。');
+    }});
+    Ch4.add('l1_square_pillar', '方形柱子', { onClick: onSquarePillar });
+    Ch4.add('l1_left_door', '左侧房门', { onClick: function () {
+      Core.showDialog('左侧房门', '一扇普通的房门，门后是另一个房间。');
+    }});
+    Ch4.add('l1_doll_door', '布偶房门', { onClick: function () {
+      Core.showDialog('布偶房门', '门缝里隐约能看到布偶的轮廓。');
+    }});
+    Ch4.add('l1_big_painting', '巨大的画', { onClick: function () {
+      Core.showDialog('巨大的画',
+        '一幅夜景画：<br>' +
+        '<b style="color:#ffb86c;">1.月亮</b>　<b style="color:#ffb86c;">2.星星</b>　<b style="color:#ffb86c;">3.山</b>　<b style="color:#ffb86c;">4.房子</b>');
+    }});
+    Ch4.add('l1_puzzle_table', '解谜表', { onClick: function () {
+      Core.showDialog('解谜表', '一张对照表，把画中元素和柱状物形状对应起来。');
+    }});
+    Ch4.add('l1_man_with_key', '拿着钥匙的人', { onClick: function () {
+      Core.showDialog('拿钥匙的人', '一个模糊的人影，手里握着钥匙。');
+    }});
+    Ch4.add('l1_masked_man', '面具人', { onClick: function () {
+      Core.showDialog('面具人', '倒在地上生死不明');
+    }});
+
+    Ch4.conn('l1_table3', 'l1_note3a');
+    Ch4.conn('l1_table3', 'l1_note3b');
+    Ch4.conn('l1_table3', 'l1_triangle');
+    Ch4.conn('l1_table3', 'l1_hall3');
+    Ch4.conn('l1_hall3', 'l1_square_pillar');
+    Ch4.conn('l1_hall3', 'l1_left_door');
+    Ch4.conn('l1_hall3', 'l1_doll_door');
+    Ch4.conn('l1_hall3', 'l1_big_painting');
+    Ch4.conn('l1_hall3', 'l1_puzzle_table');
+    Ch4.conn('l1_hall3', 'l1_man_with_key');
+    Ch4.conn('l1_hall3', 'l1_masked_man');
+
+    Renderer.render();
+    Renderer.centerView();
+  }
+
+  // 方形柱子：四步順序填孔，正確順序 圓→五角→三角→方
+  var PILLAR_STEPS = [
+    { hole: '1', expect: 'l1_cylinder',   label: '圆形柱状物' },
+    { hole: '2', expect: 'l1_pentagon',   label: '五角形柱状物' },
+    { hole: '3', expect: 'l1_triangle',   label: '三角形柱状物' },
+    { hole: '4', expect: 'square',        label: '方形柱子本身' }
+  ];
+  function onSquarePillar() {
+    var f = F();
+    if (f.l1_pillarSolved) {
+      Ch4.toast('柱子已经升起来了。');
+      return;
+    }
+    var missing = [];
+    if (!Inventory.has('l1_cylinder')) missing.push('圆形');
+    if (!Inventory.has('l1_pentagon')) missing.push('五角形');
+    if (!Inventory.has('l1_triangle')) missing.push('三角形');
+    if (missing.length > 0) {
+      Core.showDialog('方形柱子', '上面有几个孔洞，好像需要什么东西填充<br><br><span style="color:#ff8888;">还缺少：' + missing.join('、') + '</span>');
+      return;
+    }
+    askPillarStep(0);
+  }
+  function askPillarStep(i) {
+    if (i >= PILLAR_STEPS.length) {
+      pillarSolved();
+      return;
+    }
+    var s = PILLAR_STEPS[i];
+    var actions = [];
+    if (Inventory.has('l1_cylinder')) actions.push({ label: '放入圆形', onClick: function () { checkPillar(i, 'l1_cylinder'); } });
+    if (Inventory.has('l1_pentagon')) actions.push({ label: '放入五角形', onClick: function () { checkPillar(i, 'l1_pentagon'); } });
+    if (Inventory.has('l1_triangle')) actions.push({ label: '放入三角形', onClick: function () { checkPillar(i, 'l1_triangle'); } });
+    if (i === 3) actions.push({ label: '方形（柱子本身）', primary: true, onClick: function () { checkPillar(i, 'square'); } });
+    Core.showDialog('方形柱子', '第 ' + s.hole + ' 个孔洞要放什么？<br><span style="color:rgba(200,210,230,.7);">对照画中元素：1月亮 / 2星星 / 3山 / 4房子</span>', actions);
+  }
+  function checkPillar(i, choice) {
+    var s = PILLAR_STEPS[i];
+    if (choice === s.expect) {
+      Ch4.toast('咔哒——放入正确');
+      askPillarStep(i + 1);
+    } else {
+      Core.showDialog('错误', '形状不对，孔洞纹丝不动。<br>重新想一想画中元素的顺序。').then(function () {
+        askPillarStep(0);
+      });
+    }
+  }
+  function pillarSolved() {
+    var f = F();
+    f.l1_pillarSolved = true;
+    Core.showDialog('机关', '一个柱子升了起来，上面有一个按钮').then(function () {
+      Ch4.add('l1_button', '按钮', { onClick: function () {
+        if (f.l1_escaped) return;
+        f.l1_escaped = true;
+        Inventory.add({ id: 'l1_bronze_key', name: '铜钥匙', icon: '🗝️', detail: '升起来的柱子上放着一把铜钥匙' });
+        Inventory.render();
+        Ch4.levelCleared(1, 'ch4_l1_escape', '最后一个我逃了出来');
+        try { AchievementSystem.unlock('ch4_l1_clear'); } catch (e) {}
+        Ch4.showEnding(
+          '<div class="ending-title">结 局</div>' +
+          '<div style="font-size:1.2rem;margin-bottom:16px;">最后一个我逃了出来</div>' +
+          '<div style="font-size:0.85rem;color:rgba(200,210,230,.75);line-height:1.9;">' +
+          '你用铜钥匙打开了出口。<br>' +
+          '门后没有走廊，只有一面镜子——<br>' +
+          '循环闭合的那一刻，所有的「我」都消失了。' +
+          '</div>' +
+          '<button class="ending-btn" onclick="document.getElementById(\'endingScreen\').classList.remove(\'show\');Ch4.start();">返回实验室</button>'
+        );
+      }});
+      Ch4.conn('l1_square_pillar', 'l1_button');
+      Renderer.render();
+    });
+  }
+
+  // ---------- 關卡物件 ----------
+  Ch4.levels[1] = {
+    start: function () {
+      var f = F();
+      // 若從中斷恢復（已到第2/3輪），根據旗標重建
+      if (f.l1_round === 3) { rebuildRound3(); return; }
+      if (f.l1_round === 2) { rebuildRound2(); return; }
+      rebuildRound1();
+    },
+    onNodeClick: function (node) {
+      // 所有互動都在 add 時的 onClick 處理，這裡保留空實作
+    },
+    useItemOnNode: function (itemId, nodeId) {
+      var f = F();
+      // 鬧鐘鑰匙 → 置物櫃
+      if (itemId === 'l1_clock_key' && nodeId === 'l1_locker') {
+        if (f.l1_lockerOpen) { Ch4.toast('柜子已经开过了'); return true; }
+        f.l1_lockerOpen = true;
+        Inventory.remove('l1_clock_key');
+        Inventory.render();
+        Core.showDialog('置物柜', '一个储物柜<br><b style="color:#ffb86c;">棒球棒。一只棒球棒</b><br>很结实').then(function () {
+          Inventory.add({ id: 'l1_bat', name: '棒球棒', icon: '🏏', detail: '很结实的棒球棒' });
+          Inventory.render();
+          Ch4.toast('获得物品：棒球棒');
+        });
+        var n = Ch4.node('l1_locker');
+        if (n) { n.completed = true; n.label = '置物柜（已开）'; }
+        Renderer.render();
+        return true;
+      }
+      // 魚線 + 蟹餌 → 魚缸（組合）
+      if ((itemId === 'l1_fishing_line' || itemId === 'l1_bait') && nodeId === 'l1_fishtank') {
+        if (f.l1_fished) { Ch4.toast('鱼已经钓完了'); return true; }
+        if (!Inventory.has('l1_fishing_line') || !Inventory.has('l1_bait')) {
+          Ch4.toast('需要鱼线和蟹饵一起用');
+          return true;
+        }
+        f.l1_fished = true;
+        Inventory.remove('l1_fishing_line');
+        Inventory.remove('l1_bait');
+        Inventory.render();
+        Core.showDialog('鱼缸', '你把蟹饵系在鱼线上探进鱼缸——<br>几只螃蟹扑上来咬饵，被你一把钓起。<br>鱼缸底部，沉着<b style="color:#ffb86c;">一把平平无奇的钥匙</b><br><span style="color:#ff8888;">上面沾满血</span>').then(function () {
+          Inventory.add({ id: 'l1_r2_key', name: '钥匙', icon: '🗝️', detail: '从破水管里钓出来的钥匙，沾满血' });
+          Inventory.render();
+          Ch4.toast('获得物品：钥匙');
+        });
+        return true;
+      }
+      // 第二輪鑰匙 → 門縫（塞給過去的自己）
+      if (itemId === 'l1_r2_key' && nodeId === 'l1_door_gap') {
+        if (f.l1_keyPassed) { Ch4.toast('钥匙已经塞出去了'); return true; }
+        f.l1_keyPassed = true;
+        Inventory.remove('l1_r2_key');
+        Inventory.render();
+        Core.showDialog('门缝', '你把钥匙从门缝塞了出去。<br>门外传来一声闷响——你又一次眼前一黑。').then(function () {
+          rebuildRound3();
+        });
+        return true;
+      }
+      return false;
+    }
+  };
+})();
+
+
+// ===== CH4 LEVEL 2：鏡中世界 =====
+// 實驗體 20004。馬桶沖水計數、2秒內連沖4次觸發鏡子傳送、鏡像世界密碼鎖、鋁熱反應炸開鈦合金門。
+(function () {
+  function F() { G.ch4.flags = G.ch4.flags || {}; return G.ch4.flags; }
+
+  function buildRealWorld() {
+    Renderer.clear();
+    var f = F();
+    f.l2_world = 'real';
+
+    Ch4.add('l2_hall', '大厅', { root: true, w: 140, h: 50, onClick: function () {
+      Core.showDialog('大厅', '宽敞的大厅');
+    }});
+    Ch4.add('l2_mirror', '巨大的镜子', { onClick: function () {
+      if (f.l2_portalOpen) {
+        Core.showDialog('镜子', '镜子发出淡淡的光芒，镜面像水面一样波动着。<br><b style="color:#ffb86c;">要穿过去吗？</b>', [
+          { label: '穿过去', primary: true, onClick: function () {
+            Core.showDialog('镜像世界', '这里结构与刚才的大厅一模一样，只是所有的一切都反过来了').then(function () {
+              buildMirrorWorld();
+            });
+          }},
+          { label: '再看看', onClick: function () {} }
+        ]);
+      } else {
+        Core.showDialog('镜子', '一面巨大的镜子，恐怖的是，你竟然没有出现在镜子里');
+      }
+    }});
+    Ch4.add('l2_corridor', '过道', { onClick: function () {
+      Core.showDialog('过道', '一条过道');
+    }});
+    Ch4.add('l2_bathroom', '卫生间', { onClick: function () {
+      Core.showDialog('卫生间', '一间普通的卫生间');
+    }});
+    Ch4.add('l2_toilet', '马桶', { onClick: function () {
+      Core.showDialog('马桶', '一个白色的马桶，冲水按钮崭新发亮。');
+    }});
+    Ch4.add('l2_flush', '冲水按钮', { onClick: onFlush });
+
+    Ch4.add('l2_lab_door', '左侧房门', { onClick: function () {
+      Core.showDialog('左侧房门', '推开房门，是一间实验室。');
+    }});
+    Ch4.add('l2_lab', '实验室', { onClick: function () {
+      Core.showDialog('实验室', '架子上摆着各种化学试剂，墙上贴着元素周期表。');
+    }});
+    Ch4.add('l2_titanium_door', '钛合金门', { onClick: function () {
+      if (f.l2_doorBlown) {
+        Core.showDialog('钛合金门', '门已经被炸开，外面是走廊。');
+      } else {
+        Core.showDialog('钛合金门', '门被锁住了，锁头似乎是钛合金做的，砸十年都砸不开，连爆炸都炸不开');
+      }
+    }});
+    Ch4.add('l2_wall', '元素周期表', { onClick: function () {
+      Core.showDialog('元素周期表', '墙上贴着元素周期表<br><span style="color:#ffb86c;">Mn（锰）原子序数 25</span>，<span style="color:#ffb86c;">O（氧）原子序数 8</span>');
+    }});
+    Ch4.add('l2_cabinet', '玻璃柜', { onClick: function () {
+      if (f.l2_cabinetBroken) {
+        Core.showDialog('玻璃柜', '玻璃被敲碎了，柜里空空的。');
+      } else {
+        Core.showDialog('玻璃柜', '一个玻璃柜，里面摆着几瓶试剂，玻璃很厚。');
+      }
+    }});
+    Ch4.add('l2_mno2_item', '二氧化锰', { onClick: function () {
+      if (!f.l2_gotMno2) {
+        f.l2_gotMno2 = true;
+        Inventory.add({ id: 'l2_mno2', name: '二氧化锰', icon: '🧪', detail: '一瓶二氧化锰' });
+        Inventory.render();
+        Ch4.toast('拾取了二氧化锰');
+      }
+      Core.showDialog('二氧化锰', '一瓶二氧化锰');
+    }});
+    Ch4.add('l2_al_item', '铝粉', { onClick: function () {
+      if (!f.l2_gotAl) {
+        f.l2_gotAl = true;
+        Inventory.add({ id: 'l2_al', name: '铝粉', icon: '🥫', detail: '一大罐铝粉，实验用' });
+        Inventory.render();
+        Ch4.toast('拾取了铝粉');
+      }
+      Core.showDialog('铝粉', '上面一大罐铝粉，似乎是实验用的');
+    }});
+    Ch4.add('l2_igniter_item', '点火器', { onClick: function () {
+      if (!f.l2_gotIgniter) {
+        f.l2_gotIgniter = true;
+        Inventory.add({ id: 'l2_igniter', name: '点火器', icon: '🔥', detail: '一个点火器' });
+        Inventory.render();
+        Ch4.toast('拾取了点火器');
+      }
+      Core.showDialog('点火器', '点火器');
+    }});
+    Ch4.add('l2_notebook', '笔记', { onClick: function () {
+      Core.showDialog('笔记', '铝和二氧化锰的反应属于铝热反应……<br>高温可以迅速点燃周围粉尘，发生爆炸');
+    }});
+    Ch4.add('l2_diary', '上锁的日记', { onClick: function () {
+      if (f.l2_diaryBroken) {
+        Core.showDialog('日记', '被砸开的日记<br><br><b style="color:#ffb86c;">2秒内连续冲4次马桶，镜子里有东西</b>');
+      } else {
+        Core.showDialog('上锁的日记', '上锁的日记，封面写着：<br>「这个密码绝对没人知道」');
+      }
+    }});
+    Ch4.add('l2_hammer_item', '锤子', { onClick: function () {
+      if (!f.l2_gotHammer) {
+        f.l2_gotHammer = true;
+        Inventory.add({ id: 'l2_hammer', name: '锤子', icon: '🔨', detail: '普普通通的锤子' });
+        Inventory.render();
+        Ch4.toast('拾取了锤子');
+      }
+      Core.showDialog('锤子', '普普通通的锤子');
+    }});
+
+    // 連接
+    Ch4.conn('l2_hall', 'l2_mirror');
+    Ch4.conn('l2_hall', 'l2_corridor');
+    Ch4.conn('l2_corridor', 'l2_bathroom');
+    Ch4.conn('l2_bathroom', 'l2_toilet');
+    Ch4.conn('l2_toilet', 'l2_flush');
+    Ch4.conn('l2_hall', 'l2_lab_door');
+    Ch4.conn('l2_lab_door', 'l2_lab');
+    Ch4.conn('l2_lab', 'l2_titanium_door');
+    Ch4.conn('l2_lab', 'l2_wall');
+    Ch4.conn('l2_lab', 'l2_cabinet');
+    Ch4.conn('l2_cabinet', 'l2_mno2_item');
+    Ch4.conn('l2_cabinet', 'l2_al_item');
+    Ch4.conn('l2_cabinet', 'l2_igniter_item');
+    Ch4.conn('l2_lab', 'l2_notebook');
+    Ch4.conn('l2_lab', 'l2_diary');
+    Ch4.conn('l2_lab', 'l2_hammer_item');
+
+    Renderer.render();
+    Renderer.centerView();
+  }
+
+  // 沖水計數
+  function onFlush() {
+    var f = F();
+    f.l2_flushCount = (f.l2_flushCount || 0) + 1;
+    f.l2_flushTimes = f.l2_flushTimes || [];
+    var now = Date.now();
+    f.l2_flushTimes.push(now);
+    // 只保留最近 10 次
+    if (f.l2_flushTimes.length > 10) f.l2_flushTimes.shift();
+
+    Ch4.toast('冲水中……（第 ' + f.l2_flushCount + ' 次）');
+
+    // 100 次成就
+    if (f.l2_flushCount >= 100 && !f.l2_toiletAch) {
+      f.l2_toiletAch = true;
+      try { AchievementSystem.unlock('ch4_ach_toilet'); } catch (e) {}
+      Core.toast('成就解锁：痴迷马桶');
+    }
+
+    // 2秒內連續4次 → 鏡子傳送
+    if (!f.l2_portalOpen && f.l2_flushTimes.length >= 4) {
+      var recent = f.l2_flushTimes.slice(-4);
+      var span = recent[3] - recent[0];
+      if (span <= 2000) {
+        f.l2_portalOpen = true;
+        Core.showDialog('异变', '你刚刚在2秒内连冲了4次马桶……<br>远处的镜子——<br><b style="color:#ffb86c;">镜子发出淡淡的光芒</b>');
+      }
+    }
+  }
+
+  function buildMirrorWorld() {
+    Renderer.clear();
+    var f = F();
+    f.l2_world = 'mirror';
+
+    Ch4.add('l2_hall_m', '镜像大厅', { root: true, w: 140, h: 50, onClick: function () {
+      Core.showDialog('镜像大厅', '这里结构与刚才的大厅一模一样，只是所有的一切都反过来了');
+    }});
+    Ch4.add('l2_corridor_m', '镜像过道', { onClick: function () {
+      Core.showDialog('镜像过道', '过道里弥漫着一股说不出的异味。');
+    }});
+    Ch4.add('l2_unknown', '不可名状之物', { onClick: function () {
+      Core.showDialog('恐怖', '黑暗中有什么东西在倒数……<br><span style="color:#ff8888;">你感到一阵寒意，不敢靠近。</span>');
+    }});
+    Ch4.add('l2_bathroom_m', '镜像卫生间', { onClick: function () {
+      Core.showDialog('镜像卫生间', '卫生间的摆设也都是反的。');
+    }});
+    Ch4.add('l2_toilet_m', '马桶', { onClick: function () {
+      Core.showDialog('马桶', '镜像里的马桶，冲水按钮也是反着的。');
+    }});
+    Ch4.add('l2_flush_m', '冲水按钮', { onClick: onFlush });
+
+    Ch4.add('l2_lab_m', '镜像实验室', { onClick: function () {
+      Core.showDialog('镜像实验室', '实验室里一片狼藉。');
+    }});
+    Ch4.add('l2_locker_m', '储物柜', { onClick: function () {
+      if (f.l2_lockerOpen) {
+        Core.showDialog('储物柜', '柜子已经打开了。');
+      } else {
+        PasswordPanel.show(4, '8825', '二氧化锰 Mn 原子序数25、O 为8，镜像世界一切反过来', function () {
+          f.l2_lockerOpen = true;
+          var n = Ch4.node('l2_locker_m');
+          if (n) { n.completed = true; n.label = '储物柜（已开）'; }
+          Core.showDialog('储物柜', '一个储物柜里面一只老旧的棒球棍，感觉经历了很多').then(function () {
+            Inventory.add({ id: 'l2_old_bat', name: '老旧棒球棍', icon: '🏏', detail: '感觉经历了很多的棒球棍' });
+            Inventory.render();
+            Ch4.toast('获得物品：老旧棒球棍');
+          });
+          Renderer.render();
+        });
+      }
+    }});
+    Ch4.add('l2_diary_m', '摊开的日记', { onClick: function () {
+      Core.showDialog('摊开的日记', '日记摊在桌上，最后一页写着：<br>「镜像世界的密码，要把数字反过来读。」');
+    }});
+    Ch4.add('l2_wall_m', '元素周期表', { onClick: function () {
+      Core.showDialog('元素周期表', '墙上贴着元素周期表，所有元素符号都是反的。');
+    }});
+    Ch4.add('l2_broken', '仪器', { onClick: function () {
+      Core.showDialog('仪器', '看起来被什么东西暴力损坏了');
+    }});
+    Ch4.add('l2_darkroom', '暗室', { onClick: function () {
+      Core.showDialog('暗室', '这里被收拾的干干净净，空空如也');
+    }});
+    Ch4.add('l2_fuse_item', '引线', { onClick: function () {
+      if (!f.l2_gotFuse) {
+        f.l2_gotFuse = true;
+        Inventory.add({ id: 'l2_fuse', name: '引线', icon: '🧵', detail: '一根引线' });
+        Inventory.render();
+        Ch4.toast('拾取了引线');
+      }
+      Core.showDialog('引线', '一根引线');
+    }});
+    Ch4.add('l2_secret', '密室', { onClick: function () {
+      Core.showDialog('密室', '一桶油');
+    }});
+
+    // 連接
+    Ch4.conn('l2_hall_m', 'l2_corridor_m');
+    Ch4.conn('l2_corridor_m', 'l2_unknown');
+    Ch4.conn('l2_hall_m', 'l2_bathroom_m');
+    Ch4.conn('l2_bathroom_m', 'l2_toilet_m');
+    Ch4.conn('l2_toilet_m', 'l2_flush_m');
+    Ch4.conn('l2_hall_m', 'l2_lab_m');
+    Ch4.conn('l2_lab_m', 'l2_locker_m');
+    Ch4.conn('l2_lab_m', 'l2_diary_m');
+    Ch4.conn('l2_lab_m', 'l2_wall_m');
+    Ch4.conn('l2_lab_m', 'l2_broken');
+    Ch4.conn('l2_lab_m', 'l2_darkroom');
+    Ch4.conn('l2_darkroom', 'l2_fuse_item');
+    Ch4.conn('l2_lab_m', 'l2_secret');
+
+    Renderer.render();
+    Renderer.centerView();
+  }
+
+  function triggerEnding() {
+    var f = F();
+    if (f.l2_escaped) return;
+    f.l2_escaped = true;
+    f.l2_doorBlown = true;
+    Inventory.remove('l2_al');
+    Inventory.remove('l2_mno2');
+    Inventory.remove('l2_fuse');
+    Inventory.remove('l2_igniter');
+    Inventory.render();
+    Core.showDialog('爆炸',
+      '铝粉与二氧化锰在钛合金门前相遇——<br>' +
+      '引线嘶嘶燃烧，点火器划出火花。<br>' +
+      '<b style="color:#ff8888;">轰！！！</b><br>' +
+      '白炽的铝热焰熔穿了钛合金。<br><br>' +
+      '烟尘散开，门后墙上挂着一份调查报告——<br>' +
+      '<b style="color:#ffb86c;">看起来像是牛马羊的结合体</b>').then(function () {
+      Ch4.levelCleared(2, 'ch4_l2_escape', '调查报告');
+      try { AchievementSystem.unlock('ch4_l2_clear'); } catch (e) {}
+      Ch4.showEnding(
+        '<div class="ending-title">结 局</div>' +
+        '<div style="font-size:1.2rem;margin-bottom:16px;">调查报告</div>' +
+        '<div style="font-size:0.85rem;color:rgba(200,210,230,.75);line-height:1.9;">' +
+        '你拿着那份调查报告，身后的镜子碎裂成无数片。<br>' +
+        '牛马羊的结合体——那就是实验体的真相。' +
+        '</div>' +
+        '<button class="ending-btn" onclick="document.getElementById(\'endingScreen\').classList.remove(\'show\');Ch4.start();">返回实验室</button>'
+      );
+    });
+  }
+
+  Ch4.levels[2] = {
+    start: function () {
+      var f = F();
+      if (f.l2_world === 'mirror') { buildMirrorWorld(); return; }
+      buildRealWorld();
+    },
+    onNodeClick: function (node) {},
+    useItemOnNode: function (itemId, nodeId) {
+      var f = F();
+      // 錘子砸玻璃櫃
+      if (itemId === 'l2_hammer' && nodeId === 'l2_cabinet') {
+        if (f.l2_cabinetBroken) { Ch4.toast('柜子已经碎了'); return true; }
+        f.l2_cabinetBroken = true;
+        Core.showDialog('玻璃柜', '玻璃被敲碎了').then(function () {
+          Ch4.toast('柜里的试剂可以拿了');
+        });
+        var n = Ch4.node('l2_cabinet');
+        if (n) { n.completed = true; n.label = '玻璃柜（已碎）'; }
+        Renderer.render();
+        return true;
+      }
+      // 錘子砸日記
+      if (itemId === 'l2_hammer' && nodeId === 'l2_diary') {
+        if (f.l2_diaryBroken) { Ch4.toast('日记已经砸开了'); return true; }
+        f.l2_diaryBroken = true;
+        Core.showDialog('日记', '被砸开的日记<br><br><b style="color:#ffb86c;">2秒内连续冲4次马桶，镜子里有东西</b>');
+        var n = Ch4.node('l2_diary');
+        if (n) { n.completed = true; n.label = '日记（已开）'; }
+        Renderer.render();
+        return true;
+      }
+      // 鋁熱反應四件套 → 鈦合金門
+      if (nodeId === 'l2_titanium_door') {
+        if (f.l2_doorBlown) { Ch4.toast('门已经炸开了'); return true; }
+        var need = ['l2_al', 'l2_mno2', 'l2_fuse', 'l2_igniter'];
+        var missing = need.filter(function (id) { return !Inventory.has(id); });
+        if (missing.length === 0) {
+          triggerEnding();
+        } else {
+          Ch4.toast('需要铝粉、二氧化锰、引线、点火器一起用');
+        }
+        return true;
+      }
+      return false;
+    }
+  };
+})();
+
+
+// ===== CH4 LEVEL 3 =====
+Ch4.levels[3] = {
+  start() {
+    G.ch4.flags = G.ch4.flags || {};
+    const F = G.ch4.flags;
+
+    // 房間根節點
+    this.add('l3_study', '书房', { root: true, w: 140, h: 50 });
+    this.add('l3_desk', '书桌', { onClick: () => this.onDeskClick() });
+    this.add('l3_bookshelf', '书架', { onClick: () => this.onBookshelfClick() });
+    this.add('l3_cabinet', '矮柜', { onClick: () => this.toast('一个很矮的柜子，里面只有一些灰尘。') });
+    this.add('l3_legopile', '一堆乐高玩具', { onClick: () => this.openLegoPile() });
+    this.add('l3_window', '落地窗', { onClick: () => this.onWindowClick() });
+    this.add('l3_vent', '通风口', { onClick: () => this.onVentClick() });
+
+    this.conn('l3_study', 'l3_desk');
+    this.conn('l3_study', 'l3_bookshelf');
+    this.conn('l3_study', 'l3_cabinet');
+    this.conn('l3_study', 'l3_legopile');
+    this.conn('l3_study', 'l3_window');
+    this.conn('l3_study', 'l3_vent');
+
+    // 開局旁白
+    Core.showDialog('书房', '这里像是你的书房，只不过特别大，所有东西都很大');
+
+    Renderer.render();
+    Renderer.centerView();
+  },
+
+  // ---------- 書桌 ----------
+  onDeskClick() {
+    if (G.ch4.flags.l3_deskUp) {
+      this.toast('书桌上的东西你都看过了。');
+      return;
+    }
+    Core.showDialog('书桌', '一张书桌<br>放着好多书和好多模型');
+  },
+
+  // ---------- 書架：連點四次拿四樣材料 ----------
+  onBookshelfClick() {
+    G.ch4.flags = G.ch4.flags || {};
+    const F = G.ch4.flags;
+    const taps = F.l3_bookshelfTaps || 0;
+    if (taps >= 4) {
+      this.toast('书架上的东西都拿完了。');
+      return;
+    }
+    const materials = [
+      { id: 'l3_rubber', name: '橡皮筋', icon: '🩹', detail: '书架上找到的橡皮筋' },
+      { id: 'l3_cotton', name: '棉签', icon: '🍯', detail: '书架上找到的棉签' },
+      { id: 'l3_thread', name: '细线', icon: '🧵', detail: '书架上找到的细线' },
+      { id: 'l3_needle', name: '针', icon: '📌', detail: '书架上找到的针' },
+    ];
+    const m = materials[taps];
+    Inventory.add({ id: m.id, name: m.name, icon: m.icon, detail: m.detail });
+    F.l3_bookshelfTaps = taps + 1;
+    this.toast('书架上找到：' + m.name);
+    if (F.l3_bookshelfTaps === 4) {
+      this.toast('四样材料都齐了，也许可以在书桌上做点什么。');
+    }
+  },
+
+  // ---------- 樂高區 ----------
+  openLegoPile() {
+    G.ch4.flags = G.ch4.flags || {};
+    const F = G.ch4.flags;
+    if (!F.l3_legoOpened) {
+      F.l3_legoOpened = true;
+      this.add('l3_legoladder', '乐高梯子', { onClick: () => this.onLegoLadder() });
+      this.add('l3_legoplane', '乐高飞机', { onClick: () => this.onLegoPlane() });
+      this.add('l3_legobomb', '乐高核弹', { onClick: () => this.onLegoBomb() });
+      this.add('l3_legopark', '乐高游乐场', { onClick: () => this.onLegoPark() });
+      this.conn('l3_legopile', 'l3_legoladder');
+      this.conn('l3_legopile', 'l3_legoplane');
+      this.conn('l3_legopile', 'l3_legobomb');
+      this.conn('l3_legopile', 'l3_legopark');
+      Renderer.render();
+      Core.showDialog('一堆乐高玩具', '散落着各式各样的乐高玩具<br>里面有一些梯子，似乎可以用来攀爬');
+    } else {
+      this.toast('散落着各式各样的乐高玩具。');
+    }
+  },
+  onLegoLadder() {
+    G.ch4.flags = G.ch4.flags || {};
+    const F = G.ch4.flags;
+    if (F.l3_hasLadder) {
+      this.toast('乐高梯子已经收起来了。');
+      return;
+    }
+    F.l3_hasLadder = true;
+    Inventory.add({ id: 'l3_legoladder', name: '乐高梯子', icon: '🪜', detail: '打开了一把乐高梯子，可以用来攀爬' });
+    Core.showDialog('乐高梯子', '打开了一把乐高梯子，可以用来攀爬');
+  },
+  onLegoPlane() {
+    G.ch4.flags = G.ch4.flags || {};
+    const F = G.ch4.flags;
+    if (F.l3_planeBroken) {
+      this.toast('乐高飞机已经被你玩坏了。');
+      return;
+    }
+    F.l3_planeTaps = (F.l3_planeTaps || 0) + 1;
+    if (F.l3_planeTaps >= 5) {
+      F.l3_planeBroken = true;
+      const n = Ch4.node('l3_legoplane');
+      if (n) { n.completed = true; n.label = '乐高飞机(坏)'; }
+      Core.showDialog('乐高飞机', '你把飞机飞了出去……<br>哐当一声，它撞在墙上摔成了碎片。<br><br><b style="color:#ffb86c;">彩蛋：乐高飞机被你玩坏了。</b>');
+      Renderer.render();
+    } else {
+      this.toast('有了它感觉哪里都能去');
+    }
+  },
+  onLegoBomb() {
+    G.ch4.flags = G.ch4.flags || {};
+    const F = G.ch4.flags;
+    if (F.l3_bombBroken) {
+      this.toast('乐高核弹已经被你玩坏了。');
+      return;
+    }
+    F.l3_bombTaps = (F.l3_bombTaps || 0) + 1;
+    if (F.l3_bombTaps >= 5) {
+      F.l3_bombBroken = true;
+      const n = Ch4.node('l3_legobomb');
+      if (n) { n.completed = true; n.label = '乐高核弹(坏)'; }
+      Core.showDialog('乐高核弹', '你掂了掂这枚核弹……<br>手一滑，它掉在地上裂开了，漏出里面的电池。<br><br><b style="color:#ffb86c;">彩蛋：乐高核弹被你玩坏了。</b>');
+      Renderer.render();
+    } else {
+      this.toast('一枚乐高核弹似乎可以毁灭世界');
+    }
+  },
+  onLegoPark() {
+    G.ch4.flags = G.ch4.flags || {};
+    const F = G.ch4.flags;
+    if (F.l3_parkOpen) {
+      this.toast('乐高游乐场的密码锁已经打开了。');
+      return;
+    }
+    PasswordPanel.show(3, '119', '起火不报警，119小火变大火', () => {
+      F.l3_parkOpen = true;
+      const n = Ch4.node('l3_legopark');
+      if (n) { n.completed = true; n.label = '乐高游乐场(已开)'; }
+      Inventory.add({ id: 'l3_part', name: '乐高零件', icon: '🧩', detail: '从游乐场里找到的简单小零件' });
+      Core.showDialog('乐高游乐场', '密码锁咔哒一声开了。<br>你从里面翻出一颗小零件。');
+      Renderer.render();
+    });
+  },
+
+  // ---------- 落地窗 ----------
+  onWindowClick() {
+    this.toast('坚硬的窗户很难打碎，窗外似乎写着几个字：去屋顶');
+  },
+
+  // ---------- 通風口 → 屋頂 ----------
+  onVentClick() {
+    G.ch4.flags = G.ch4.flags || {};
+    const F = G.ch4.flags;
+    if (F.l3_roofOpen) {
+      this.toast('通风口已经通向屋顶了。');
+      return;
+    }
+    Core.showDialog('通风口',
+      '一个通风口似乎可以通到屋顶<br>通风口太小了<br>只能自己进入',
+      [
+        { label: '取消', value: false },
+        { label: '自己进去', value: true, primary: true }
+      ]).then((go) => {
+      if (!go) return;
+      F.l3_roofOpen = true;
+      this.buildRoof();
+    });
+  },
+
+  // ---------- 屋頂 ----------
+  buildRoof() {
+    const F = G.ch4.flags;
+    this.add('l3_roof', '屋顶', { onClick: () => this.toast('这里是屋顶，一个呼叫器可以调节频道') });
+    this.add('l3_caller', '呼叫器', { onClick: () => this.onCaller() });
+    this.add('l3_memo', '备忘图片', { onClick: () => this.onMemo() });
+    this.add('l3_a_cat', '野猫', { onClick: () => this.onAnimal('l3_a_cat', '野猫') });
+    this.add('l3_a_eagle', '老鹰', { onClick: () => this.onAnimal('l3_a_eagle', '老鹰') });
+    this.add('l3_a_dog', '野狗', { onClick: () => this.onAnimal('l3_a_dog', '野狗') });
+    this.conn('l3_vent', 'l3_roof');
+    this.conn('l3_roof', 'l3_caller');
+    this.conn('l3_roof', 'l3_memo');
+    this.conn('l3_roof', 'l3_a_cat');
+    this.conn('l3_roof', 'l3_a_eagle');
+    this.conn('l3_roof', 'l3_a_dog');
+    Renderer.render();
+    this.toast('你从通风口爬到了屋顶。');
+  },
+  onCaller() {
+    const F = G.ch4.flags;
+    if (F.l3_callerSet) {
+      this.toast('呼叫器已经调到正确频道了。');
+      return;
+    }
+    Core.showDialog('呼叫器',
+      '一个呼叫器，可以调节频道。<br>旁边贴着一张备忘图片，像是一组数字。<br>你试着扭动旋钮。',
+      [
+        { label: '频道 123', value: 123 },
+        { label: '频道 423', value: 423, primary: true },
+        { label: '频道 999', value: 999 }
+      ]).then((v) => {
+      if (v === 423) {
+        F.l3_callerSet = true;
+        const n = Ch4.node('l3_caller');
+        if (n) { n.completed = true; n.label = '呼叫器(423)'; }
+        this.toast('滋滋——频道接通了，里面传来模糊的呼叫声。');
+        Renderer.render();
+      } else {
+        this.toast('滋滋滋……只有电流声。');
+      }
+    });
+  },
+  onMemo() {
+    Core.showDialog('备忘图片',
+      '一张皱巴巴的备忘图片，上面是一组迷宫状的数字。<br>你挪动了几下拼图，把它拼了出来。<br><br>' +
+      '<b style="color:#ffb86c;">拼出的数字是：423</b><br>（这似乎就是呼叫器的频道。）');
+  },
+  onAnimal(id, name) {
+    const F = G.ch4.flags;
+    const node = Ch4.node(id);
+    if (node && node.completed) {
+      this.toast(name + '已经被消灭了。');
+      return;
+    }
+    if (!F.l3_gundamRoof) {
+      this.toast(name + '警惕地看着你，你徒手根本没法靠近。');
+      return;
+    }
+    if (node) { node.completed = true; node.label = name + '(已消灭)'; }
+    this.toast('高达一炮把' + name + '消灭了。');
+    F.l3_animalsDown = (F.l3_animalsDown || 0) + 1;
+    Renderer.render();
+    if (F.l3_animalsDown >= 3) {
+      try { AchievementSystem.unlock('ch4_ach_animal'); } catch (e) {}
+      this.toast('成就达成：动物终结者！');
+    }
+  },
+
+  // ---------- 電子口琴 / 音箱 / 筆電 ----------
+  buildUpDesk() {
+    const F = G.ch4.flags;
+    F.l3_deskUp = true;
+    this.add('l3_harmonica', '电子口琴模型', { onClick: () => this.onHarmonica() });
+    this.add('l3_speaker', '智能音箱', { onClick: () => this.onSpeaker() });
+    this.add('l3_laptop', '笔记本电脑', { onClick: () => this.onLaptop() });
+    this.conn('l3_desk', 'l3_harmonica');
+    this.conn('l3_desk', 'l3_speaker');
+    this.conn('l3_desk', 'l3_laptop');
+    Renderer.render();
+    Core.showDialog('书桌上方', '针头死死的插在书桌上，可以沿着线爬上去');
+  },
+  onHarmonica() {
+    const notes = ['do(C)', 're(D)', 'mi(E)', 'fa(F)', 'so(G)', 'la(A)', 'si(B)'];
+    Core.showDialog('电子口琴模型',
+      '你发现一个电子口琴模型，居然可以发出声音。<br><br>按下面的按键试试：',
+      notes.map((n, i) => ({ label: n, value: n, primary: i === 0 }))
+    ).then((v) => {
+      if (v) this.toast('你吹了一声：' + v);
+    });
+  },
+  onSpeaker() {
+    const F = G.ch4.flags;
+    Core.showDialog('智能音箱',
+      '智能音箱功能强大，超乎想象。<br>它似乎能控制房间里的一切。',
+      [
+        { label: '打开窗帘', value: 'curtain' },
+        { label: '算了', value: 'cancel', primary: true }
+      ]).then((v) => {
+      if (v === 'curtain') {
+        F.l3_curtainOpen = true;
+        this.toast('窗帘缓缓打开，窗外的光洒了进来。');
+      }
+    });
+  },
+  onLaptop() {
+    const F = G.ch4.flags;
+    if (F.l3_desktopOpen) {
+      this.buildDesktop();
+      return;
+    }
+    PasswordPanel.show(4, '0871', '开机提示，数学中的七上八下', () => {
+      F.l3_desktopOpen = true;
+      this.buildDesktop();
+    });
+  },
+
+  // ---------- 電腦桌面 ----------
+  buildDesktop() {
+    const F = G.ch4.flags;
+    if (Ch4.node('l3_desktop')) {
+      this.toast('电脑桌面已经打开了。');
+      return;
+    }
+    this.add('l3_desktop', '电脑桌面', { onClick: () => this.toast('一台笔记本电脑启动') });
+    this.add('l3_studymat', '学习资料', { onClick: () => this.onStudyMat() });
+    this.add('l3_research', '物质缩小研究', { onClick: () => this.toast('未清楚对方组织如何实现无副作用的缩小') });
+    this.add('l3_qq', 'QQ', { onClick: () => this.onQQ() });
+    this.add('l3_gundam_app', '高达应用', { onClick: () => this.onGundamApp() });
+    this.add('l3_music', '录音音乐', { onClick: () => this.onMusic() });
+    this.conn('l3_laptop', 'l3_desktop');
+    this.conn('l3_desktop', 'l3_studymat');
+    this.conn('l3_desktop', 'l3_research');
+    this.conn('l3_desktop', 'l3_qq');
+    this.conn('l3_desktop', 'l3_gundam_app');
+    this.conn('l3_desktop', 'l3_music');
+    Renderer.render();
+    Core.showDialog('笔记本电脑', '一台笔记本电脑启动');
+  },
+  onStudyMat() {
+    const F = G.ch4.flags;
+    if (F.l3_studyboxOpen) {
+      this.toast('学习资料盒已经打开过了。');
+      return;
+    }
+    Core.showDialog('学习资料', '看到这个盘，你心里莫名有些激动<br><br>里面有一个上了锁的盒子。', [
+      { label: '打开资料盒', primary: true }
+    ]).then(() => {
+      PasswordPanel.show(5, '66666', '提示 XXZLP，X=6（彩蛋盒，不影响通关）', () => {
+        F.l3_studyboxOpen = true;
+        Core.showDialog('学习资料盒',
+          '盒子打开了，里面只有三个文件：<br><br>' +
+          '<b>幸存者X的反抗.txt</b> —— 文件已损坏<br>' +
+          '<b>希望终结之达.txt</b> —— 文件已损坏<br>' +
+          '<b>东方神拳录像集.txt</b> —— 文件已损坏<br><br>' +
+          '<span style="color:rgba(200,210,230,.7);">（彩蛋，不影响通关）</span>');
+      });
+    });
+  },
+  onQQ() {
+    this.add('l3_qqgroup', 'XX交流群(320436473)', {
+      onClick: () => Core.showDialog('XX交流群',
+        '群里的消息还停留在几年前：<br>"今天又被实验了……"<br>"有人逃出去了吗？"<br><br>你似乎很喜欢在这里和人交流。')
+    });
+    this.conn('l3_qq', 'l3_qqgroup');
+    Renderer.render();
+    Core.showDialog('QQ', '似乎好久没上线了<br>你似乎很喜欢在这里和人交流');
+  },
+  onGundamApp() {
+    const F = G.ch4.flags;
+    if (F.l3_hasGundam) {
+      this.toast('高达已经启动完成了。');
+      return;
+    }
+    Core.showDialog('高达应用', '完美的杰作，开放式驾驶室', [
+      { label: '启动', primary: true }
+    ]).then(() => {
+      F.l3_hasGundam = true;
+      Inventory.add({ id: 'l3_gundam', name: '高达', icon: '🤖', detail: '完美的杰作，开放式驾驶室' });
+      this.toast('获得：高达！可以开到屋顶上去。');
+    });
+  },
+  onMusic() {
+    this.add('l3_bin', 'bin', {
+      onClick: () => {
+        this.add('l3_pocketmodel', '电子口袋模型', {
+          onClick: () => {
+            Core.showDialog('电子口袋模型',
+              '一个小小的电子口袋模型，可以按出音符：<br>1-do/C，2-re/D，3-mi/E，4-fa/F，5-so/G，6-la/A，7-si/B。<br>（简短玩具，没有后续谜题）',
+              [{ label: '知道了', primary: true }]);
+          }
+        });
+        this.conn('l3_bin', 'l3_pocketmodel');
+        Renderer.render();
+        this.toast('bin 文件夹里藏着一个小游戏。');
+      }
+    });
+    this.conn('l3_music', 'l3_bin');
+    Renderer.render();
+    this.toast('录音音乐文件夹，里面有个 bin。');
+  },
+
+  // ---------- 物品使用 ----------
+  useItemOnNode(itemId, nodeId) {
+    G.ch4.flags = G.ch4.flags || {};
+    const F = G.ch4.flags;
+
+    // 組合：針 + 線 + 橡皮筋（在書桌上）
+    if (itemId === 'l3_needle' && nodeId === 'l3_desk') {
+      if (F.l3_hasBow) {
+        this.toast('弓已经做好了。');
+        return true;
+      }
+      const taps = F.l3_bookshelfTaps || 0;
+      if (taps < 4) {
+        this.toast('书架上的材料还没拿齐（已拿 ' + taps + '/4）。');
+        return true;
+      }
+      Inventory.remove('l3_rubber');
+      Inventory.remove('l3_thread');
+      Inventory.remove('l3_cotton');
+      Inventory.remove('l3_needle');
+      Inventory.add({ id: 'l3_bow', name: '弓', icon: '🏹', detail: '针后挂着线，不可思议，你做了一把弓' });
+      F.l3_hasBow = true;
+      Core.showDialog('书桌', '针后挂着线，不可思议，你做了一把弓<br>用来射点什么？');
+      return true;
+    }
+
+    // 用弓射書桌
+    if (itemId === 'l3_bow' && nodeId === 'l3_desk') {
+      if (F.l3_deskUp) {
+        this.toast('书桌上已经架好线了。');
+        return true;
+      }
+      this.buildUpDesk();
+      return true;
+    }
+
+    // 高達開上屋頂
+    if (itemId === 'l3_gundam' && nodeId === 'l3_roof') {
+      if (F.l3_gundamRoof) {
+        this.toast('高达已经在屋顶上了。');
+        return true;
+      }
+      F.l3_gundamRoof = true;
+      this.add('l3_gundam_roof', '高达(屋顶)', { onClick: () => this.onGundamRoof() });
+      this.conn('l3_roof', 'l3_gundam_roof');
+      Renderer.render();
+      this.toast('你把高达开到了屋顶上。');
+      return true;
+    }
+
+    return false;
+  },
+
+  // ---------- 高達（屋頂）→ 結局 ----------
+  onGundamRoof() {
+    const F = G.ch4.flags;
+    // 先列出武器
+    Core.showDialog('高达',
+      '开放式驾驶室启动。<br>武器系统：<br>· 大砲　· 喷火　· 大剑　· 高温　· 范围攻击<br><br>' +
+      '远处，一个巨型生物正从楼底爬上来。',
+      [
+        { label: '消灭小动物', value: 'animals' },
+        { label: '冲向巨型生物', value: 'finale', primary: true }
+      ]).then((v) => {
+      if (v === 'animals') {
+        this.toast('你可以直接点击屋顶上的野猫 / 老鹰 / 野狗来消灭它们。');
+        return;
+      }
+      // 結局
+      this.finale();
+    });
+  },
+
+  finale() {
+    const F = G.ch4.flags;
+    try { AchievementSystem.unlock('ch4_l3_clear'); } catch (e) {}
+    Ch4.levelCleared(3, 'ch4_l3_escape', '弹射逃生');
+    Ch4.showEnding(
+      '<div class="ending-title">结 局</div>' +
+      '<div style="font-size:1.2rem;margin-bottom:16px;">弹射逃生</div>' +
+      '<div style="font-size:0.85rem;color:rgba(200,210,230,.75);line-height:1.9;">' +
+      '你在冲向对方时启动核爆程序后，及时弹出逃生，但也被冲击波震昏过去' +
+      '</div>' +
+      '<button class="ending-btn" onclick="document.getElementById(\'endingScreen\').classList.remove(\'show\');Ch4.start();">返回实验室</button>'
+    );
+  },
+};
+
+
+// ===== CH4 LEVEL 4：蝴蝶效應 =====
+// 橫跨 2023 / 2033 / 2043 三個年代，六結局 + 三失敗結局
+// 密碼：保險箱 0812、意向表 922、凱撒 612、聚變方程 3461、保存容器 3557
+Ch4.levels[4] = {
+  // ---------- 進入關卡 ----------
+  start() {
+    G.ch4.flags = G.ch4.flags || {};
+    // 每一次從關卡入口進入（含失敗重開）都重置本關旗標；
+    // 2023→2033→2043 由內部 _gotoYear 切換，不重進 start()。
+    G.ch4.flags.l4_choice       = null;   // 'med' / 'sci'
+    G.ch4.flags.l4_keepShampoo  = true;   // 生髮水留著
+    G.ch4.flags.l4_keepPoison   = true;   // 毒鼠強留著
+    G.ch4.flags.l4_stabilizer   = null;   // true/false 玩家是否給穩定器
+    G.ch4.flags.l4_sakuraPlanted= false;  // 種了櫻花樹
+    G.ch4.flags.l4_saveShiqiang = null;   // true/false 救石強
+    G.ch4.flags.l4_blueSolution = false;  // 醫學院疫苗加藍色溶液
+    G.ch4.flags.l4_gotDoc       = false;
+    G.ch4.flags.l4_gotPoison    = false;
+    G.ch4.flags.l4_gotShampoo   = false;
+    G.ch4.flags.l4_bedTaken     = false;
+    G.ch4.flags.l4_storageTaken = false;
+    G.ch4.flags.l4_safeOpen     = false;
+    G.ch4.flags.l4_blackOpen    = false;
+    G.ch4.flags.l4_trashLooted   = false;
+    G.ch4.flags.l4_riverVisit    = 0;
+    G.ch4.flags.l4_magSolved     = false;
+    G.ch4.flags.l4_eqSolved      = false;
+    G.ch4.flags.l4_sunDone       = false;
+    G.ch4.flags.l4_published     = false;
+    G.ch4.flags.l4_containerOpen = false;
+    this._build2023();
+  },
+
+  // ---------- 切換年代 ----------
+  _gotoYear(year) {
+    Renderer.clear();
+    if (year === 2033) this._build2033();
+    else if (year === 2043) this._build2043();
+  },
+
+  // ============================================================
+  // 2023 年：父親家
+  // ============================================================
+  _build2023() {
+    this.add('l4_home23', '家（2023年）', { root: true, w: 160, h: 50 });
+    // 四個房間
+    this.add('l4_frontdoor', '大门', {});
+    this.add('l4_bedroom',  '父亲的卧室', {});
+    this.add('l4_living',   '客厅', {});
+    this.add('l4_table',    '桌子', {});
+    this.conn('l4_home23', 'l4_frontdoor');
+    this.conn('l4_home23', 'l4_bedroom');
+    this.conn('l4_home23', 'l4_living');
+    this.conn('l4_home23', 'l4_table');
+
+    // 大門分支
+    this.add('l4_express',  '快递驿站', { onClick: () => this._expressClick() });
+    this.add('l4_river',   '河道',     { onClick: () => this._riverClick() });
+    this.add('l4_hhouse',  'H博士家',  { onClick: () => Core.showDialog('H博士家',
+      '博士似乎不在家。<br><br>你的邻居H博士，<br>头发保养得很好。') });
+    this.add('l4_trash',    '垃圾桶',   { onClick: () => this._trashClick() });
+    this.conn('l4_frontdoor', 'l4_express');
+    this.conn('l4_frontdoor', 'l4_river');
+    this.conn('l4_frontdoor', 'l4_hhouse');
+    this.conn('l4_frontdoor', 'l4_trash');
+
+    // 父親的臥室
+    this.add('l4_floor', '地板', { onClick: () => Core.showDialog('地板',
+      '木地板打理得一尘不染，看得出是一丝不苟的人。') });
+    this.add('l4_safe',  '保险箱', { onClick: () => this._safeClick() });
+    this.add('l4_bed',   '床', { onClick: () => this._bedClick() });
+    this.conn('l4_bedroom', 'l4_floor');
+    this.conn('l4_bedroom', 'l4_safe');
+    this.conn('l4_bedroom', 'l4_bed');
+
+    // 客廳
+    this.add('l4_empty',    '空地',   { onClick: () => this.toast('一块空地，什么都没有。') });
+    this.add('l4_seasonwin','季节窗', { onClick: () => this._seasonwinClick() });
+    this.add('l4_storage',  '杂物间', { onClick: () => this._storageClick() });
+    this.add('l4_plantcab',  '植物柜', { onClick: () => Core.showDialog('植物柜',
+      '柜里摆着一把剪刀和几盆土。<br>你拿走了<b style="color:#ffb86c;">剪刀</b>。') });
+    this.add('l4_expresscab','快递柜', { onClick: () => Core.showDialog('快递柜',
+      '快递柜里是空的。包裹都在驿站。') });
+    this.conn('l4_living', 'l4_empty');
+    this.conn('l4_living', 'l4_seasonwin');
+    this.conn('l4_living', 'l4_storage');
+    this.conn('l4_living', 'l4_plantcab');
+    this.conn('l4_living', 'l4_expresscab');
+
+    // 桌子
+    this.add('l4_note',     '便签', { onClick: () => Core.showDialog('便签',
+      '我给你留了几道谜题，解开了就能拿到对应的意向表。') });
+    this.add('l4_woodbox', '木盒子', { onClick: () => this._woodboxClick() });
+    this.add('l4_whitebox', '白盒子', { onClick: () => Core.showDialog('白盒子',
+      '白盒子里空空如也，只有一张纸条：<br><br>' +
+      '<i>「黑盒子挂着6把锁，钥匙藏在世界各地。」</i>') });
+    this.add('l4_blackbox','黑盒子', { onClick: () => this._blackboxClick() });
+    this.conn('l4_table', 'l4_note');
+    this.conn('l4_table', 'l4_woodbox');
+    this.conn('l4_table', 'l4_whitebox');
+    this.conn('l4_table', 'l4_blackbox');
+
+    Renderer.render(); Renderer.centerView();
+  },
+
+  // 快遞驛站：三個尾號對應三個包裹
+  _expressClick() {
+    const f = G.ch4.flags;
+    const items = [];
+    if (!f.l4_gotDoc)     items.push({ label: '尾号 123 — 文件', value: 'doc' });
+    if (!f.l4_gotPoison)  items.push({ label: '尾号 456 — 快递盒', value: 'poison' });
+    if (!f.l4_gotShampoo) items.push({ label: '尾号 789 — 洗护袋', value: 'shampoo' });
+    if (items.length === 0) {
+      Core.showDialog('快递驿站', '所有包裹都取完了。<br><br>超越极限，次日达。');
+      return;
+    }
+    items.push({ label: '取消', value: 'cancel' });
+    Core.showDialog('快递驿站',
+      '输入手机尾号，查找快递。<br><br>' +
+      '<span style="color:rgba(200,210,230,.7);">（坏快递单上写着：123=文件，456=药品盒，789=洗护袋）</span>',
+      items).then(v => {
+        if (v === 'doc') {
+          f.l4_gotDoc = true;
+          Inventory.add({ id: 'l4_doc', name: '文件', icon: '📄', detail: '一份来自父亲的挂号文件。' });
+          this.toast('你拿到了文件。');
+        } else if (v === 'poison') {
+          f.l4_gotPoison = true; f.l4_keepPoison = true;
+          Inventory.add({ id: 'l4_ratpoison', name: '毒鼠强', icon: '☠️', detail: '一小瓶毒鼠强。' });
+          this.toast('你拿到了毒鼠强。');
+        } else if (v === 'shampoo') {
+          f.l4_gotShampoo = true; f.l4_keepShampoo = true;
+          Inventory.add({ id: 'l4_shampoo', name: '生发洗发水', icon: '🧴', detail: 'H博士推荐的生发洗发水。' });
+          this.toast('你拿到了生发洗发水。');
+        }
+      });
+  },
+
+  // 河道：第二次沒棒球棍 → 被搶劫打殘
+  _riverClick() {
+    const f = G.ch4.flags;
+    f.l4_riverVisit = (f.l4_riverVisit || 0) + 1;
+    if (f.l4_riverVisit >= 2 && !Inventory.has('l4_bat')) {
+      this._failEnding('ch4_l4_beg', '乞讨余生',
+        '你在黑漆漆的河道口被人一闷棍打倒。<br>醒来时口袋空空，腿也断了。<br><br>从那以后，街上多了一个乞讨的人。');
+      return;
+    }
+    Core.showDialog('河道', '一条黑黝黝的河，对岸路灯昏黄。<br>晚上这里不太安全。');
+  },
+
+  // 垃圾桶：壞掉的快遞單
+  _trashClick() {
+    const f = G.ch4.flags;
+    if (f.l4_trashLooted) { this.toast('垃圾桶已经空了。'); return; }
+    f.l4_trashLooted = true;
+    Core.showDialog('垃圾桶',
+      '你在垃圾桶里翻出一张<b style="color:#ffb86c;">坏掉的快递单</b>，<br>' +
+      '还有一堆腐烂的水果。<br><br>' +
+      '快递单上依稀可见三个尾号：<b>123 / 456 / 789</b>。');
+  },
+
+  // 保險箱：5位密碼 0812
+  _safeClick() {
+    const f = G.ch4.flags;
+    if (f.l4_safeOpen) { this.toast('保险箱已经打开了。'); return; }
+    PasswordPanel.show(5, '0812', '儿子的生日是8月12日', () => {
+      f.l4_safeOpen = true;
+      Core.showDialog('保险箱',
+        '里面是父亲的一本日记。<br><br>' +
+        '<i>「儿子生日那天，我把意向表留在黑盒子里。」</i><br><br>' +
+        '你把日记合上，心里五味杂陈。');
+    });
+  },
+
+  // 床：拿到棒球棍；寄完意向表後睡覺 → 2033
+  _bedClick() {
+    const f = G.ch4.flags;
+    if (!f.l4_bedTaken) {
+      f.l4_bedTaken = true;
+      Inventory.add({ id: 'l4_bat', name: '棒球棍', icon: '🏏', detail: '一支崭新的棒球棍，是你今年的生日礼物。' });
+      this.toast('你拿到了棒球棍。');
+      return;
+    }
+    if (!f.l4_choice) {
+      Core.showDialog('床', '你还没寄出意向表。<br>父亲让你解开谜题，选一张表寄出去。');
+      return;
+    }
+    Core.showDialog('床', '你躺下来，沉沉睡去。<br><br>再睁眼时，已经是十年后。').then(() => {
+      this._gotoYear(2033);
+    });
+  },
+
+  // 季節窗：種下櫻花苗
+  _seasonwinClick() {
+    const f = G.ch4.flags;
+    if (f.l4_sakuraPlanted) { this.toast('樱花树苗已经种下了。'); return; }
+    if (!Inventory.has('l4_sakura')) {
+      Core.showDialog('季节窗', '窗外是一块小小的花圃。<br>要是有树苗，可以种在这里。');
+      return;
+    }
+    Core.showDialog('季节窗', '你把樱花树苗种进了花圃。<br><br>它会长大的吧？').then(() => {
+      f.l4_sakuraPlanted = true;
+      Inventory.remove('l4_sakura');
+      this.toast('樱花树种下了。');
+    });
+  },
+
+  // 雜物間：鏟子 / 種花袋 / 種子盆（拿櫻花苗）
+  _storageClick() {
+    const f = G.ch4.flags;
+    if (f.l4_storageTaken) { this.toast('杂物间已经空了。'); return; }
+    f.l4_storageTaken = true;
+    Inventory.add({ id: 'l4_sakura', name: '樱花苗', icon: '🌱', detail: '一株小小的樱花树苗。' });
+    Core.showDialog('杂物间',
+      '角落里堆着铲子、种花袋和几个种子盆。<br>' +
+      '你挑了一株<b style="color:#ffb86c;">樱花苗</b>带走。<br>' +
+      '旁边还有一株枣树苗，但你没拿。');
+  },
+
+  // 木盒子：數量謎題
+  _woodboxClick() {
+    Core.showDialog('木盒子',
+      '盒子里是一堆彩色珠子：<br>' +
+      '红色 <b style="color:#ff8888;">3</b> 个，蓝色 <b style="color:#88aaff;">5</b> 个，黄色 <b style="color:#ffee88;">2</b> 个。<br><br>' +
+      '你数清楚了。盒底弹出一行小字：<br>' +
+      '<i>「去黑盒子，那才是真正的谜题。」</i>');
+  },
+
+  // 黑盒子：3位密碼 922 → 三張意向表
+  _blackboxClick() {
+    const f = G.ch4.flags;
+    if (f.l4_blackOpen) { this.toast('黑盒子已经打开了。'); return; }
+    PasswordPanel.show(3, '922', '个位>十位≥百位，三位数相乘=36，相加=13', () => {
+      f.l4_blackOpen = true;
+      Inventory.add({ id: 'l4_form_med', name: '医学院意向表', icon: '📜', detail: '一张医学院的意向表。' });
+      Inventory.add({ id: 'l4_form_sci', name: '科学院意向表', icon: '📜', detail: '一张科学院的意向表。' });
+      Core.showDialog('黑盒子',
+        '锁咔嗒一声开了。<br>里面整齐叠着三张意向表，<br>但你只能寄一张出去。<br><br>' +
+        '<span style="color:#ffb86c;">用「快递驿站」寄出其中一张。</span>');
+    });
+  },
+
+  // ============================================================
+  // 2033 年：十年後
+  // ============================================================
+  _build2033() {
+    this.add('l4_home33', '家（2033年）', { root: true, w: 160, h: 50 });
+    this.add('l4_bed33',      '卧室', { onClick: () => this._bed33Click() });
+    this.add('l4_bedroom_f',  '父亲的卧室', { onClick: () => Core.showDialog('父亲的卧室',
+      '被你封死的房门，10年不曾使用过。') });
+    this.add('l4_school',     '学校', { onClick: () => this.toast('母校已经翻新过了。') });
+    this.add('l4_frontdoor33','大门', { onClick: () => this.toast('推开门就是街道。') });
+    this.add('l4_living33',   '客厅', {});
+    this.add('l4_lab33',      '实验中心', {});
+    this.conn('l4_home33', 'l4_bed33');
+    this.conn('l4_home33', 'l4_bedroom_f');
+    this.conn('l4_home33', 'l4_school');
+    this.conn('l4_home33', 'l4_frontdoor33');
+    this.conn('l4_home33', 'l4_living33');
+    this.conn('l4_home33', 'l4_lab33');
+
+    // 客廳
+    this.add('l4_ai',   '智能管家', { onClick: () => this.toast('智能管家：欢迎回来，主人。') });
+    this.add('l4_news', '新闻', { onClick: () => Core.showDialog('新闻',
+      '今日新闻：议会人员全部失踪。<br>据悉，著名物理学家<b style="color:#ff8888;">H博士</b>（你的父亲）也在失踪名单中。') });
+    this.add('l4_fav',  '收藏夹', { onClick: () => this.toast('收藏夹里只有十年前的旧快递单。') });
+    this.conn('l4_living33', 'l4_ai');
+    this.conn('l4_living33', 'l4_news');
+    this.conn('l4_living33', 'l4_fav');
+
+    // 街道 / 石強
+    this.add('l4_street',   '街道', { onClick: () => this.toast('空荡荡的街道，远处传来挖掘机的声音。') });
+    this.add('l4_shiqiang', '石强（被埋）', { onClick: () => this._shiqiangClick() });
+    this.conn('l4_frontdoor33', 'l4_street');
+    this.conn('l4_street', 'l4_shiqiang');
+
+    // 實驗中心
+    this.add('l4_data',      '实验资料', { onClick: () => this._dataClick() });
+    this.add('l4_scinews',   '科学新闻', { onClick: () => Core.showDialog('科学新闻',
+      '人类在可控核聚变技术上取得重大突破。<br>人造太阳，不再是梦。') });
+    this.add('l4_datacenter','数据中心', { onClick: () => this._datacenterClick() });
+    this.add('l4_publish',   '发表中心', { onClick: () => this._publishClick() });
+    this.add('l4_labroom',   '实验室', {});
+    this.conn('l4_lab33', 'l4_data');
+    this.conn('l4_lab33', 'l4_scinews');
+    this.conn('l4_lab33', 'l4_datacenter');
+    this.conn('l4_lab33', 'l4_publish');
+    this.conn('l4_lab33', 'l4_labroom');
+
+    this.add('l4_safedoor', '安全门', { onClick: () => this.toast('安全门后面是真空室。') });
+    this.add('l4_vacuum',   '真空室', { onClick: () => this._vacuumClick() });
+    this.add('l4_stableprod','稳定核聚变产物', {});
+    this.conn('l4_labroom', 'l4_safedoor');
+    this.conn('l4_labroom', 'l4_vacuum');
+    this.conn('l4_labroom', 'l4_stableprod');
+
+    this.add('l4_direction','实验方向', {});
+    this.add('l4_gravity',  '引力约束', { onClick: () => this.toast('自由参数，你暂时调不出来。') });
+    this.add('l4_inertia', '惯性约束', { onClick: () => this.toast('惯性约束：需要更大的能量。') });
+    this.add('l4_mag',     '磁约束', { onClick: () => this._magClick() });
+    this.add('l4_laser',   '激光束（全开）', { onClick: () => this._laserClick() });
+    this.conn('l4_stableprod', 'l4_direction');
+    this.conn('l4_direction', 'l4_gravity');
+    this.conn('l4_direction', 'l4_inertia');
+    this.conn('l4_direction', 'l4_mag');
+    this.conn('l4_direction', 'l4_laser');
+
+    // 藍色溶液（醫學院疫苗線）
+    this.add('l4_bluesol', '蓝色溶液', { onClick: () => this._bluesolClick() });
+    this.conn('l4_labroom', 'l4_bluesol');
+
+    Renderer.render(); Renderer.centerView();
+  },
+
+  _bed33Click() {
+    const f = G.ch4.flags;
+    if (!f.l4_published) {
+      Core.showDialog('卧室', '你还没有发表研究成果。<br>先去实验中心吧。');
+      return;
+    }
+    Core.showDialog('卧室', '你躺在床上，研究已经发表。<br><br>意识再次模糊——').then(() => {
+      this._gotoYear(2043);
+    });
+  },
+
+  // 實驗資料：聚變方程 4位密碼 3461
+  _dataClick() {
+    const f = G.ch4.flags;
+    if (f.l4_eqSolved) { this.toast('聚变方程已经解开了。'); return; }
+    PasswordPanel.show(4, '3461', '聚变方程', () => {
+      f.l4_eqSolved = true;
+      this.toast('聚变方程解开了。');
+    });
+  },
+
+  // 數據中心：凱撒位移 UKCQPGBYQU → SIX/ONE/TWO → 612
+  _datacenterClick() {
+    const f = G.ch4.flags;
+    if (f.l4_magSolved) { this.toast('磁力装置已经解锁。'); return; }
+    Core.showDialog('数据中心',
+      '屏幕上跳出一串乱码：<br>' +
+      '<b style="color:#ffb86c;">UKCQPGBYQU</b><br><br>' +
+      '提示：凯撒位移，往前 2 位。<br>' +
+      '（解密后是三个英文数字）').then(() => {
+      PasswordPanel.show(3, '612', '凯撒位移后的英文数字 SIX/ONE/TWO', () => {
+        f.l4_magSolved = true;
+        this.toast('磁力装置解锁了。');
+      });
+    });
+  },
+
+  // 磁約束：簡化為對話選擇
+  _magClick() {
+    const f = G.ch4.flags;
+    if (!f.l4_magSolved) { this.toast('磁力装置还没解锁（数据中心 612）。'); return; }
+    Core.showDialog('磁约束',
+      '磁力装置参数：最大 99，一个线圈限 30。<br>' +
+      '你把参数调到 30。<br><br>磁场稳定了。');
+  },
+
+  // 激光束全開：沒穩定器 → 飛煙滅
+  _laserClick() {
+    const f = G.ch4.flags;
+    if (f.l4_sunDone) { this.toast('人造太阳已经稳定运行。'); return; }
+    if (f.l4_stabilizer !== true) {
+      this._failEnding('ch4_l4_fail', '飞烟灭',
+        '你把激光束开到最大。<br>真空室在零点一秒内融化。<br><br>你连惨叫都没来得及发出。');
+      return;
+    }
+    this.toast('激光束全功率运行，人造太阳微微晃动。');
+  },
+
+  // 真空室 / 人造太陽：是否給穩定器
+  _vacuumClick() {
+    const f = G.ch4.flags;
+    if (!f.l4_eqSolved || !f.l4_magSolved) {
+      Core.showDialog('真空室', '真空室还没准备好。<br>需要先解开聚变方程（3461）和磁力装置（612）。');
+      return;
+    }
+    if (f.l4_sunDone) { this.toast('人造太阳已经在真空室里微微晃动。'); return; }
+    Core.showDialog('真空室',
+      '核聚变产物，人类智慧的结晶。<br><b style="color:#ffb86c;">人造太阳。</b><br>在真空中微微晃动着。<br><br>' +
+      '是否给它装上粒子稳定器？',
+      [
+        { label: '装上稳定器', value: 'yes', primary: true },
+        { label: '不装', value: 'no' },
+      ]).then(v => {
+        f.l4_stabilizer = (v === 'yes');
+        f.l4_sunDone = true;
+        this.toast(f.l4_stabilizer ? '粒子稳定器启动。' : '你没有装稳定器。');
+      });
+  },
+
+  // 發表中心
+  _publishClick() {
+    const f = G.ch4.flags;
+    if (f.l4_published) { this.toast('研究已经发表过了。'); return; }
+    if (!f.l4_sunDone) {
+      Core.showDialog('发表中心', '在这里发表研究成果。<br><br>但你还没造出人造太阳。');
+      return;
+    }
+    f.l4_published = true;
+    Core.showDialog('发表中心', '你的论文震惊了世界。<br>十年前那个被父亲锁在家里的孩子，<br>终于站在了人类科学的顶端。');
+  },
+
+  // 石強：救不救
+  _shiqiangClick() {
+    const f = G.ch4.flags;
+    if (f.l4_saveShiqiang !== null && f.l4_saveShiqiang !== undefined) {
+      this.toast('你已经做过选择了。');
+      return;
+    }
+    Core.showDialog('石强',
+      '一个叫石强的少年被埋在废墟下，露出一只手。<br><br>救他吗？',
+      [
+        { label: '救他', value: 'yes', primary: true },
+        { label: '走开', value: 'no' },
+      ]).then(v => {
+        f.l4_saveShiqiang = (v === 'yes');
+        this.toast(f.l4_saveShiqiang ? '你把石强拉了出来。' : '你转身走开了。');
+      });
+  },
+
+  // 藍色溶液：醫學院疫苗線
+  _bluesolClick() {
+    const f = G.ch4.flags;
+    if (f.l4_blueSolution) { this.toast('蓝色溶液已经加入疫苗。'); return; }
+    Core.showDialog('蓝色溶液',
+      '一瓶闪着幽光的蓝色溶液。<br>实验室标签：<i>疫苗增强剂</i>。<br><br>加入疫苗吗？',
+      [
+        { label: '加入', value: 'yes', primary: true },
+        { label: '不动它', value: 'no' },
+      ]).then(v => {
+        if (v === 'yes') {
+          f.l4_blueSolution = true;
+          this.toast('蓝色溶液加入了疫苗。');
+        }
+      });
+  },
+
+  // ============================================================
+  // 2043 年：地下實驗室
+  // ============================================================
+  _build2043() {
+    this.add('l4_underground', '地下实验室（2043年）', { root: true, w: 180, h: 50 });
+    this.add('l4_container', '完美的保存容器', { onClick: () => this._containerClick() });
+    this.conn('l4_underground', 'l4_container');
+    Renderer.render(); Renderer.centerView();
+  },
+
+  // 掃雷變體 5×5 → 密碼 3557
+  _containerClick() {
+    const f = G.ch4.flags;
+    if (f.l4_containerOpen) { this.toast('保存容器已经打开了。'); return; }
+    Core.showDialog('完美的保存容器',
+      '你记得你用一个马赛克游戏的答案来做密码。<br><br>' +
+      '5×5 扫雷变体（数字=周围8格中涂黑格数）：<br>' +
+      '<pre style="font-family:monospace;color:#ffb86c;line-height:1.6;">' +
+      '_ _ 1 1 _<br>' +
+      '3 _ _ _ _<br>' +
+      '_ 5 5 2 0<br>' +
+      '4 _ 7 _ _<br>' +
+      '_ _ _ 3 _</pre>' +
+      '<span style="color:rgba(200,210,230,.7);">0=周围全白；7=周围7格黑。解出四个角的数字即密码。</span>'
+    ).then(() => {
+      PasswordPanel.show(4, '3557', '扫雷变体：0周围全白，7周围7格黑', () => {
+        f.l4_containerOpen = true;
+        this.add('l4_microcore', '微型聚变核心', { onClick: () => this._endingBranch() });
+        this.conn('l4_container', 'l4_microcore');
+        Renderer.render();
+        Core.showDialog('微型聚变核心', '容器缓缓打开，一颗指甲盖大小的微型聚变核心躺在中央。<br><br>它在发光。').then(() => {
+          this._endingBranch();
+        });
+      });
+    });
+  },
+
+  // ============================================================
+  // 結局分支
+  // ============================================================
+  _endingBranch() {
+    const f = G.ch4.flags;
+    // 結局2：不給穩定器 → K組織總部
+    if (f.l4_stabilizer === false) {
+      this._ending('ch4_l4_2', '洁白的房间',
+        '洁白的房间。<br>上面写着大大的<b style="color:#ff8888;">K</b>。<br><br>这里是K组织总部。');
+      return;
+    }
+    // 結局3：醫學院 + 生髮水留著 + 毒鼠強扔了
+    if (f.l4_choice === 'med' && f.l4_keepShampoo && !f.l4_keepPoison) {
+      this._ending('ch4_l4_3', '刑场',
+        '疫苗存在一处微小的缺陷。<br>你被判处死刑。<br><br>' +
+        '牢门打开了……今天你被带到了刑场。');
+      return;
+    }
+    // 結局4：醫學院 + 加藍色溶液
+    if (f.l4_choice === 'med' && f.l4_blueSolution) {
+      this._ending('ch4_l4_4', '基因病毒',
+        '一份经过加强的疫苗。<br>你被恐怖分子绑架，逼你交出配方。<br><br>配方泄露，一种基因病毒席卷世界。');
+      return;
+    }
+    // 失敗：醫學院但既沒留生髮水也沒加藍色溶液 → 基因實驗失敗
+    if (f.l4_choice === 'med' && !f.l4_keepShampoo && !f.l4_blueSolution) {
+      this._failEnding('ch4_l4_genefail', '基因实验失败',
+        '疫苗在最后一刻崩解。<br>你和整个实验室被封锁在地下。<br><br>再也没有人见过你。');
+      return;
+    }
+    // 結局5：科學院 + 救石強 + 扔毒鼠強
+    if (f.l4_choice === 'sci' && f.l4_saveShiqiang && !f.l4_keepPoison) {
+      this._ending('ch4_l4_5', '亚洲猛虎',
+        '挖掘机轰然推进。<br>拳打七洲，脚踢四洋。<br><br>石强开着推土机来救你了。<br>——亚洲猛虎。');
+      return;
+    }
+    // 結局6：種櫻花樹 + 不救石強 + 不扔毒藥
+    if (f.l4_sakuraPlanted && f.l4_saveShiqiang === false && f.l4_keepPoison) {
+      this._ending('ch4_l4_6', '走马灯',
+        '意识模糊间，你仿佛看见十年前那株樱花树苗。<br>它开了满树的花。<br><br>' +
+        '<b style="color:#ffb8cc;">真的好美呀。</b>');
+      return;
+    }
+    // 結局1：正常路線
+    this._ending('ch4_l4_1', '最大的安全门',
+      '现实。幻境。真相。<br><br>' +
+      '准备好了吗？<br>最大的安全门。这里有一切。');
+  },
+
+  // 正常結局（通關）
+  _ending(id, name, narration) {
+    try { Ch4.levelCleared(4, id, name); } catch(e) {}
+    try { AchievementSystem.unlock('ch4_l4_clear'); } catch(e) {}
+    Ch4.showEnding(
+      '<div class="ending-title">结 局</div>' +
+      '<div style="font-size:1.2rem;margin-bottom:16px;">' + name + '</div>' +
+      '<div style="font-size:0.85rem;color:rgba(200,210,230,.75);line-height:1.9;">' +
+      narration +
+      '</div>' +
+      '<button class="ending-btn" onclick="document.getElementById(\'endingScreen\').classList.remove(\'show\');Ch4.start();">返回实验室</button>'
+    );
+  },
+
+  // 失敗結局（重開本關）
+  _failEnding(id, name, narration) {
+    try { recordEnding && recordEnding(id, name); } catch(e) {}
+    Ch4.showEnding(
+      '<div class="ending-title bad">失 败</div>' +
+      '<div style="font-size:1.2rem;margin-bottom:16px;color:#ff8888;">' + name + '</div>' +
+      '<div style="font-size:0.85rem;color:rgba(220,180,180,.7);line-height:1.9;">' +
+      narration +
+      '</div>' +
+      '<button class="ending-btn" onclick="document.getElementById(\'endingScreen\').classList.remove(\'show\');Ch4.enterLevel(G.ch4.level);">重新开始本关</button>'
+    );
+  },
+
+  // ============================================================
+  // 節點點擊（預設無 onClick 的節點會走這裡，目前都已在 add 時掛好）
+  // ============================================================
+  onNodeClick(node) {
+    // 多數節點已在 _buildXXX 中以 onClick 註冊；此處保留防呆。
+    this.toast(node ? (node.label || '…') : '…');
+  },
+
+  // ============================================================
+  // 物品 × 節點
+  // ============================================================
+  useItemOnNode(itemId, nodeId) {
+    const f = G.ch4.flags;
+    // 寄意向表到快遞驛站
+    if (nodeId === 'l4_express') {
+      if (itemId === 'l4_form_med' || itemId === 'l4_form_sci') {
+        const choice = itemId === 'l4_form_med' ? 'med' : 'sci';
+        Core.showDialog('寄出意向表',
+          '你把这张意向表交给了快递员。<br><br>' +
+          '<span style="color:#ffb86c;">' + (choice === 'med' ? '医学院' : '科学院') + '</span>' +
+          '的录取通知，将在十年后到达。',
+          [{ label: '寄出', value: 'ok', primary: true }]).then(() => {
+            f.l4_choice = choice;
+            Inventory.remove('l4_form_med');
+            Inventory.remove('l4_form_sci');
+            this.toast('意向表已寄出。去床上睡一觉吧。');
+          });
+        return true;
+      }
+    }
+    // 把毒鼠強丟進垃圾桶
+    if (nodeId === 'l4_trash' && itemId === 'l4_ratpoison') {
+      f.l4_keepPoison = false;
+      Inventory.remove('l4_ratpoison');
+      this.toast('你把毒鼠强扔进了垃圾桶。');
+      return true;
+    }
+    // 把生髮水丟進垃圾桶
+    if (nodeId === 'l4_trash' && itemId === 'l4_shampoo') {
+      f.l4_keepShampoo = false;
+      Inventory.remove('l4_shampoo');
+      this.toast('你把生发洗发水扔进了垃圾桶。');
+      return true;
+    }
+    // 把櫻花苗種到季節窗
+    if (nodeId === 'l4_seasonwin' && itemId === 'l4_sakura') {
+      f.l4_sakuraPlanted = true;
+      Inventory.remove('l4_sakura');
+      this.toast('樱花树种下了。');
+      return true;
+    }
+    return false;
+  },
+};
+
+
+// ===== CH4 LEVEL 5 : 虛擬接入（最終章）=====
+Ch4.levels[5] = {
+
+  // ---------- 入口 ----------
+  start() {
+    G.ch4.flags = G.ch4.flags || {};
+    // 重新進入本關時清空 l5_ 旗標（背包由骨架清空）
+    Object.keys(G.ch4.flags).forEach(k => {
+      if (k.indexOf('l5_') === 0) delete G.ch4.flags[k];
+    });
+    Ch4.levels[5].buildControl();
+  },
+
+  // ---------- 控制室 ----------
+  buildControl() {
+    Renderer.clear();
+    Ch4.add('l5_control','控制室',{root:true,w:160,h:50});
+    Ch4.add('l5_holo','全息投影',{onClick:()=>Core.showDialog('全息投影',
+      '一片蓝色的光在空气中跳动。<br>'+
+      '上面滚动着无数实验体的数据。<br><br>'+
+      '<b style="color:#ffb86c;">你，实验体50001。</b>')});
+    Ch4.add('l5_subject','实验体描述',{onClick:()=>Core.showDialog('实验体描述',
+      '实验体50001：男性，25岁。<br>'+
+      '意识上传成功率：99.7%。<br>'+
+      '记忆兼容性：完美。<br><br>'+
+      '<b style="color:#ffb86c;">【代理人计划背景】</b><br>'+
+      '2223年，世界毁灭。<br>'+
+      'K组织将意识上传至数字世界，<br>'+
+      '内部分裂，一部分人主张克隆人类做实验——就是前五关。<br>'+
+      '你们，是被克隆出来的容器。<br>'+
+      'K组织的终极目的：寻找新的家园。')});
+    Ch4.add('l5_restart','重启控制室',{onClick:()=>{
+      Core.showDialog('重启控制室','确定要重新进入控制室吗？',[
+        {label:'取消'},
+        {label:'重启',primary:true,onClick:()=>{ Ch4.enterLevel(5); }}
+      ]);
+    }});
+    Ch4.add('l5_archive','实验体档案',{onClick:()=>Core.showDialog('实验体档案',
+      '【前序实验体记录】<br>'+
+      '· <b>石强</b>：蝴蝶效应中被你救下的人，后来成为亚洲战神。<br>'+
+      '· <b>不可名状物</b>：镜中世界的怪物，牛、马、羊的结合体。<br>'+
+      '· <b>10023</b>：时间迷宫实验体。<br>'+
+      '· <b>20004</b>：镜中世界实验体，错误代码。<br>'+
+      '· <b>30012</b>：致命巨物实验体。<br>'+
+      '· <b>40002</b>：蝴蝶效应实验体。<br><br>'+
+      '<b style="color:#ffb86c;">你是第50001号。</b>')});
+    Ch4.add('l5_chamber','实体连接舱',{onClick:()=>{
+      const f = G.ch4.flags;
+      if (f.l5_dna) { Ch4.toast('连接舱已解锁。'); return; }
+      Core.showDialog('实体连接舱','一台银白色的连接舱。<br>屏幕上闪烁着：<br><b style="color:#ffb86c;">请输入 DNA 尾部信息片段</b>');
+      PasswordPanel.show(4,'GCAT','DNA尾部信息片段',()=>{
+        f.l5_dna = true;
+        Ch4.toast('DNA匹配成功，连接舱解锁。');
+        const ch = Ch4.node('l5_chamber');
+        if (ch) { ch.completed = true; ch.label = '实体连接舱（已解锁）'; }
+        Renderer.render();
+        Ch4.levels[5].buildWorld1();
+      });
+    }});
+    Ch4.conn('l5_control','l5_holo');
+    Ch4.conn('l5_control','l5_subject');
+    Ch4.conn('l5_control','l5_restart');
+    Ch4.conn('l5_control','l5_archive');
+    Ch4.conn('l5_control','l5_chamber');
+    Renderer.render(); Renderer.centerView();
+  },
+
+  // ---------- 記憶世界1：春秋 匡邑城 ----------
+  buildWorld1() {
+    Renderer.clear();
+    const f = G.ch4.flags;
+    Ch4.add('l5_kw','匡邑城',{root:true,w:140,h:50});
+    Ch4.add('l5_stable','马厩',{onClick:()=>{
+      if (f.l5_horsehair) { Ch4.toast('马尾已经取走了。'); return; }
+      Core.showDialog('马厩','一匹被拴住的马。<br>你一靠近，它变得<b style="color:#ff5555;">愤怒</b>起来。<br>你趁机拔下一把马尾。',[
+        {label:'拔马尾',primary:true,onClick:()=>{
+          f.l5_horsehair = true;
+          Inventory.add({id:'l5_horsehair',name:'马尾',icon:'🐴',detail:'一把粗壮的马尾。'});
+          Ch4.toast('获得：马尾');
+        }}
+      ]);
+    }});
+    Ch4.add('l5_log','木头',{onClick:()=>{
+      if (f.l5_wood) { Ch4.toast('木头已经被你砍走了。'); return; }
+      if (!Inventory.has('l5_sword')) { Ch4.toast('木头太硬，你砍不动。需要一把锋利的剑。'); return; }
+      f.l5_wood = true;
+      Inventory.add({id:'l5_wood',name:'长条状木头',icon:'🪵',detail:'适合做琴身。'});
+      Ch4.toast('你用剑砍下一段长条状木头。');
+    }});
+    Ch4.add('l5_confucius','孔子',{onClick:()=>{
+      if (f.l5_pass1) { Ch4.toast('孔子对你微微颔首。'); return; }
+      Core.showDialog('孔子','一位身长八尺、肌肉隆起的男子，<br><b style="color:#ffb86c;">威风凛凛</b>。<br>他身后站着众弟子，个个不同凡响。<br><br>他腰间佩着一把锋利的宝剑，剑鞘上刻着「德」。');
+    }});
+    Ch4.add('l5_sword','佩剑',{onClick:()=>{
+      if (f.l5_sword) { Ch4.toast('剑已经在你手里了。'); return; }
+      f.l5_sword = true;
+      Inventory.add({id:'l5_sword',name:'宝剑',icon:'🗡️',detail:'一把锋利的宝剑，剑鞘上刻着德。'});
+      Ch4.toast('你取下了佩剑。');
+    }});
+    Ch4.add('l5_disciples','众弟子',{onClick:()=>Core.showDialog('众弟子','身后站着众弟子，个个不同凡响。<br>他们警惕地看着你。')});
+    Ch4.add('l5_qin','五弦琴',{onClick:()=>{
+      if (f.l5_qinTuned) { Ch4.toast('琴已经调好了。'); return; }
+      if (!f.l5_qinBuilt) {
+        if (Inventory.has('l5_wood') && Inventory.has('l5_horsehair')) {
+          Inventory.remove('l5_wood'); Inventory.remove('l5_horsehair');
+          f.l5_qinBuilt = true;
+          Ch4.toast('你用木头和马尾做成了一把五弦琴。还需要调整一下。');
+        } else {
+          Ch4.toast('需要长条状木头和马尾才能做琴。');
+        }
+        return;
+      }
+      Ch4.levels[5].tuneQin();
+    }});
+    Ch4.conn('l5_kw','l5_stable');
+    Ch4.conn('l5_kw','l5_log');
+    Ch4.conn('l5_kw','l5_confucius');
+    Ch4.conn('l5_confucius','l5_sword');
+    Ch4.conn('l5_confucius','l5_disciples');
+    Ch4.conn('l5_kw','l5_qin');
+    Renderer.render(); Renderer.centerView();
+  },
+
+  tuneQin() {
+    const f = G.ch4.flags;
+    const seq = ['角','宫','羽','徵','商'];
+    let idx = 0;
+    const ask = () => {
+      if (idx >= seq.length) {
+        f.l5_qinTuned = true;
+        Ch4.toast('琴调好了，这是一把可供使用的琴。');
+        Core.showDialog('抚琴','你对着孔子抚了一曲。<br>孔子听完，抚须长叹：<br><b style="color:#ffb86c;">「君子居之，何陋之有？你不是贼子。」</b>',[
+          {label:'通过',primary:true,onClick:()=>{ Ch4.levels[5].world1Done(); }}
+        ]);
+        return;
+      }
+      const opts = seq.slice().sort(()=>Math.random()-0.5);
+      const btns = opts.map(s => ({
+        label:s,
+        onClick:()=>{
+          if (s === seq[idx]) { idx++; ask(); }
+          else { Ch4.toast('音不对，重新调。'); idx = 0; ask(); }
+        }
+      }));
+      Core.showDialog('调音','请按五行顺序拨弦（第 '+(idx+1)+' / 5 根）', btns);
+    };
+    ask();
+  },
+
+  world1Done() {
+    G.ch4.flags.l5_pass1 = true;
+    Ch4.toast('记忆世界1完成。');
+    Ch4.levels[5].buildWorld2();
+  },
+
+  // ---------- 記憶世界2：秦朝 咸陽 ----------
+  buildWorld2() {
+    Renderer.clear();
+    Ch4.add('l5_xianyang','咸阳',{root:true,w:140,h:50});
+    Ch4.add('l5_palace','阿房宫',{onClick:()=>{
+      Core.showDialog('阿房宫','宏伟的皇宫。<br>门口禁军林立。<br><br>你要硬闯吗？',[
+        {label:'离开'},
+        {label:'硬闯',primary:true,onClick:()=>{ Ch4.levels[5].failPalace(); }}
+      ]);
+    }});
+    Ch4.add('l5_exec','刑场',{onClick:()=>{
+      const f = G.ch4.flags;
+      if (f.l5_execDone) { Ch4.toast('那人已经被你救走了。'); return; }
+      Core.showDialog('刑场','一人被绑在木桩上。<br>旁边放着一池水和一堆竹签。');
+      PasswordPanel.show(5,'15230','池子3×3×1米，竹签1m×5cm×1cm，灌水1385升，要多少根竹签？',()=>{
+        f.l5_execDone = true;
+        Ch4.toast('你报出了正确数字，那人被释放了。他塞给你一坨牛粪。');
+        Inventory.add({id:'l5_dung',name:'牛粪',icon:'💩',detail:'一坨热乎乎的牛粪。'});
+        Renderer.render();
+      });
+    }});
+    Ch4.add('l5_zhaogao','赵高',{onClick:()=>{
+      const f = G.ch4.flags;
+      if (f.l5_pass2) { Ch4.toast('赵高已经被扔过牛粪了。'); return; }
+      Core.showDialog('赵高','指鹿为马的权臣。<br>他正斜眼看着你。');
+    }});
+    Ch4.conn('l5_xianyang','l5_palace');
+    Ch4.conn('l5_xianyang','l5_exec');
+    Ch4.conn('l5_xianyang','l5_zhaogao');
+    Renderer.render(); Renderer.centerView();
+  },
+
+  world2Done() {
+    G.ch4.flags.l5_pass2 = true;
+    Ch4.toast('记忆世界2完成。');
+    Ch4.levels[5].buildWorld3();
+  },
+
+  // ---------- 記憶世界3：三國 長坂坡 ----------
+  buildWorld3() {
+    Renderer.clear();
+    const f = G.ch4.flags;
+    Ch4.add('l5_cbp','长坂坡',{root:true,w:140,h:50});
+    Ch4.add('l5_zhaoyun','赵云',{onClick:()=>{
+      if (f.l5_pass3) { Ch4.toast('赵云已经远去。'); return; }
+      if (!f.l5_adouUp) {
+        Core.showDialog('赵云','一位身长八尺的将军。<br><b style="color:#ffb86c;">「身长八尺，一身是胆也！」</b><br>他急切地看着你：「救少主！」');
+        return;
+      }
+      if (!f.l5_qinggang) {
+        Core.showDialog('赵云','你把阿斗从井里救起。<br>赵云抱拳：「多谢！但夏侯惇还在追来，青钢剑还在他手中。」');
+        return;
+      }
+      Core.showDialog('赵云','你把阿斗和青钢剑都交给赵云。<br>他单膝跪地：<br><b style="color:#ffb86c;">「一身是胆，何惧一死！」</b>然后绝尘而去。',[
+        {label:'通过',primary:true,onClick:()=>{ Ch4.levels[5].world3Done(); }}
+      ]);
+    }});
+    Ch4.add('l5_ganfu','甘夫人/阿斗',{onClick:()=>{
+      if (f.l5_adouUp) { Ch4.toast('阿斗已经被救走了。'); return; }
+      Core.showDialog('甘夫人','甘夫人泪流满面。<br>阿斗被放进了一个水桶里，挂在井中。<br>她指着一旁的辘轳。');
+    }});
+    Ch4.add('l5_lulu','辘轳',{onClick:()=>{
+      if (f.l5_adouUp) { Ch4.toast('阿斗已经被拉上来了。'); return; }
+      Core.showDialog('辘轳','辘轳，一种提水工具。<br>请救出少主，顺时针转动往上升。',[
+        {label:'顺时针转动',primary:true,onClick:()=>{
+          f.l5_adouUp = true;
+          Ch4.toast('你顺时针转动辘轳，阿斗被拉了上来。');
+        }}
+      ]);
+    }});
+    Ch4.add('l5_xiahou','夏侯惇',{onClick:()=>{
+      if (f.l5_qinggang) { Ch4.toast('夏侯惇已经被你打跑了。'); return; }
+      Core.showDialog('夏侯惇','独眼将军夏侯惇挡在你面前。<br>一场简短的战斗……',[
+        {label:'夺剑',primary:true,onClick:()=>{
+          f.l5_qinggang = true;
+          Inventory.add({id:'l5_qinggang',name:'青钢剑',icon:'⚔️',detail:'从夏侯惇处夺来的宝剑。'});
+          Ch4.toast('你从夏侯惇手中夺过青钢剑！');
+        }}
+      ]);
+    }});
+    Ch4.add('l5_zhangfei','张飞',{onClick:()=>Core.showDialog('张飞','豹头环眼，燕颔虎须。<br>他站在当阳桥上，一声怒吼，喝断了桥梁水倒流。')});
+    Ch4.conn('l5_cbp','l5_zhaoyun');
+    Ch4.conn('l5_cbp','l5_ganfu');
+    Ch4.conn('l5_ganfu','l5_lulu');
+    Ch4.conn('l5_cbp','l5_xiahou');
+    Ch4.conn('l5_cbp','l5_zhangfei');
+    Renderer.render(); Renderer.centerView();
+  },
+
+  world3Done() {
+    G.ch4.flags.l5_pass3 = true;
+    Ch4.toast('记忆世界3完成。');
+    Ch4.levels[5].buildWorld4();
+  },
+
+  // ---------- 記憶世界4：唐朝 魯郡桃花樹 ----------
+  buildWorld4() {
+    Renderer.clear();
+    const f = G.ch4.flags;
+    Ch4.add('l5_lujun','鲁郡桃花树',{root:true,w:160,h:50});
+    Ch4.add('l5_peach','桃花树',{onClick:()=>Core.showDialog('桃花树','满树桃花盛开，落英缤纷。')});
+    Ch4.add('l5_storage','杂物房',{onClick:()=>{
+      if (f.l5_distilled) { Ch4.toast('蒸馏已经完成。'); return; }
+      Core.showDialog('杂物房','角落里堆着一坛酒。<br>你架起古法蒸馏装置，加入桃花瓣提香。<br><br>蒸馏出三罐酒：头酒、中酒、尾酒。',[
+        {label:'喝头酒',onClick:()=>{ Ch4.levels[5].failDrink(); }},
+        {label:'喝中酒',primary:true,onClick:()=>{
+          f.l5_distilled = true;
+          Ch4.toast('中酒醇厚，带着桃花香。');
+        }},
+        {label:'喝尾酒',onClick:()=>{ Ch4.toast('尾酒太淡，没味道。'); }}
+      ]);
+    }});
+    Ch4.add('l5_libai','李白',{onClick:()=>{
+      if (f.l5_pass4) { Ch4.toast('李白已经醉倒了。'); return; }
+      if (!f.l5_distilled) {
+        Core.showDialog('李白','白衣诗人正在喝酒。<br>他看着你手中空空如也。');
+        return;
+      }
+      if (!f.l5_gavePhoto) {
+        Core.showDialog('李白','你递上中酒。<br>他一饮而尽，大笑：<br><b style="color:#ffb86c;">「幸好也是酒，结交结老苍，千古一诗人！」</b>',[
+          {label:'拿出拍立得',primary:true,onClick:()=>{
+            f.l5_gavePhoto = true;
+            Ch4.toast('你拿出拍立得，拍下李白醉笑的瞬间。');
+            Core.showDialog('拍立得','照片吐了出来。<br>留存时间的美好。<br>李白对着照片连连称奇，看到照片大笑起来。',[
+              {label:'通过',primary:true,onClick:()=>{ Ch4.levels[5].world4Done(); }}
+            ]);
+          }}
+        ]);
+      }
+    }});
+    Ch4.add('l5_dufu','杜甫',{onClick:()=>Core.showDialog('杜甫','另一位清瘦的诗人正在苦吟。')});
+    Ch4.conn('l5_lujun','l5_peach');
+    Ch4.conn('l5_lujun','l5_storage');
+    Ch4.conn('l5_lujun','l5_libai');
+    Ch4.conn('l5_lujun','l5_dufu');
+    Renderer.render(); Renderer.centerView();
+  },
+
+  world4Done() {
+    G.ch4.flags.l5_pass4 = true;
+    Ch4.toast('记忆世界4完成。');
+    Ch4.levels[5].buildWorld5();
+  },
+
+  // ---------- 記憶世界5：1348 佛羅倫薩 ----------
+  buildWorld5() {
+    Renderer.clear();
+    const f = G.ch4.flags;
+    Ch4.add('l5_florence','佛罗伦萨',{root:true,w:160,h:50});
+    Ch4.add('l5_dog','恶犬',{onClick:()=>Core.showDialog('恶犬','一只恶犬在主路上游荡。<br><b style="color:#ff5555;">恶犬，你不敢靠近。</b>')});
+    Ch4.add('l5_leftpath','左小路',{onClick:()=>{
+      if (f.l5_hammer) { Ch4.toast('垃圾堆已经被翻过了。'); return; }
+      Core.showDialog('左小路','垃圾堆里翻出一把锯子和一把锤子。',[
+        {label:'拿锤子',primary:true,onClick:()=>{
+          f.l5_hammer = true;
+          Inventory.add({id:'l5_hammer',name:'锤子',icon:'🔨',detail:'一把还算结实的锤子。'});
+          Ch4.toast('获得：锤子');
+        }}
+      ]);
+    }});
+    Ch4.add('l5_rightpath','右小路',{onClick:()=>{
+      if (f.l5_meat) { Ch4.toast('储物箱已经被砸开了。'); return; }
+      if (!Inventory.has('l5_hammer')) {
+        Core.showDialog('右小路','一个医生的家，空无一人。<br>角落里有个储物箱，上了锁。<br>需要工具砸开。');
+        return;
+      }
+      Inventory.remove('l5_hammer');
+      f.l5_meat = true;
+      Inventory.add({id:'l5_meat',name:'腐烂的肉块',icon:'🥩',detail:'长满了蛆虫。'});
+      Ch4.toast('你用锤子砸开储物箱，里面是一块腐烂的肉块，长满了蛆虫。');
+    }});
+    Ch4.add('l5_church','教会',{onClick:()=>{
+      if (f.l5_lockOpen) { Ch4.toast('教会的门已经开了。里面售卖赎罪券和圣水。'); return; }
+      PasswordPanel.show(4,'2690','看三幅画中手指数量',()=>{
+        f.l5_lockOpen = true;
+        Ch4.toast('铜锁咔哒一声开了。里面售卖赎罪券和圣水。');
+        Renderer.render();
+      });
+    }});
+    Ch4.add('l5_paintings','三幅画作',{onClick:()=>Core.showDialog('三幅画作',
+      '<b>第一幅</b>：画中人伸出 <b style="color:#ffb86c;">2</b> 根手指。<br>'+
+      '<b>第二幅</b>：画中人伸出 <b style="color:#ffb86c;">6</b> 根手指。<br>'+
+      '<b>第三幅</b>：画中人伸出 <b style="color:#ffb86c;">9</b> 根手指。<br><br>'+
+      '（提示：密码是四位数，铜锁后还有一幅画——画中伸出 0 根手指。）')});
+    Ch4.add('l5_manor','奢华庄园',{onClick:()=>{
+      if (!f.l5_manorDone) {
+        Core.showDialog('奢华庄园','里面灯火通明，正在开派对。<br>门口的守卫不让你进。');
+        return;
+      }
+      Core.showDialog('人形恶魔','派对散了。突然，一个人形恶魔从阴影中走出！',[
+        {label:'逃跑',primary:true,onClick:()=>{ Ch4.levels[5].world5Done(); }},
+        {label:'咬舌自尽',onClick:()=>{ Ch4.levels[5].failBite(); }}
+      ]);
+    }});
+    Ch4.add('l5_beak','鸟嘴服',{onClick:()=>{
+      if (f.l5_beak) { Ch4.toast('鸟嘴服已经穿上了。'); return; }
+      f.l5_beak = true;
+      Inventory.add({id:'l5_beak',name:'鸟嘴服',icon:'🩺',detail:'穿上去像你印象中的医衣。'});
+      Ch4.toast('你穿上了鸟嘴服。');
+    }});
+    Ch4.conn('l5_florence','l5_dog');
+    Ch4.conn('l5_florence','l5_leftpath');
+    Ch4.conn('l5_florence','l5_rightpath');
+    Ch4.conn('l5_florence','l5_church');
+    Ch4.conn('l5_church','l5_paintings');
+    Ch4.conn('l5_florence','l5_manor');
+    Ch4.conn('l5_florence','l5_beak');
+    Renderer.render(); Renderer.centerView();
+  },
+
+  world5Done() {
+    G.ch4.flags.l5_pass5 = true;
+    Ch4.toast('你逃过了人形恶魔。记忆世界5完成。');
+    Ch4.levels[5].buildWorld6();
+  },
+
+  // ---------- 記憶世界6：1765 格拉斯哥 ----------
+  buildWorld6() {
+    Renderer.clear();
+    const f = G.ch4.flags;
+    Ch4.add('l5_repair','修理店',{root:true,w:140,h:50});
+    Ch4.add('l5_watt','瓦特蒸汽机',{onClick:()=>Core.showDialog('瓦特蒸汽机','一台原始的蒸汽机，效率很低。<br>瓦特正在眉头紧锁。')});
+    Ch4.add('l5_paper','黄纸',{onClick:()=>Core.showDialog('黄纸','纸上写着一串自述性数字：<br><br><b style="color:#ffb86c;">2200</b><br><br>（提示：这串数字描述自己——2个0、1个1、2个2、0个3、0个4……推理出完整的五位数。）')});
+    Ch4.add('l5_lock2','坚固锁头',{onClick:()=>{
+      if (f.l5_lock2Open) { Ch4.toast('锁已经开了。'); return; }
+      PasswordPanel.show(5,'21200','黄纸上的自述性数字',()=>{
+        f.l5_lock2Open = true;
+        Ch4.toast('锁开了，里面是一台冷凝器。');
+        Inventory.add({id:'l5_condenser',name:'冷凝器',icon:'⚗️',detail:'可以大幅提升蒸汽机效率。'});
+        Renderer.render();
+      });
+    }});
+    Ch4.add('l5_condenser','冷凝器',{onClick:()=>{
+      if (f.l5_pass6) { Ch4.toast('蒸汽机已经改进了。'); return; }
+      if (!Inventory.has('l5_condenser')) { Ch4.toast('需要先拿到冷凝器。'); return; }
+      Inventory.remove('l5_condenser');
+      f.l5_pass6 = true;
+      Ch4.toast('你把冷凝器装上蒸汽机，效率高多了！');
+      Core.showDialog('爆炸','蒸汽机轰鸣——<br>突然一声巨响，锅炉爆炸！<br><br>烟雾中，一个吐着舌头的老人出现了。<br><b style="color:#ffb86c;">这不羁的头发，无疑是爱因斯坦。</b>',[
+        {label:'继续',primary:true,onClick:()=>{ Ch4.levels[5].buildEinstein(); }}
+      ]);
+    }});
+    Ch4.conn('l5_repair','l5_watt');
+    Ch4.conn('l5_repair','l5_paper');
+    Ch4.conn('l5_repair','l5_lock2');
+    Ch4.conn('l5_repair','l5_condenser');
+    Renderer.render(); Renderer.centerView();
+  },
+
+  // ---------- 愛因斯坦 & 治療室 ----------
+  buildEinstein() {
+    Renderer.clear();
+    Ch4.add('l5_einstein','爱因斯坦',{root:true,w:160,h:50});
+    Ch4.add('l5_morse','摩斯密码',{onClick:()=>{
+      const f = G.ch4.flags;
+      if (f.l5_morse) { Ch4.toast('摩斯密码已经解开。'); return; }
+      Core.showDialog('摩斯密码','爱因斯坦在黑板上写下一串摩斯密码：<br><br><b style="color:#ffb86c;">··· ——— ···· ····</b><br><br>解码结果：这是一个四位数字漏洞代码。<br><b style="color:#ffb86c;">2333</b>',[
+        {label:'记下漏洞代码',primary:true,onClick:()=>{
+          f.l5_morse = true;
+          Ch4.toast('漏洞代码：2333');
+        }}
+      ]);
+    }});
+    Ch4.add('l5_therapy','治疗室（2123年）',{onClick:()=>{
+      Core.showDialog('治疗室（2123年）',
+        '老者坐在仪器前。<br>他等了80年。<br>「年轻人，K组织的代理人计划需要你。<br><b style="color:#ffb86c;">人类生死存亡在此一役，拜托了。</b>」<br><br>'+
+        '【代理人计划】<br>'+
+        '2223年世界毁灭 → K组织意识上传数字世界 → 内部分裂 → 克隆人类做实验 → 寻找新家园。<br><br>'+
+        '输入漏洞代码，激活仪器，请慎重。',[
+        {label:'接受代理人计划',primary:true,onClick:()=>{ Ch4.levels[5].agentEnding(); }},
+        {label:'拒绝',onClick:()=>{ Ch4.levels[5].rebelEnding(); }},
+        {label:'输入漏洞代码 2333',onClick:()=>{
+          PasswordPanel.show(4,'2333','摩斯密码解出的漏洞代码',()=>{ Ch4.levels[5].trueEnding(); });
+        }}
+      ]);
+    }});
+    Ch4.conn('l5_einstein','l5_morse');
+    Ch4.conn('l5_einstein','l5_therapy');
+    Renderer.render(); Renderer.centerView();
+  },
+
+  // ---------- 失敗結局 ----------
+  failConfucius() {
+    try { AchievementSystem.unlock('ch4_ach_confucius'); } catch(e){}
+    try { recordEnding('ch4_l5_confucius','以德服人'); } catch(e){}
+    Ch4.showEnding(
+      '<div class="ending-title bad">结 局</div>'+
+      '<div style="font-size:1.2rem;margin-bottom:16px;">以德服人</div>'+
+      '<div style="font-size:0.85rem;color:rgba(200,180,180,.7);line-height:1.9;">你用剑刺向孔子，却被他身后的三千弟子制服。<br><br><b style="color:#ffb86c;">以德服人。</b></div>'+
+      '<button class="ending-btn" onclick="document.getElementById(\'endingScreen\').classList.remove(\'show\');Ch4.enterLevel(G.ch4.level);">重新开始本关</button>'
+    );
+  },
+
+  failPalace() {
+    try { recordEnding('ch4_l5_palace','擅闯皇宫'); } catch(e){}
+    Ch4.showEnding(
+      '<div class="ending-title bad">结 局</div>'+
+      '<div style="font-size:1.2rem;margin-bottom:16px;">擅闯皇宫</div>'+
+      '<div style="font-size:0.85rem;color:rgba(200,180,180,.7);line-height:1.9;">你擅闯皇宫，被禁军当场格杀。</div>'+
+      '<button class="ending-btn" onclick="document.getElementById(\'endingScreen\').classList.remove(\'show\');Ch4.enterLevel(G.ch4.level);">重新开始本关</button>'
+    );
+  },
+
+  failDrink() {
+    try { recordEnding('ch4_l5_drink','头酒中毒'); } catch(e){}
+    Ch4.showEnding(
+      '<div class="ending-title bad">结 局</div>'+
+      '<div style="font-size:1.2rem;margin-bottom:16px;">头酒中毒</div>'+
+      '<div style="font-size:0.85rem;color:rgba(200,180,180,.7);line-height:1.9;">头酒度数太高，你当场不省人事。</div>'+
+      '<button class="ending-btn" onclick="document.getElementById(\'endingScreen\').classList.remove(\'show\');Ch4.enterLevel(G.ch4.level);">重新开始本关</button>'
+    );
+  },
+
+  failBite() {
+    try { recordEnding('ch4_l5_bite','咬舌自尽'); } catch(e){}
+    Ch4.showEnding(
+      '<div class="ending-title bad">结 局</div>'+
+      '<div style="font-size:1.2rem;margin-bottom:16px;">咬舌自尽</div>'+
+      '<div style="font-size:0.85rem;color:rgba(200,180,180,.7);line-height:1.9;">你选择咬舌自尽。</div>'+
+      '<button class="ending-btn" onclick="document.getElementById(\'endingScreen\').classList.remove(\'show\');Ch4.enterLevel(G.ch4.level);">重新开始本关</button>'
+    );
+  },
+
+  // ---------- 三個通關結局 ----------
+  agentEnding() {
+    try { AchievementSystem.unlock('ch4_ach_agent'); } catch(e){}
+    Ch4.levelCleared(5,'ch4_l5_agent','代理人');
+    try { AchievementSystem.unlock('ch4_l5_clear'); } catch(e){}
+    Ch4.showEnding(
+      '<div class="ending-title good">结 局</div>'+
+      '<div style="font-size:1.2rem;margin-bottom:16px;">代理人</div>'+
+      '<div style="font-size:0.85rem;color:rgba(255,220,170,.75);line-height:1.9;">人类生死存亡在此一役，拜托了。<br>你点点头，将手放在仪器上。<br>意识化作数据流，飞向无垠的数字宇宙。<br>你成为了K组织的代理人。</div>'+
+      '<button class="ending-btn" onclick="document.getElementById(\'endingScreen\').classList.remove(\'show\');Ch4.start();">返回实验室</button>'
+    );
+  },
+
+  rebelEnding() {
+    try { AchievementSystem.unlock('ch4_ach_rebel'); } catch(e){}
+    Ch4.levelCleared(5,'ch4_l5_rebel','反骨');
+    try { AchievementSystem.unlock('ch4_l5_clear'); } catch(e){}
+    Ch4.showEnding(
+      '<div class="ending-title">结 局</div>'+
+      '<div style="font-size:1.2rem;margin-bottom:16px;">反骨</div>'+
+      '<div style="font-size:0.85rem;color:rgba(200,210,230,.75);line-height:1.9;">你摇了摇头。<br>「我不是任何人的代理人。」<br>老者叹了口气，仪器缓缓关闭。<br>你的意识留在了这个数字世界，<br>做一个自由的游魂。</div>'+
+      '<button class="ending-btn" onclick="document.getElementById(\'endingScreen\').classList.remove(\'show\');Ch4.start();">返回实验室</button>'
+    );
+  },
+
+  trueEnding() {
+    Ch4.levelCleared(5,'ch4_l5_true','真结局');
+    try { AchievementSystem.unlock('ch4_l5_clear'); } catch(e){}
+    Ch4.showEnding(
+      '<div class="ending-title good">真 结 局</div>'+
+      '<div style="font-size:1.2rem;margin-bottom:16px;">漏洞</div>'+
+      '<div style="font-size:0.85rem;color:rgba(255,220,170,.75);line-height:1.9;">你输入漏洞代码 2333。<br>仪器发出绿光，老者睁开了眼。<br>他看着你，笑了。<br>「谢谢你，50001。」<br><br>意识开始倒流。<br>或许他会成为下一个你，又或许……</div>'+
+      '<button class="ending-btn" onclick="document.getElementById(\'endingScreen\').classList.remove(\'show\');Ch4.start();">返回实验室</button>'
+    );
+  },
+
+  // ---------- 節點點擊（無物品使用時的後備） ----------
+  onNodeClick(node) {
+    // 所有節點的 onClick 都已在 build* 內直接綁定，這裡留空
+  },
+
+  // ---------- 物品使用於節點 ----------
+  useItemOnNode(itemId, nodeId) {
+    const f = G.ch4.flags;
+    // 用劍刺孔子 → 失敗結局「以德服人」
+    if (itemId === 'l5_sword' && nodeId === 'l5_confucius') {
+      Ch4.levels[5].failConfucius();
+      return true;
+    }
+    // 對趙高扔牛糞
+    if (itemId === 'l5_dung' && nodeId === 'l5_zhaogao') {
+      if (f.l5_pass2) { Ch4.toast('赵高已经被扔过牛粪了。'); return true; }
+      Inventory.remove('l5_dung');
+      Ch4.toast('赵高被你扔了一脸牛粪，所有人都震惊了。');
+      Core.showDialog('通过','在一片震惊中，你离开了咸阳。',[
+        {label:'继续',primary:true,onClick:()=>{ Ch4.levels[5].world2Done(); }}
+      ]);
+      return true;
+    }
+    // 對莊園門使用腐肉 → 派對散 → 人形惡魔
+    if (itemId === 'l5_meat' && nodeId === 'l5_manor') {
+      if (f.l5_manorDone) { Ch4.toast('庄园已经空了。'); return true; }
+      f.l5_manorDone = true;
+      Ch4.toast('你把腐肉扔向庄园大门。');
+      Core.showDialog('奢华庄园','里面的人大叫，黑色死神四处逃窜。<br>派对散了。',[
+        {label:'继续',primary:true,onClick:()=>{
+          Core.showDialog('人形恶魔','突然，一个人形恶魔从阴影中走出！',[
+            {label:'逃跑',primary:true,onClick:()=>{ Ch4.levels[5].world5Done(); }},
+            {label:'咬舌自尽',onClick:()=>{ Ch4.levels[5].failBite(); }}
+          ]);
+        }}
+      ]);
+      return true;
+    }
+    return false;
+  }
+};
+
+
+
+// V11.0.0：把 Ch4 的輔助函式綁定到每個 level 物件上（相容 level 內 this.add/this.conn 寫法）
+[1,2,3,4,5].forEach(function(n){
+  if (Ch4.levels[n]) {
+    Ch4.levels[n].add = Ch4.add.bind(Ch4);
+    Ch4.levels[n].conn = Ch4.conn.bind(Ch4);
+    Ch4.levels[n].toast = Ch4.toast.bind(Ch4);
+    Ch4.levels[n].node = Ch4.node.bind(Ch4);
+  }
+});
+
 function gmGoto(scene){
   gmClosePanel();
   // ===== 教學關場景跳轉 =====
@@ -14310,6 +16960,30 @@ function gmGoto(scene){
   } else if(scene === 'pocket'){
     G.ch2.area = 'pocket';
     Ch2.buildPocket();
+  } else if(scene === 'ch4_hub' || scene.indexOf('ch4_l') === 0){
+    // V11.0.0：第四章跳轉
+    if(typeof Ch4 === 'undefined'){ Core.toast('第四章對象不存在'); return; }
+    gmClosePanel();
+    document.body.classList.remove('chapter-scp','chapter-ch1','chapter-dawn');
+    document.body.classList.add('chapter-korg');
+    try { if (G.ch1) { clearInterval(G.ch1.oxygenTimer); clearInterval(G.ch1.batteryTimer); } } catch(e){}
+    if (G.ch2 && G.ch2.timers) { Object.keys(G.ch2.timers).forEach(function(k){ try{ var _t=G.ch2.timers[k]; if(_t&&_t.interval) clearInterval(_t.interval);}catch(e){} }); G.ch2.timers={}; }
+    G.currentPage = 'ch4';
+    G.currentChapter = 'ch4';
+    if (!G.ch4.levelDone) G.ch4.levelDone = {1:false,2:false,3:false,4:false,5:false};
+    G.ch4.flags = {};
+    $('#backBtn').classList.remove('hidden');
+    $('#pageTitle').textContent = '第 四 章 · K組織實驗';
+    $('#inventoryBar').style.display = 'flex';
+    $('#statusBar').style.display = 'none';
+    $('#bgAtmosphere').className = 'bg-atmosphere';
+    $('#lampGlow').classList.remove('on');
+    $('#lowOxygenVignette').classList.remove('on');
+    Inventory.init();
+    var ov3 = document.getElementById('dialogOverlay'); if(ov3) ov3.classList.remove('show');
+    Ch4.start();
+    if (scene !== 'ch4_hub') { var _n = parseInt(scene.replace('ch4_l',''),10); Ch4.enterLevel(_n); }
+    return;
   } else if(scene && scene.indexOf('ch3_') === 0){
     // V4.0.0：第三章跳轉
     if(typeof Ch3 === 'undefined'){ Core.toast('第二章對象不存在'); return; }
@@ -21375,8 +24049,8 @@ V6.Home.registerRoom('attic', {
     <svg class="cut-line-svg cut-line-top" viewBox="0 0 1000 20" preserveAspectRatio="none"><path class="cut-path cyan" d=""/></svg>
     <svg class="cut-line-svg cut-line-bottom" viewBox="0 0 1000 20" preserveAspectRatio="none"><path class="cut-path cyan" d=""/></svg>
   </div>
-  <div class="version-display">脑图密室逃脱 V10.1.0</div>
-  <div id="versionWatermark" style="display:none;">幽冥密室 V10.1.0</div>
+  <div class="version-display">脑图密室逃脱 V11.0.0</div>
+  <div id="versionWatermark" style="display:none;">幽冥密室 V11.0.0</div>
   <div id="questBar"><div class="quest-title" onclick="QuestTracker.toggle()">任务清单</div><ul id="questList"></ul></div>
   <div class="codex-overlay" id="codexOverlay"><div class="codex-panel">
     <div class="codex-header"><div class="codex-title">笔记 · 线索收集册</div>
